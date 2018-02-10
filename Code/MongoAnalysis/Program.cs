@@ -102,10 +102,9 @@ namespace MongoAnalysis
 				Console.WriteLine("Username: {0}\nPassword: {1}\nLogins: {2}",
 					p.Username, p.Password, p.Logins.Length);
 				foreach (var d in p.Logins)
-					Console.WriteLine(d.LoginTime + " ~ " + d.LogoutTime);
+					Console.WriteLine("\t" + d.LoginTime + " ~ " + d.LogoutTime);
 				Console.WriteLine();
 			}
-			Console.ReadKey();
 
 			// def'n of "played the game/active" being
 			// ppl who have logged in at least once
@@ -113,7 +112,7 @@ namespace MongoAnalysis
 			foreach (var p in players)
 				if (p.Logins.Length > 0)
 					++numActive;
-			Console.WriteLine("Players/Accounts = {0}/{1}({2}%)",
+			Console.WriteLine("Active Players/Accounts = {0}/{1}({2}%)",
 				numActive, players.Count, 100 * numActive / players.Count);
 		}
 	}
