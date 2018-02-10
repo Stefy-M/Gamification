@@ -1,7 +1,6 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.IO;
 using MongoDB.Bson.Serialization;
-using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
@@ -10,24 +9,40 @@ using System.Threading.Tasks;
 
 namespace MongoAnalysis
 {
-	[BsonIgnoreExtraElements] // so you don't have to serialize everything
+	public class Login
+	{
+		public ObjectId _id; // id doesn't matter
+		public DateTime LoginTime;
+		public DateTime LogoutTime;
+	}
+
 	public class Player
 	{
-		// id doesn't matter
+		public ObjectId _id; // id doesn't matter
 		public string Username;
 		public string Password;
-		// List of login logs
-		// Logins are dictionaries
-		// with keys of "LoginTime" and "LogoutTime"
-		// and values of DateTime
-		public List<Dictionary<string, DateTime>> Logins;
-		// Incremental
-		// Seeker (rpg)
-		// Conquerer (shmup)
-		// Mastermind (sudoku)
-		// data.xml file details what's saved in the games
-		// (or at least it should)
+		public Login[] Logins;
+		// Incremental, Seeker, Conqueror, Mastermind
+		// are all objects serialized in JSON strings
+		//
+		// The game itself only (de)serializes these strings
+		// which is why we can use Newtonsoft.Json to (de)serialize them
+		// This database JSON requires MongoDB to do the (de)serializing
+		// because of its weird extended format
+		//
+		// Assets/Incremental/Scripts/playerInfo.cs -> IncrementalData class
+		// (This file also handles saving/loading the other strings)
+		public string Incremental;
+		// Assets/Seeker/Scripts/SaveLoad/GlobalControl.cs -> Seeker class
+		public string Seeker;
+		// Assets/Conqueror/Scripts/PlayerMovementScript.cs --> conqueror class
+		// (Not a good place to put the code)
+		public string Conqueror;
+		// Assets/Mastermind/Scripts/StatisticsController.cs -> Statistics class
+		// (This class is being serialized in XML which is then serialized into JSON)
+		public string Mastermind;
 		// Login Cookie (isn't that really insecure?)
+		public string LoginCookie;
 	}
 
 	class Program
@@ -85,10 +100,9 @@ namespace MongoAnalysis
 			foreach (var p in players)
 			{
 				Console.WriteLine("Username: {0}\nPassword: {1}\nLogins: {2}",
-					p.Username, p.Password, p.Logins.Count);
+					p.Username, p.Password, p.Logins.Length);
 				foreach (var d in p.Logins)
-					Console.WriteLine(d["LoginTime"]
-						+ " ~ " + d["LogoutTime"]);
+					Console.WriteLine(d.LoginTime + " ~ " + d.LogoutTime);
 				Console.WriteLine();
 			}
 			Console.ReadKey();
@@ -97,7 +111,7 @@ namespace MongoAnalysis
 			// ppl who have logged in at least once
 			int numActive = 0;
 			foreach (var p in players)
-				if (p.Logins.Count > 0)
+				if (p.Logins.Length > 0)
 					++numActive;
 			Console.WriteLine("Players/Accounts = {0}/{1}({2}%)",
 				numActive, players.Count, 100 * numActive / players.Count);
