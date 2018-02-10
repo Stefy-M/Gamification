@@ -74,20 +74,20 @@ namespace MongoAnalysis
 			// grabs newest version of player database
 			// http://mongodb.github.io/mongo-csharp-driver/2.2/examples/exporting_json/
 			using (var streamWriter = new StreamWriter(playerDbPath))
-				using (var jsonWriter = new MongoDB.Bson.IO.JsonWriter(streamWriter))
-					using (var cursor = await collection.FindAsync(new BsonDocument()))
-					{
-						var settings = new JsonWriterSettings
-						{
-							Indent = true, // Easier to read
-						};
-						while (await cursor.MoveNextAsync())
-						{
-							var batch = cursor.Current;
-							foreach (var doc in batch)
-								await streamWriter.WriteLineAsync(doc.ToJson(settings));
-						}
-					}
+			using (var jsonWriter = new MongoDB.Bson.IO.JsonWriter(streamWriter))
+			using (var cursor = await collection.FindAsync(new BsonDocument()))
+			{
+				var settings = new JsonWriterSettings
+				{
+					Indent = true, // Easier to read
+				};
+				while (await cursor.MoveNextAsync())
+				{
+					var batch = cursor.Current;
+					foreach (var doc in batch)
+						await streamWriter.WriteLineAsync(doc.ToJson(settings));
+				}
+			}
 
 			// deserialize into player objects
 			List<Player> players = new List<Player>();
