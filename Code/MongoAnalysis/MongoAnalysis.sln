@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27130.2027
+VisualStudioVersion = 15.0.27130.2024
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MongoAnalysis", "MongoAnalysis\MongoAnalysis.csproj", "{0E686A5F-CD3D-4BB6-8B32-D53A7D28B541}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MongoAnalysis", "MongoAnalysis.csproj", "{72208FF3-9145-4166-B9AE-20353FAE07E0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{0E686A5F-CD3D-4BB6-8B32-D53A7D28B541}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0E686A5F-CD3D-4BB6-8B32-D53A7D28B541}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0E686A5F-CD3D-4BB6-8B32-D53A7D28B541}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0E686A5F-CD3D-4BB6-8B32-D53A7D28B541}.Release|Any CPU.Build.0 = Release|Any CPU
+		{72208FF3-9145-4166-B9AE-20353FAE07E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{72208FF3-9145-4166-B9AE-20353FAE07E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{72208FF3-9145-4166-B9AE-20353FAE07E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{72208FF3-9145-4166-B9AE-20353FAE07E0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {76D73449-DE84-467C-9283-27A2EED469C4}
+		SolutionGuid = {658886DD-02C3-48C2-BCCE-8707D0A82240}
 	EndGlobalSection
 EndGlobal
