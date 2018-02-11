@@ -57,21 +57,21 @@ namespace MongoAnalysis
 
 		static async Task MainAsync(string[] args)
 		{
-            FileStream outStream;
-            StreamWriter writer;
-            TextWriter oldOut = Console.Out;
-            try
-            {
-                outStream = new FileStream("./output.txt", FileMode.OpenOrCreate, FileAccess.Write);
-                writer = new StreamWriter(outStream);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("Cannot open file 'output.txt' for writing");
-                Console.WriteLine(e.Message);
-                return;
-            }
-            Console.SetOut(writer); // every write and writeline after this will be redirected to 'output.txt'
+            //FileStream outStream;
+            //StreamWriter writer;
+            //TextWriter oldOut = Console.Out;
+            //try
+            //{
+            //    outStream = new FileStream("./output.txt", FileMode.OpenOrCreate, FileAccess.Write);
+            //    writer = new StreamWriter(outStream);
+            //}
+            //catch (Exception e)
+            //{
+            //    Console.WriteLine("Cannot open file 'output.txt' for writing");
+            //    Console.WriteLine(e.Message);
+            //    return;
+            //}
+            //Console.SetOut(writer); // every write and writeline after this will be redirected to 'output.txt'
 
 			string connectionString = "mongodb://ccain.eecs.wsu.edu:443/admin";
 			var client = new MongoClient(connectionString);
@@ -209,10 +209,10 @@ namespace MongoAnalysis
 				}
 				Console.WriteLine();
 			}
-            Console.SetOut(oldOut);
-            writer.Close();
-            outStream.Close();
-            Console.WriteLine("Console output successfully redirected");
+            //Console.SetOut(oldOut);
+            //writer.Close();
+            //outStream.Close();
+            //Console.WriteLine("Console output successfully redirected");
 		}
 	}
 }
