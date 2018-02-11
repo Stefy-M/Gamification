@@ -57,6 +57,22 @@ namespace MongoAnalysis
 
 		static async Task MainAsync(string[] args)
 		{
+            FileStream outStream;
+            StreamWriter writer;
+            TextWriter oldOut = Console.Out;
+            try
+            {
+                outStream = new FileStream("./output.txt", FileMode.OpenOrCreate, FileAccess.Write);
+                writer = new StreamWriter(outStream);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Cannot open file 'output.txt' for writing");
+                Console.WriteLine(e.Message);
+                return;
+            }
+            Console.SetOut(writer); // every write and writeline after this will be redirected to 'output.txt'
+
 			string connectionString = "mongodb://ccain.eecs.wsu.edu:443/admin";
 			var client = new MongoClient(connectionString);
 			var database = client.GetDatabase("test");
@@ -119,15 +135,17 @@ namespace MongoAnalysis
 					++numActive;
 			Console.WriteLine("Active Players/Accounts = {0}/{1}({2}%)",
 				numActive, players.Count, 100 * numActive / players.Count);
-
+                   
             Console.WriteLine("Total Logins: {0}", loginCount);
 
             usernames.Sort();
+            Console.WriteLine("----------------------------------------------------------------------------");
             Console.WriteLine("Usernames:");
             foreach (string username in usernames)
             {
                 Console.WriteLine("{0}", username);
             }
+            Console.WriteLine();
 
 			// Rough code for finding # of active players during hours/days
 			bool dateTimesOverlap(DateTime a1, DateTime a2, DateTime b1, DateTime b2)
@@ -191,6 +209,10 @@ namespace MongoAnalysis
 				}
 				Console.WriteLine();
 			}
+            Console.SetOut(oldOut);
+            writer.Close();
+            outStream.Close();
+            Console.WriteLine("Console output successfully redirected");
 		}
 	}
 }
