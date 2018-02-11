@@ -62,7 +62,9 @@ namespace MongoAnalysis
 			var database = client.GetDatabase("test");
 			bool isMongoLive
 				= database.RunCommandAsync((Command<BsonDocument>)"{ping:1}").Wait(5000);
-			if (isMongoLive)
+            int loginCount = 0;
+
+            if (isMongoLive)
 				Console.WriteLine("Connected!");
 			else
 			{
@@ -101,6 +103,7 @@ namespace MongoAnalysis
 			{
 				Console.WriteLine("Username: {0}\nPassword: {1}\nLogins: {2}",
 					p.Username, p.Password, p.Logins.Length);
+                loginCount += p.Logins.Length;
 				foreach (var d in p.Logins)
 					Console.WriteLine("\t" + d.LoginTime + " ~ " + d.LogoutTime);
 				Console.WriteLine();
@@ -115,6 +118,7 @@ namespace MongoAnalysis
 			Console.WriteLine("Active Players/Accounts = {0}/{1}({2}%)",
 				numActive, players.Count, 100 * numActive / players.Count);
 
+            Console.WriteLine("Total Logins: {0}", loginCount);
 
 			// Rough code for finding # of active players during hours/days
 			bool dateTimesOverlap(DateTime a1, DateTime a2, DateTime b1, DateTime b2)
