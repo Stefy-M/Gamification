@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 public class IncrementalManager : MonoBehaviour {
 
-    private update up = new update();
 	// Use this for initialization
 	void Start () {
 	}
@@ -21,7 +20,6 @@ public class IncrementalManager : MonoBehaviour {
         } 
         else
         {
-            //update up = new update();
         }
     }
     public void gainExp(int i)

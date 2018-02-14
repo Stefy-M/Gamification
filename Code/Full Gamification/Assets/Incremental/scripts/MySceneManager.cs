@@ -24,17 +24,17 @@ public static class MySceneManager{
         //unload
         if (activeGame == minigame.seeker)
         {
-            SceneManager.UnloadScene(scene_seeker);
+			SceneManager.UnloadSceneAsync(scene_seeker);
             scene_seeker = "";
         }
         else if (activeGame == minigame.mastermind)
         {
-            SceneManager.UnloadScene(scene_mastermind);
+			SceneManager.UnloadSceneAsync(scene_mastermind);
             scene_mastermind = "";
         }
         else if (activeGame == minigame.conquer)
         {
-            SceneManager.UnloadScene(scene_conquer);
+			SceneManager.UnloadSceneAsync(scene_conquer);
             scene_conquer = "";
         }
 

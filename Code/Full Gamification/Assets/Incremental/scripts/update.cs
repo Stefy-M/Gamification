@@ -52,7 +52,7 @@ public class update : MonoBehaviour {
     public Button passiveActiveButton;
     public Image progressBarImage;
     public Text msglog;
-    
+
     string nextScene;
     int frameCount; // Throttles update of progress bar
     bool upgradeWindow;
@@ -72,7 +72,9 @@ public class update : MonoBehaviour {
 
         if (!player.Incre.startMessageDisplayed)
         {
-            showMessage("While you were not playing the game, it collects " + player.Incre.LogOutpassiveProgressGained + " Passive Progress.", "Passive Progress Gain");
+            showMessage("While you were not playing the game, it collects "
+				+ player.Incre.LogOutpassiveProgressGained
+				+ " Passive Progress.", "Passive Progress Gain");
             player.Incre.startMessageDisplayed = true;
         }
 
@@ -106,16 +108,13 @@ public class update : MonoBehaviour {
         updateExpBar();
         mainScreen.SetActive(!player.Incre.gameON);
 
-        if (bar_progress.value <= 0.021f)
+        if (bar_progress.value < 0.021f)
             bar_progress.value = 0.021f;
 
-        if (bar_exp.value <= 0.021f)
+        if (bar_exp.value < 0.021f)
             bar_exp.value = 0.021f;
-
-        if (player.Incre.gameON)
-            txt_exit.text = "Close Game";
-        else
-            txt_exit.text = "Exit Game";
+		
+		txt_exit.text = player.Incre.gameON ? "Close Game" : "Exit Game";
 
         if (saveCount >= 60 * 3)
         {
@@ -162,41 +161,39 @@ public class update : MonoBehaviour {
             showMessage2("Do you want to close the minigame?", "You sure?", dialogMode.exitgame);
         }
         else
-            showMessage2("Do you want to close the whole game?", "Are you really sure?", dialogMode.exitapplication);
-    }
-    
-    public void resetPressed()
-    {
-        showMessage2("Do you want to reset the entire game? All progress will be lost.", "Reset Game", dialogMode.resetGame);
+            showMessage2("Do you want to close the whole game?",
+				"Are you really sure?", dialogMode.exitapplication);
     }
 
+    public void resetPressed()
+    {
+        showMessage2("Do you want to reset the entire game? All progress will be lost.",
+			"Reset Game", dialogMode.resetGame);
+    }
+
+	// Unused
     public void buttonYesOrNoClicked(bool yes)
     {
         if (yes)
-        {
-            if (_dialogMode == dialogMode.changeGame)
-            {
-                player.Incre.currentGame = player.Incre.nextGame;
-                SceneManager.LoadScene(nextScene, LoadSceneMode.Single);
-            }
-
-            if (_dialogMode == dialogMode.exitgame)
-            {
-                player.Incre.currentGame = minigame.none;
-                player.Incre.gameON = false;
-                player.Incre.passive = true;
-                SceneManager.LoadScene("ui", LoadSceneMode.Single);
-            }
-
-            if (_dialogMode == dialogMode.exitapplication)
-                Application.Quit();
-			
-            if (_dialogMode == dialogMode.resetGame)
-            {
-                GlobalControl.Instance.ResetGame();
-                showMessage("The game has been reset.", "Game Reset");
-            }
-        }
+			switch (_dialogMode) {
+			case dialogMode.changeGame:
+				player.Incre.currentGame = player.Incre.nextGame;
+				SceneManager.LoadScene(nextScene, LoadSceneMode.Single);
+				break;
+			case dialogMode.exitgame:
+				player.Incre.currentGame = minigame.none;
+				player.Incre.gameON = false;
+				player.Incre.passive = true;
+				SceneManager.LoadScene("ui", LoadSceneMode.Single);
+				break;
+			case dialogMode.exitapplication:
+				Application.Quit();
+				break;
+			case dialogMode.resetGame:
+				GlobalControl.Instance.ResetGame();
+				showMessage("The game has been reset.", "Game Reset");
+				break;
+			}
 
         dialog.SetActive(false);
     }
@@ -204,22 +201,28 @@ public class update : MonoBehaviour {
     void updatePlayerInfo()
     {
         if (playerInfoDisplay != null)
-            playerInfoDisplay.text = string.Format("-player info-\r\nid: {0}\r\nreset: {1}", player.Incre.username, player.Incre.permanentPerksLV);
+            playerInfoDisplay.text = string.Format("-player info-\r\nid: {0}\r\nreset: {1}",
+				player.Incre.username, player.Incre.permanentPerksLV);
     }
 
     void updateRedeemText()
     {
 		if (player.Incre.passive) //passive mode
         {
-            txt_redeem_pc.text = string.Format("pc: +{0}", bal.getPassiveCoinBonus()* player.Incre.coin.boosterRate);
+            txt_redeem_pc.text = string.Format("pc: +{0}",
+				bal.getPassiveCoinBonus()* player.Incre.coin.boosterRate);
             txt_redeem_ac.text = string.Format("ac: +{0}", 0);
-            txt_redeem_exp.text = string.Format("exp: +{0}", bal.getPassiveEXPRate() * player.Incre.exp.boosterRate);
+            txt_redeem_exp.text = string.Format("exp: +{0}",
+				bal.getPassiveEXPRate() * player.Incre.exp.boosterRate);
         }
         else
         {
-            txt_redeem_pc.text = string.Format("pc: +{0}", bal.getPassiveCoinBonus() * player.Incre.coin.boosterRate);
-            txt_redeem_ac.text = string.Format("ac: +{0}", bal.getActiveCoinBonus() * player.Incre.coin.boosterRate);
-            txt_redeem_exp.text = string.Format("exp: +{0}", bal.getActiveEXPRate() * player.Incre.exp.boosterRate);
+            txt_redeem_pc.text = string.Format("pc: +{0}",
+				bal.getPassiveCoinBonus() * player.Incre.coin.boosterRate);
+            txt_redeem_ac.text = string.Format("ac: +{0}",
+				bal.getActiveCoinBonus() * player.Incre.coin.boosterRate);
+            txt_redeem_exp.text = string.Format("exp: +{0}",
+				bal.getActiveEXPRate() * player.Incre.exp.boosterRate);
         }
     }
 
@@ -235,7 +238,7 @@ public class update : MonoBehaviour {
             cb.highlightedColor = c;
             passiveActiveButton.colors = cb;
         }
-        else 
+        else
         {
             c = new Color32(255, 216, 0, 255);
             cb.normalColor = c;
@@ -243,8 +246,8 @@ public class update : MonoBehaviour {
             passiveActiveButton.colors = cb;
         }
     }
-    
-    //returns true if it is full(100%)
+
+    //returns true if it is full (100%)
     void updateProgressBar()
     {
         //check over Progress
@@ -304,15 +307,17 @@ public class update : MonoBehaviour {
         }
 		else //not 100%
         {
+			double boosterRate = player.Incre.progress.boosterRate;
+
             if (player.Incre.passive == true)
             {
                 txt_mode.text = "Passive MODE";
-                player.Incre.progress.cur += bal.getPassiveProgressBarRate() * player.Incre.progress.boosterRate;
+                player.Incre.progress.cur += bal.getPassiveProgressBarRate() * boosterRate;
             }
             else
             {
                 txt_mode.text = "Active MODE";
-                player.Incre.progress.cur += bal.getActiveProgressBarRate() * player.Incre.progress.boosterRate;
+                player.Incre.progress.cur += bal.getActiveProgressBarRate() * boosterRate;
             }
 
             bar_progress.value = (float)player.Incre.progress.cur / bal.getMaxProgress();
@@ -320,14 +325,15 @@ public class update : MonoBehaviour {
             double progressRate;
 
             if (player.Incre.passive)
-                progressRate = bal.getPassiveProgressBarRate() * player.Incre.progress.boosterRate;
+                progressRate = bal.getPassiveProgressBarRate() * boosterRate;
             else
-                progressRate = bal.getActiveProgressBarRate() * player.Incre.progress.boosterRate;
+                progressRate = bal.getActiveProgressBarRate() * boosterRate;
 
             if (frameCount >= 10)
             {
-                txt_progress.text = string.Format("Prog {0}/100(+{1})", ((player.Incre.progress.cur / bal.getMaxProgress() * 100)).ToString("N2")
-            , (progressRate / bal.getMaxProgress() * 10000).ToString("N3"));
+                txt_progress.text = string.Format("Prog {0}/100(+{1})",
+					((player.Incre.progress.cur / bal.getMaxProgress() * 100)).ToString("N2"),
+					(progressRate / bal.getMaxProgress() * 10000).ToString("N3"));
                 frameCount = 0;
             }
             else
@@ -335,56 +341,40 @@ public class update : MonoBehaviour {
         }
     }
 
-	// because ToString() differs based on locale
-	// and there's no overloads that allow custom formatting
-	// in Unity's C#?
 	string changeToTime(float sec)
     {
-        string h, m, s;
-        TimeSpan time = TimeSpan.FromSeconds(sec);
-
-        if (time.Hours < 10)
-            h = "0" + time.Hours.ToString();
-        else
-            h = time.Hours.ToString();
-
-        if (time.Minutes < 10)
-            m = "0" + time.Minutes.ToString();
-        else
-            m = time.Minutes.ToString();
-
-        if (time.Seconds < 10)
-            s = "0" + time.Seconds.ToString();
-        else
-            s = time.Seconds.ToString();
-		
-        return string.Format("{0}:{1}:{2}", h, m, s);
-    } 
+		DateTime t = new DateTime() + TimeSpan.FromSeconds(sec);
+		return t.ToString("HH:mm:ss");
+    }
 
     void updateStamina()
     {
-        //stamina decreases when player enters some area in minigames 
-        txt_stamina.text = String.Format("STAMINA: {0}/{1}", player.Incre.stamina.cur, player.Incre.stamina.max);
+        //stamina decreases when player enters some area in minigames
+        txt_stamina.text = String.Format("STAMINA: {0}/{1}",
+			player.Incre.stamina.cur, player.Incre.stamina.max);
     }
 
     void updateTimeBar()
     {
         if (!player.Incre.passive)
         {
-            if (player.Incre.timeleft.cur > 0) { player.Incre.timeleft.cur -= Time.deltaTime; }
+            if (player.Incre.timeleft.cur > 0)
+				player.Incre.timeleft.cur -= Time.deltaTime;
+			
             if (player.Incre.timeleft.cur <= 0)
             {
-                //player.Incre.gameON = false;
+//                player.Incre.gameON = false;
                 player.Incre.passive = true;
-                /*player.Incre.nextGame = minigame.none;
-                SceneManager.LoadScene("ui", LoadSceneMode.Single);*/
+				// This is the intended behavior (but not really)
+				// Stamina is meant to handle that.
+//				player.Incre.nextGame = minigame.none; 
+//                SceneManager.LoadScene("ui", LoadSceneMode.Single);
             }
         }
 
         bar_timeLeft.value = (float)(player.Incre.timeleft.cur / player.Incre.timeleft.max);
         txt_timeLeft.text = changeToTime((float)player.Incre.timeleft.cur);
     }
-
 
     void updateCoin()
     {
@@ -462,7 +452,7 @@ public class update : MonoBehaviour {
             return;
         }
 
-        //have enough time and stemina
+        //have enough time and stamina
         if (player.Incre.timeleft.cur > 0 && player.Incre.stamina.cur > 0)
         {
             player.Incre.progress.cur = 0; //set to zero when switching between active and passive mode
@@ -495,9 +485,9 @@ public class update : MonoBehaviour {
                 selectedGame = minigame.conquer;
                 break;
         }
-        
+
         //if game is not on
-        if (player.Incre.gameON == false)
+        if (!player.Incre.gameON)
         {
             player.Incre.gameON = true;
             player.Incre.currentGame = selectedGame;
@@ -508,7 +498,8 @@ public class update : MonoBehaviour {
         {
             nextScene = sceneName;
             player.Incre.nextGame = selectedGame;
-            showMessage2("If you change the minigame, you will lose the data. Continue to change the game?", "Warning!", dialogMode.changeGame);
+            showMessage2("If you change the minigame, you will lose data. Continue to change the game?",
+				"Warning!", dialogMode.changeGame);
         }
         else
         {
@@ -532,7 +523,7 @@ public class update : MonoBehaviour {
     {
         if (Input.GetMouseButtonDown(0))
         {
-            Debug.Log("pressed");
+            Debug.Log("Clicked");
             return true;
         }
 
@@ -548,7 +539,7 @@ public class update : MonoBehaviour {
 
         return false;
     }
-    
+
     public void onClickGetBonus()
     {
         strDele fun = new strDele(showMessage);

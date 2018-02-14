@@ -114,7 +114,7 @@ public class IncrementalData
     public int lv = 1;
     public string username = "Username";
     public int permanentPerksLV = 1;
-    string _DateTimeStr = "";
+    //string _DateTimeStr = "";
     public bool startMessageDisplayed = false;
     public DateTime lastLogOut = DateTime.Now;
         /*
