@@ -32,4 +32,7 @@ sysinfo.txt
 
 # Builds
 *.apk
-*.unitypackage
+!*.unitypackage #probably breaks Unity too I dunno
+
+!*.meta #This breaks Unity
+!*.obj #This ALSO breaks Unity
