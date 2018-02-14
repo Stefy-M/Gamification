@@ -54,7 +54,6 @@ public class update : MonoBehaviour {
     public Text msglog;
     
     string nextScene;
-    int timeLeftFrameCount;
     int frameCount;
     bool upgradeWindow;
     bool bonusWindow;
@@ -164,10 +163,10 @@ public class update : MonoBehaviour {
         {
             nextScene = "ui";
             player.Incre.nextGame = minigame.none;
-            showMessage2("Do you want to close the minigame?", "Are you sure?", dialogMode.exitgame);
+            showMessage2("Do you want to close the minigame?", "You sure?", dialogMode.exitgame);
         }
         else
-            showMessage2("Do you want to close the whole game?", "Sure?", dialogMode.exitapplication);
+            showMessage2("Do you want to close the whole game?", "Are you really sure?", dialogMode.exitapplication);
     }
     
     public void resetPressed()
@@ -281,15 +280,9 @@ public class update : MonoBehaviour {
 
         //change color depends on mode
         if (player.Incre.passive)
-        {
-            Color32 c = new Color32(16, 203, 255, 255);
-            progressBarImage.color = c;
-        }
+			progressBarImage.color = new Color32(16, 203, 255, 255);
         else
-        {
-            Color32 c = new Color32(255, 216, 0, 255);
-            progressBarImage.color = c;
-        }
+			progressBarImage.color = new Color32(255, 216, 0, 255);
 
         //gets 100% ---> redeem coins and exp
         if (player.Incre.progress.cur >= bal.getMaxProgress())
@@ -488,21 +481,16 @@ public class update : MonoBehaviour {
         string sceneName = "";
         minigame selectedGame = minigame.none;
 
-        switch(whichGame)
+        switch (whichGame)
         {
-            //seeker
             case 1:
                 sceneName = "Mode_Choose";
                 selectedGame = minigame.seeker;
                 break;
-
-            //mastermind
             case 2:
                 sceneName = "Mastermind_Menu";
                 selectedGame = minigame.mastermind;
                 break;
-
-            //conquere
             case 3:
                 sceneName = "Menu";
                 selectedGame = minigame.conquer;
