@@ -54,7 +54,7 @@ public class update : MonoBehaviour {
     public Text msglog;
     
     string nextScene;
-    int frameCount;
+    int frameCount; // Throttles update of progress bar
     bool upgradeWindow;
     bool bonusWindow;
     dialogMode _dialogMode;
@@ -85,11 +85,7 @@ public class update : MonoBehaviour {
         bonus.SetActive(bonusWindow);
 
         frameCount = 100;
-
-        if (!player.Incre.gameON)
-            player.Incre.passive = true;
-        else
-            player.Incre.passive = false;
+		player.Incre.passive = !player.Incre.gameON;
 
 //		if (player.Incre.timeleft.cur <= 0)
 //            ("Active time finished.", "Active Time");
@@ -174,9 +170,9 @@ public class update : MonoBehaviour {
         showMessage2("Do you want to reset the entire game? All progress will be lost.", "Reset Game", dialogMode.resetGame);
     }
 
-    public void buttonYesOrNoClicked(bool yesno)
+    public void buttonYesOrNoClicked(bool yes)
     {
-        if (yesno)
+        if (yes)
         {
             if (_dialogMode == dialogMode.changeGame)
             {
@@ -311,7 +307,7 @@ public class update : MonoBehaviour {
             if (player.Incre.passive == true)
             {
                 txt_mode.text = "Passive MODE";
-                player.Incre.progress.cur += bal.getPassiveProgressBarRate()*player.Incre.progress.boosterRate;
+                player.Incre.progress.cur += bal.getPassiveProgressBarRate() * player.Incre.progress.boosterRate;
             }
             else
             {
@@ -339,7 +335,10 @@ public class update : MonoBehaviour {
         }
     }
 
-    string changeToTime(float sec)
+	// because ToString() differs based on locale
+	// and there's no overloads that allow custom formatting
+	// in Unity's C#?
+	string changeToTime(float sec)
     {
         string h, m, s;
         TimeSpan time = TimeSpan.FromSeconds(sec);
@@ -372,7 +371,7 @@ public class update : MonoBehaviour {
     {
         if (!player.Incre.passive)
         {
-            while (player.Incre.timeleft.cur > 0) { player.Incre.timeleft.cur -= Time.deltaTime; }
+            if (player.Incre.timeleft.cur > 0) { player.Incre.timeleft.cur -= Time.deltaTime; }
             if (player.Incre.timeleft.cur <= 0)
             {
                 //player.Incre.gameON = false;
@@ -607,14 +606,14 @@ public class update : MonoBehaviour {
         loginScript.updatePassiveProgress(DateTime.Now.AddDays(-i));
         player.Incre.debugging = true;
         player.Incre.passivePlayingTimeLeft -= 7;
-        Debug.Log("remain passive days = " + player.Incre.passivePlayingTimeLeft);
+        Debug.Log("Remaining passive days = " + player.Incre.passivePlayingTimeLeft);
     }
 
     public void debug_playHour(int i)
     {
         loginScript.updateActiveProgress(DateTime.Now.AddHours(-i));
         player.Incre.debugging = true;
-        Debug.Log("remain active playing time = " + player.Incre.activePlayingTimeLeft--);
+		Debug.Log("Remaining active playing time = " + player.Incre.activePlayingTimeLeft--);
     }
 
     public void debug_gameON()
@@ -630,11 +629,11 @@ public class update : MonoBehaviour {
     void save()
     {
         player.Incre.lastLogOut = DateTime.Now;
-        Debug.Log("last logout saved: " + player.Incre.lastLogOut.ToString());
+        Debug.Log("Last logout saved: " + player.Incre.lastLogOut.ToString());
 
         if (player.isLocal)
         {
-            Debug.Log("local saving");
+            Debug.Log("Local saving");
             player.localIncreData = player.getJsonStr(game.incremental);
             player.localMasterData = player.getJsonStr(game.mastermind);
             player.localSeekerData = player.getJsonStr(game.seeker);
