@@ -72,9 +72,10 @@ public class update : MonoBehaviour {
 
         if (!player.Incre.startMessageDisplayed)
         {
-            showMessage("While you were not playing the game, it collects "
-				+ player.Incre.LogOutpassiveProgressGained
-				+ " Passive Progress.", "Passive Progress Gain");
+            showMessage("While you were not playing the game, "
+				+ " (" + TimeSpan.FromSeconds(player.Incre.LogOutpassiveProgressGained) + ")"
+				+ (bal.getPassiveProgressBarRate() * player.Incre.LogOutpassiveProgressGained * 60).ToString("##.##") + "%"
+				+ " Passive Progress were collected.", "Passive Progress Gain");
             player.Incre.startMessageDisplayed = true;
         }
 
