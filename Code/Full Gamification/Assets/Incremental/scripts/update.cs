@@ -65,13 +65,11 @@ public class update : MonoBehaviour {
 
     void Start()
     {
-        /*
         //test purpose
-        player.Incre.stamina.cur = 10;
-        player.Incre.needTutorial = false;
-        player.Incre.timeleft.cur = 60 * 60;
-        */
-        sendMsg("Welcome " + player.Incre.username);
+//        player.Incre.stamina.cur = 10;
+//        player.Incre.needTutorial = false;
+//        player.Incre.timeleft.cur = 60 * 60;
+//        sendMsg("Welcome " + player.Incre.username);
 
         if (!player.Incre.startMessageDisplayed)
         {
@@ -87,7 +85,6 @@ public class update : MonoBehaviour {
         upgrade.SetActive(upgradeWindow);
         bonus.SetActive(bonusWindow);
 
-        timeLeftFrameCount = 0;
         frameCount = 100;
 
         if (!player.Incre.gameON)
@@ -95,10 +92,10 @@ public class update : MonoBehaviour {
         else
             player.Incre.passive = false;
 
-		//if (player.Incre.timeleft.cur <= 0)
-            //("Active time finished.", "Active Time");
-        //Vector3 newpos = new Vector3(0, 0, 0);
-        //upgrade.transform.position = newpos;
+//		if (player.Incre.timeleft.cur <= 0)
+//            ("Active time finished.", "Active Time");
+//        Vector3 newpos = new Vector3(0, 0, 0);
+//        upgrade.transform.position = newpos;
     }
 
 	// Update is called once per frame
@@ -112,13 +109,12 @@ public class update : MonoBehaviour {
         updateCoin();
         updateRedeemText();
         updateExpBar();
-        timeLeftFrameCount++;
         mainScreen.SetActive(!player.Incre.gameON);
 
         if (bar_progress.value <= 0.021f)
             bar_progress.value = 0.021f;
 
-        if(bar_exp.value <= 0.021f)
+        if (bar_exp.value <= 0.021f)
             bar_exp.value = 0.021f;
 
         if (player.Incre.gameON)
@@ -279,6 +275,7 @@ public class update : MonoBehaviour {
                     gainedExp += bal.getActiveEXPRate(); //debug
                 }
             }
+
             player.Incre.debugging = false;
         }
 
@@ -552,8 +549,7 @@ public class update : MonoBehaviour {
             return true;
         }
 
-		if (Input.GetAxis("Mouse X") != 0 ||
-			Input.GetAxis("Mouse Y") != 0)
+		if (Input.GetAxis("Mouse X") != 0 || Input.GetAxis("Mouse Y") != 0)
             return true;
 
         if (Input.GetKeyDown("up") || Input.GetKeyDown("down") || Input.GetKeyDown("right") || Input.GetKeyDown("left") ||
@@ -571,7 +567,6 @@ public class update : MonoBehaviour {
         strDele fun = new strDele(showMessage);
         bonusCode.analyzeCode(bonusCodeInput.text, fun);
     }
-    
 
     public void debug_seekerReward(int usedStamina)
     {
