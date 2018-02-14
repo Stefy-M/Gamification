@@ -6,8 +6,16 @@ using System.Timers;
 using UnityEngine.SceneManagement;
 using System;
 
-//delegate
 public delegate void strDele(string a, string b);
+
+public enum dialogMode
+{
+	exitgame,
+	changeGame,
+	exitapplication,
+	resetGame
+}
+
 public class update : MonoBehaviour {
     public GameObject upgrade;
     public GameObject bonus;
@@ -20,7 +28,6 @@ public class update : MonoBehaviour {
     public Slider bar_exp;
     public Slider bar_timeLeft;
 
-    
     public Text txt_progress;
     public Text txt_exp;
     public Text txt_welcomeMsg;
@@ -65,38 +72,37 @@ public class update : MonoBehaviour {
         player.Incre.timeleft.cur = 60 * 60;
         */
         sendMsg("Welcome " + player.Incre.username);
-        if(!player.Incre.startMessageDisplayed)
+
+        if (!player.Incre.startMessageDisplayed)
         {
             showMessage("While you were not playing the game, it collects " + player.Incre.LogOutpassiveProgressGained + " Passive Progress.", "Passive Progress Gain");
             player.Incre.startMessageDisplayed = true;
         }
+
         updatePlayerInfo();
-      //set upgrade window
+
+		//set upgrade window
         upgradeWindow = false;
         bonusWindow = false;
         upgrade.SetActive(upgradeWindow);
         bonus.SetActive(bonusWindow);
+
         timeLeftFrameCount = 0;
         frameCount = 100;
-        if(!player.Incre.gameON)
-        {
+
+        if (!player.Incre.gameON)
             player.Incre.passive = true;
-        }
         else
-        {
             player.Incre.passive = false;
-        }
-        /*if(player.Incre.timeleft.cur <= 0)
-        {
-            showMessage("Active time finished.", "Active Time");
-        }*/
-        // Vector3 newpos = new Vector3(0, 0, 0);
+
+		//if (player.Incre.timeleft.cur <= 0)
+            //("Active time finished.", "Active Time");
+        //Vector3 newpos = new Vector3(0, 0, 0);
         //upgrade.transform.position = newpos;
-        //Screen.SetResolution(1325, 895, false);
     }
-    
+
 	// Update is called once per frame
-	void Update ()
+	void Update()
     {
         updateModeButton();
         updateTimeBar();
@@ -108,18 +114,18 @@ public class update : MonoBehaviour {
         updateExpBar();
         timeLeftFrameCount++;
         mainScreen.SetActive(!player.Incre.gameON);
+
         if (bar_progress.value <= 0.021f)
-        {
             bar_progress.value = 0.021f;
-        }
+
         if(bar_exp.value <= 0.021f)
-        {
             bar_exp.value = 0.021f;
-        }
+
         if (player.Incre.gameON)
             txt_exit.text = "Close Game";
         else
             txt_exit.text = "Exit Game";
+
         if (saveCount >= 60 * 3)
         {
             Debug.Log("Saving...");
@@ -127,7 +133,7 @@ public class update : MonoBehaviour {
             saveCount = 0;
         }
         else
-        { saveCount++; }
+			saveCount++;
     }
 
     public void sendMsg(string msg)
@@ -158,16 +164,14 @@ public class update : MonoBehaviour {
 
     public void exitPressed()
     {
-        if(player.Incre.gameON)
+        if (player.Incre.gameON)
         {
             nextScene = "ui";
             player.Incre.nextGame = minigame.none;
             showMessage2("Do you want to close the minigame?", "Are you sure?", dialogMode.exitgame);
         }
         else
-        {
             showMessage2("Do you want to close the whole game?", "Sure?", dialogMode.exitapplication);
-        }
     }
     
     public void resetPressed()
@@ -177,49 +181,44 @@ public class update : MonoBehaviour {
 
     public void buttonYesOrNoClicked(bool yesno)
     {
-        if(yesno)
+        if (yesno)
         {
-            if(_dialogMode == dialogMode.changeGame)
+            if (_dialogMode == dialogMode.changeGame)
             {
                 player.Incre.currentGame = player.Incre.nextGame;
                 SceneManager.LoadScene(nextScene, LoadSceneMode.Single);
             }
-            if(_dialogMode == dialogMode.exitgame)
+
+            if (_dialogMode == dialogMode.exitgame)
             {
                 player.Incre.currentGame = minigame.none;
                 player.Incre.gameON = false;
                 player.Incre.passive = true;
                 SceneManager.LoadScene("ui", LoadSceneMode.Single);
             }
-            if(_dialogMode == dialogMode.exitapplication)
-            {
+
+            if (_dialogMode == dialogMode.exitapplication)
                 Application.Quit();
-            }
-            if(_dialogMode == dialogMode.resetGame)
+			
+            if (_dialogMode == dialogMode.resetGame)
             {
                 GlobalControl.Instance.ResetGame();
                 showMessage("The game has been reset.", "Game Reset");
             }
         }
-        else
-        {
-            
-        }
+
         dialog.SetActive(false);
     }
 
     void updatePlayerInfo()
     {
-        if(playerInfoDisplay != null)
-        {
+        if (playerInfoDisplay != null)
             playerInfoDisplay.text = string.Format("-player info-\r\nid: {0}\r\nreset: {1}", player.Incre.username, player.Incre.permanentPerksLV);
-        }
     }
 
     void updateRedeemText()
     {
-        //passive mode
-        if(player.Incre.passive)
+		if (player.Incre.passive) //passive mode
         {
             txt_redeem_pc.text = string.Format("pc: +{0}", bal.getPassiveCoinBonus()* player.Incre.coin.boosterRate);
             txt_redeem_ac.text = string.Format("ac: +{0}", 0);
@@ -233,11 +232,11 @@ public class update : MonoBehaviour {
         }
     }
 
-
     void updateModeButton()
     {
         ColorBlock cb = passiveActiveButton.colors;
         Color c;
+
         if (player.Incre.passive)
         {
             c = new Color32(16, 203, 255, 255);
@@ -259,7 +258,8 @@ public class update : MonoBehaviour {
     {
         //check over Progress
         double gainedExp = 0;
-        if(player.Incre.debugging)
+
+        if (player.Incre.debugging)
         {
             while (player.Incre.progress.cur > bal.getMaxProgress())
             {
@@ -268,19 +268,20 @@ public class update : MonoBehaviour {
                     earnPassiveCoin(bal.getPassiveCoinBonus());
                     earnExp(bal.getPassiveEXPRate());
                     player.Incre.progress.cur -= bal.getMaxProgress();
-                    gainedExp += bal.getPassiveEXPRate();           //debug
+                    gainedExp += bal.getPassiveEXPRate(); //debug
                 }
-                else  //---------------below is ONLY for debuging purpose
+                else  //debugging ONLY
                 {
                     earnActiveCoin(bal.getActiveCoinBonus());
                     earnPassiveCoin(bal.getPassiveCoinBonus());
                     earnExp(bal.getActiveEXPRate());
                     player.Incre.progress.cur -= bal.getMaxProgress();
-                    gainedExp += bal.getActiveEXPRate();           //debug
+                    gainedExp += bal.getActiveEXPRate(); //debug
                 }
             }
             player.Incre.debugging = false;
         }
+
         //change color depends on mode
         if (player.Incre.passive)
         {
@@ -296,8 +297,7 @@ public class update : MonoBehaviour {
         //gets 100% ---> redeem coins and exp
         if (player.Incre.progress.cur >= bal.getMaxProgress())
         {
-            //Active MODE
-            if(!player.Incre.passive)   //active gets both coins
+            if (!player.Incre.passive) //active gets both coins
             {
                 if (isPlayerActive())
                 {
@@ -308,8 +308,7 @@ public class update : MonoBehaviour {
                     player.Incre.progress.cur = 0;
                 }
             }
-            else
-            //Passive MODE
+			else //Passive MODE
             {
                 earnPassiveCoin(bal.getPassiveCoinBonus()* (int)player.Incre.coin.boosterRate);
                 earnExp(bal.getPassiveEXPRate() * player.Incre.exp.boosterRate);
@@ -317,8 +316,7 @@ public class update : MonoBehaviour {
                 player.Incre.progress.cur = 0;
             }
         }
-        //not 100%
-        else
+		else //not 100%
         {
             if (player.Incre.passive == true)
             {
@@ -330,8 +328,11 @@ public class update : MonoBehaviour {
                 txt_mode.text = "Active MODE";
                 player.Incre.progress.cur += bal.getActiveProgressBarRate() * player.Incre.progress.boosterRate;
             }
+
             bar_progress.value = (float)player.Incre.progress.cur / bal.getMaxProgress();
+
             double progressRate;
+
             if (player.Incre.passive)
                 progressRate = bal.getPassiveProgressBarRate() * player.Incre.progress.boosterRate;
             else
@@ -345,39 +346,29 @@ public class update : MonoBehaviour {
             }
             else
                 frameCount++;
-            
         }
     }
+
     string changeToTime(float sec)
     {
         string h, m, s;
         TimeSpan time = TimeSpan.FromSeconds(sec);
+
         if (time.Hours < 10)
-        {
             h = "0" + time.Hours.ToString();
-        }
         else
-        {
             h = time.Hours.ToString();
-        }
 
         if (time.Minutes < 10)
-        {
             m = "0" + time.Minutes.ToString();
-        }
         else
-        {
             m = time.Minutes.ToString();
-        }
 
         if (time.Seconds < 10)
-        {
             s = "0" + time.Seconds.ToString();
-        }
         else
-        {
             s = time.Seconds.ToString();
-        }
+		
         return string.Format("{0}:{1}:{2}", h, m, s);
     } 
 
@@ -386,6 +377,7 @@ public class update : MonoBehaviour {
         //stamina decreases when player enters some area in minigames 
         txt_stamina.text = String.Format("STAMINA: {0}/{1}", player.Incre.stamina.cur, player.Incre.stamina.max);
     }
+
     void updateTimeBar()
     {
         if (!player.Incre.passive)
@@ -399,6 +391,7 @@ public class update : MonoBehaviour {
                 SceneManager.LoadScene("ui", LoadSceneMode.Single);*/
             }
         }
+
         bar_timeLeft.value = (float)(player.Incre.timeleft.cur / player.Incre.timeleft.max);
         txt_timeLeft.text = changeToTime((float)player.Incre.timeleft.cur);
     }
@@ -409,14 +402,17 @@ public class update : MonoBehaviour {
         txt_passiveCoin.text = player.Incre.coin.passive.ToString();
         txt_activeCoin.text = player.Incre.coin.active.ToString();
     }
+
     void updateLv()
     {
         txt_level.text = player.Incre.lv.ToString();
     }
+
     void updateExpBar()
     {
         bar_exp.value = (float)(player.Incre.exp.cur / bal.getMaxEXP());
         txt_exp.text = string.Format("EXP {0}/{1}", (int)player.Incre.exp.cur, (int)bal.getMaxEXP());
+
         if (player.Incre.exp.cur >= bal.getMaxEXP())
         {
             double remain = player.Incre.exp.cur - bal.getMaxEXP();
@@ -452,7 +448,6 @@ public class update : MonoBehaviour {
 
         //calculate new incremental values here
         //calculateIncremental();
-        
     }
 
     public void upgradeButtonPressed()
@@ -462,6 +457,7 @@ public class update : MonoBehaviour {
         //upgrade.SendMessage("updateTitle");
         //upgrade.SendMessage("updatePrice");
     }
+
     public void bonusButtonPressed()
     {
         bonusWindow = !bonusWindow;
@@ -470,31 +466,31 @@ public class update : MonoBehaviour {
 
     public void changeMODE()
     {
-        if(!player.Incre.gameON)
+        if (!player.Incre.gameON)
         {
             showMessage("Minigame is not running. You can't change it to active mode!", "Minigame Not Running");
             player.Incre.passive = true;
             return;
         }
+
         //have enough time and stemina
-        if(player.Incre.timeleft.cur > 0 && player.Incre.stamina.cur > 0)
+        if (player.Incre.timeleft.cur > 0 && player.Incre.stamina.cur > 0)
         {
             player.Incre.progress.cur = 0; //set to zero when switching between active and passive mode
             player.Incre.passive = !player.Incre.passive;
         }
-        else if(player.Incre.timeleft.cur == 0)
-        {
+        else if (player.Incre.timeleft.cur == 0)
             showMessage("You don't have enough 'Time Left'!", "Error!");
-        }
+
         updateModeButton();
     }
 
-    
     public void minigameStart(int whichGame)
     {
         Debug.Log(player.Incre.currentGame.ToString());
         string sceneName = "";
         minigame selectedGame = minigame.none;
+
         switch(whichGame)
         {
             //seeker
@@ -517,14 +513,14 @@ public class update : MonoBehaviour {
         }
         
         //if game is not on
-        if(player.Incre.gameON == false)
+        if (player.Incre.gameON == false)
         {
             player.Incre.gameON = true;
             player.Incre.currentGame = selectedGame;
             Debug.Log(player.Incre.currentGame.ToString());
             SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
         }
-        else if(player.Incre.gameON == true && player.Incre.currentGame != selectedGame) //game is on
+        else if (player.Incre.gameON == true && player.Incre.currentGame != selectedGame) //game is on
         {
             nextScene = sceneName;
             player.Incre.nextGame = selectedGame;
@@ -537,6 +533,7 @@ public class update : MonoBehaviour {
             showMessage2("Do you want to close the minigame?", "Are you sure?", dialogMode.exitgame);
         }
     }
+
     public void changeScenes(string newScene)
     {
         SceneManager.LoadScene(newScene, UnityEngine.SceneManagement.LoadSceneMode.Additive);
@@ -554,23 +551,18 @@ public class update : MonoBehaviour {
             Debug.Log("pressed");
             return true;
         }
-        if(Input.GetAxis("Mouse X") != 0)
-        {
+
+		if (Input.GetAxis("Mouse X") != 0 ||
+			Input.GetAxis("Mouse Y") != 0)
             return true;
-        }
-        if(Input.GetAxis("Mouse Y") != 0)
-        {
-            return true;
-        }
-        if(Input.GetKeyDown("up") || Input.GetKeyDown("down") || Input.GetKeyDown("right") || Input.GetKeyDown("left") ||
+
+        if (Input.GetKeyDown("up") || Input.GetKeyDown("down") || Input.GetKeyDown("right") || Input.GetKeyDown("left") ||
             Input.GetKeyDown("a") || Input.GetKeyDown("s") || Input.GetKeyDown("d") || Input.GetKeyDown("w"))
-        {
             return true;
-        }
-        if(player.Incre.debugging)
-        {
+
+        if (player.Incre.debugging)
             return true;
-        }
+
         return false;
     }
     
@@ -585,10 +577,12 @@ public class update : MonoBehaviour {
     {
         player.getReward(minigame.seeker, usedStamina);
     }
+
     public void debug_MastermindReward(int usedStamina)
     {
         player.getReward(minigame.mastermind, usedStamina);
     }
+
     public void debug_ConquerorReward(int usedStamina)
     {
         player.getReward(minigame.conquer, usedStamina);
@@ -599,18 +593,22 @@ public class update : MonoBehaviour {
         player.Incre.stamina.cur = 10;
         player.Incre.stamina.cur = 10;
     }
+
     public void debug_lvUp()
     {
         player.Incre.lv++;
     }
+
     public void debug_lvDown()
     {
         player.Incre.lv--;
     }
+
     public void debug_noTime()
     {
         player.Incre.timeleft.cur -= 60*5;
     }
+
     public void debug_yesTime()
     {
         player.Incre.timeleft.cur += 60 * 5;
@@ -620,6 +618,7 @@ public class update : MonoBehaviour {
     {
         player.Incre.needTutorial = false;
     }
+
     public void debug_addDay(int i)
     {
         loginScript.updatePassiveProgress(DateTime.Now.AddDays(-i));
@@ -627,12 +626,14 @@ public class update : MonoBehaviour {
         player.Incre.passivePlayingTimeLeft -= 7;
         Debug.Log("remain passive days = " + player.Incre.passivePlayingTimeLeft);
     }
+
     public void debug_playHour(int i)
     {
         loginScript.updateActiveProgress(DateTime.Now.AddHours(-i));
         player.Incre.debugging = true;
         Debug.Log("remain active playing time = " + player.Incre.activePlayingTimeLeft--);
     }
+
     public void debug_gameON()
     {
         player.Incre.gameON = true;
@@ -647,6 +648,7 @@ public class update : MonoBehaviour {
     {
         player.Incre.lastLogOut = DateTime.Now;
         Debug.Log("last logout saved: " + player.Incre.lastLogOut.ToString());
+
         if (player.isLocal)
         {
             Debug.Log("local saving");
@@ -667,15 +669,5 @@ public class update : MonoBehaviour {
 
     public void debug_load()
     {
-        
     }
 }
-
-public enum dialogMode
-{
-    exitgame,
-    changeGame,
-    exitapplication,
-    resetGame
-}
-
