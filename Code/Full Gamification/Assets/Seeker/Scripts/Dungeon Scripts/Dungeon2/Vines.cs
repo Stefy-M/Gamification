@@ -50,7 +50,10 @@ public class Vines : MonoBehaviour {
     private void Dodge()
     {
         float x = 0.0f;
-        
+        float difficultyCheck = 0.1f * ((Random.Range(0.0f, player.GetComponent<PlayerStats>().GetTotalDexterity()) + Random.Range(0.0f, player.GetComponent<PlayerStats>().GetTotalInsight())) * difficulty); //implementation just to make it work
+                                                                                                                                                                                                               //could use some rebalancing probably.
+
+
         // Use player stamina. If player doesn't have 3 or more stamina, use all and apply it to dodge chance
         if (player.GetComponent<PlayerStats>().current_stamina <= 2)
         {
@@ -66,10 +69,10 @@ public class Vines : MonoBehaviour {
         // Rolls to see if player dodges trap
 
         // If fails roll
-        if (x + (player.GetComponent<PlayerStats>().GetTotalInsight() * .1) <= difficulty)
+        if (x + (player.GetComponent<PlayerStats>().GetTotalInsight()) <= difficultyCheck) //changed this line to not multiply insight by 1
         {
             // If the player's dexterity roll was fast enough, take reduced damage
-            if (x >= Mathf.CeilToInt(difficulty * 0.8f))
+            if (x >= Mathf.CeilToInt(difficultyCheck * 0.8f))
             {
                 player.GetComponent<PlayerStats>().Hurt(Mathf.FloorToInt(damage * 0.5f * (1 - (armor/100))));
                 notification.GetComponent<TextInfo>().AddText("You weren't fast enough to dodge the vines unscathed.");
@@ -94,6 +97,8 @@ public class Vines : MonoBehaviour {
     private void DigUp()
     {
         float x = 0.0f;
+        float difficultyCheck = 0.1f * ((Random.Range(0.0f, player.GetComponent<PlayerStats>().GetTotalDexterity()) + Random.Range(0.0f, player.GetComponent<PlayerStats>().GetTotalInsight())) * difficulty); //implementation just to make it work
+        //could use some rebalancing probably.
 
         // If no stamina, reduce chance of success
         if (player.GetComponent<PlayerStats>().current_stamina <= 0)
@@ -108,7 +113,7 @@ public class Vines : MonoBehaviour {
             player.GetComponent<PlayerStats>().Tired(1);
         }
         
-        if (x + (player.GetComponent<PlayerStats>().GetTotalDexterity() * 0.1f) <= difficulty)
+        if (x + (player.GetComponent<PlayerStats>().GetTotalDexterity()) <= difficultyCheck) //removed multiplication by .1 because does not fit this balance model
         {
             notification.GetComponent<TextInfo>().AddText("The vines thrash at you.");
             Dodge();
