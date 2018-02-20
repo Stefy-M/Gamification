@@ -53,6 +53,8 @@ public class update : MonoBehaviour {
     public Image progressBarImage;
     public Text msglog;
 
+	public Tutorial tut;
+
     string nextScene;
     int frameCount; // Throttles update of progress bar
     bool upgradeWindow;
@@ -99,6 +101,9 @@ public class update : MonoBehaviour {
 	// Update is called once per frame
 	void Update()
     {
+		if (Input.GetKeyUp ("h"))
+			tut.Reset ();
+		
         updateModeButton();
         updateTimeBar();
         updateStamina();

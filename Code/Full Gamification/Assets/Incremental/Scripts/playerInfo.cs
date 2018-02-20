@@ -100,8 +100,8 @@ public struct timeLeft
         }
     }
 }
-
 #endregion
+
 public class IncrementalData
 {
     public bool startNew = true;
