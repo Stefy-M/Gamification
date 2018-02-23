@@ -133,7 +133,7 @@ public class PlayerMovementScript : MonoBehaviour {
 
 		if (player.Conqueror.hp != 30) {
 			//init values
-			player.Conqueror.g = new Gun(1, 150, 0);
+			player.Conqueror.g = new Gun(1, 700, 0);
 			player.Conqueror.hp = 30;
 			player.Conqueror.damage = .3f;
 			player.Conqueror.skill = 2;
@@ -218,14 +218,14 @@ public class PlayerMovementScript : MonoBehaviour {
 
 		if (Input.GetKeyDown (KeyCode.Alpha1)) {
 			player1.g = player1.guns [0];
-			GameObject.Find ("Text").GetComponent<Text>().text = "Weapon 1";
+			GameObject.Find ("Weapons").GetComponent<Text>().text = "Weapon 1";
 		} else if (Input.GetKeyDown (KeyCode.Alpha2)) {
 			player1.g = player1.guns [1];
-			GameObject.Find ("Text").GetComponent<Text>().text = "Weapon 2";
+			GameObject.Find ("Weapons").GetComponent<Text>().text = "Weapon 2";
 		}
 		 else if (Input.GetKeyDown (KeyCode.Alpha3)) {
 		player1.g = player1.guns [2];
-			GameObject.Find ("Text").GetComponent<Text>().text = "Weapon 3";
+			GameObject.Find ("Weapons").GetComponent<Text>().text = "Weapon 3";
 		}
 
 		//skills
