@@ -319,6 +319,8 @@ public static class player
         }
         else
             seekerData = new seeker();
+
+		Incre.username = NetworkManager.Instance.GetUsername ();
     }
 
     /// <summary>

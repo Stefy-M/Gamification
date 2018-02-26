@@ -354,8 +354,10 @@ public class NetworkManager : MonoBehaviour
         //if (_udp != null) _udp.Close();
     }
 
-    
-
+	public string GetUsername()
+	{
+		return Instance._username;
+	}
 
     /********************************************************************************
     ------------------------ NETWORK AND ENCRYPTION SECTION -------------------------
