@@ -70,7 +70,6 @@ public class update : MonoBehaviour {
 //        player.Incre.stamina.cur = 10;
 //        player.Incre.needTutorial = false;
 //        player.Incre.timeleft.cur = 60 * 60;
-//        sendMsg("Welcome " + player.Incre.username);
 
 		sendMsg (randomWelcomeMessage ());
 
