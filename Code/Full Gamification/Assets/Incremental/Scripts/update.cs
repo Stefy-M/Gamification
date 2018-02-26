@@ -201,8 +201,8 @@ public class update : MonoBehaviour {
     void updatePlayerInfo()
     {
         if (playerInfoDisplay != null)
-            playerInfoDisplay.text = string.Format("-player info-\r\nid: {0}\r\nreset: {1}",
-				player.Incre.username, player.Incre.permanentPerksLV);
+            playerInfoDisplay.text = string.Format("-player info-\r\nid: {0}\r\nresets: {1}",
+				player.Incre.username, player.Incre.permanentPerksLV - 1);
     }
 
     void updateRedeemText()

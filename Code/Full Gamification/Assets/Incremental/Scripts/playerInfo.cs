@@ -199,16 +199,12 @@ public static class player
 		switch (g) {
 		case game.incremental:
 			return JsonConvert.SerializeObject(Incre);
-			break;
 		case game.mastermind:
 			return JsonConvert.SerializeObject(Sudoku);
-			break;
 		case game.seeker:
 			return JsonConvert.SerializeObject(seekerData);
-			break;
 		case game.conquer:
 			return JsonConvert.SerializeObject(Conqueror);
-			break;
 		default:
 			return "";
 		}
