@@ -72,6 +72,8 @@ public class update : MonoBehaviour {
 //        player.Incre.timeleft.cur = 60 * 60;
 //        sendMsg("Welcome " + player.Incre.username);
 
+		sendMsg (randomWelcomeMessage ());
+
         if (!player.Incre.startMessageDisplayed)
         {
             showMessage("While you were not playing the game, "
@@ -551,6 +553,31 @@ public class update : MonoBehaviour {
         strDele fun = new strDele(showMessage);
         bonusCode.analyzeCode(bonusCodeInput.text, fun);
     }
+
+	private string randomWelcomeMessage ()
+	{
+		string[] wels = {
+			"Welcome!!!!!!!!!!!!!!!!!!!!!!",
+			"Hello!!!!!!",
+			"Lootboxes will be coming soon!",
+			"Some numbers got bigger!",
+			"No anime girls!",
+			"Hostile takeover!",
+			"Glorious!",
+			"Fearless!",
+			"Spoilers!",
+			"Activated with moisture!",
+			"We'd probably be better off with a Minecraft clone!",
+			"Games as a service!",
+			"Gold team rules!",
+			"Ellipsis warning!",
+			"Better than nothing!"
+		};
+
+		int i = UnityEngine.Random.Range (0, wels.Length);
+
+		return wels [i];
+	}
 
     public void debug_seekerReward(int usedStamina)
     {
