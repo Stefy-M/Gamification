@@ -55,7 +55,6 @@ public class update : MonoBehaviour {
 	public Tutorial tut;
 
     string nextScene;
-    int frameCount; // Throttles update of progress bar
     bool upgradeWindow;
     bool bonusWindow;
     dialogMode _dialogMode;
@@ -89,7 +88,6 @@ public class update : MonoBehaviour {
         upgrade.SetActive(upgradeWindow);
         bonus.SetActive(bonusWindow);
 
-        frameCount = 100;
 		player.Incre.passive = !player.Incre.gameON;
 
 //		if (player.Incre.timeleft.cur <= 0)
@@ -334,15 +332,9 @@ public class update : MonoBehaviour {
             else
                 progressRate = bal.getActiveProgressBarRate() * boosterRate;
 
-            if (frameCount >= 10)
-            {
-                txt_progress.text = string.Format("Prog {0}/100(+{1})",
-					((player.Incre.progress.cur / bal.getMaxProgress() * 100)).ToString("N2"),
-					(progressRate / bal.getMaxProgress() * 10000).ToString("N3"));
-                frameCount = 0;
-            }
-            else
-                frameCount++;
+            txt_progress.text = string.Format("Prog {0}/100(+{1})",
+				((player.Incre.progress.cur / bal.getMaxProgress() * 100)).ToString("N2"),
+				(progressRate / bal.getMaxProgress() * 10000).ToString("N3"));
         }
     }
 
