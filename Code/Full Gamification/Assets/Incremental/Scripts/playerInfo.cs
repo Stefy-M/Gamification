@@ -114,32 +114,8 @@ public class IncrementalData
     public int lv = 1;
     public string username = "Username";
     public int permanentPerksLV = 1;
-    //string _DateTimeStr = "";
     public bool startMessageDisplayed = false;
     public DateTime lastLogOut = DateTime.Now;
-        /*
-    {
-        get
-        {
-            string now;
-            if (_DateTimeStr == "")
-            {
-                now = DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss.fff", CultureInfo.InvariantCulture);
-                return Convert.ToDateTime(now);
-            }
-            else
-            {
-                DateTime dt = Convert.ToDateTime(_DateTimeStr);
-                return dt;
-            }
-        }
-        set
-        {
-            string dateTimeStr = DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss.fff", CultureInfo.InvariantCulture);
-            _DateTimeStr = dateTimeStr;
-
-        }
-    }*/
     public bool passive = false;
     public bool gameON = false;
     public minigame currentGame;
