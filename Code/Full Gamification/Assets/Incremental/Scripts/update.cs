@@ -99,9 +99,6 @@ public class update : MonoBehaviour {
 	// Update is called once per frame
 	void Update()
     {
-		if (Input.GetKeyUp ("h"))
-			tut.Reset ();
-		
         updateModeButton();
         updateStamina();
         updateProgressBar();
@@ -417,6 +414,11 @@ public class update : MonoBehaviour {
         bonusWindow = !bonusWindow;
         bonus.SetActive(bonusWindow);
     }
+
+	public void helpButtonPressed()
+	{
+		tut.Reset ();
+	}
 
     public void changeMODE()
     {
