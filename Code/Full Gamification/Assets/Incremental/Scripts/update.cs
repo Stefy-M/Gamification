@@ -26,7 +26,6 @@ public class update : MonoBehaviour {
     public GameObject mainScreen;
     public Slider bar_progress;
     public Slider bar_exp;
-    public Slider bar_timeLeft;
 
     public Text txt_progress;
     public Text txt_exp;
@@ -106,7 +105,6 @@ public class update : MonoBehaviour {
 			tut.Reset ();
 		
         updateModeButton();
-        updateTimeBar();
         updateStamina();
         updateProgressBar();
         updateLv();
@@ -359,28 +357,6 @@ public class update : MonoBehaviour {
         //stamina decreases when player enters some area in minigames
         txt_stamina.text = String.Format("STAMINA: {0}/{1}",
 			player.Incre.stamina.cur, player.Incre.stamina.max);
-    }
-
-    void updateTimeBar()
-    {
-        if (!player.Incre.passive)
-        {
-            if (player.Incre.timeleft.cur > 0)
-				player.Incre.timeleft.cur -= Time.deltaTime;
-			
-            if (player.Incre.timeleft.cur <= 0)
-            {
-//                player.Incre.gameON = false;
-                player.Incre.passive = true;
-				// This is the intended behavior (but not really)
-				// Stamina is meant to handle that.
-//				player.Incre.nextGame = minigame.none; 
-//                SceneManager.LoadScene("ui", LoadSceneMode.Single);
-            }
-        }
-
-        bar_timeLeft.value = (float)(player.Incre.timeleft.cur / player.Incre.timeleft.max);
-        txt_timeLeft.text = changeToTime((float)player.Incre.timeleft.cur);
     }
 
     void updateCoin()
