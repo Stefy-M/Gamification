@@ -127,6 +127,7 @@ public class PlayerMovementScript : MonoBehaviour {
 	Vector3 xyvec;
     Animator anim;
     public AudioClip playerHit;
+    public GameObject mf;
 
 	GameObject rocket;
 	void Start () {
@@ -164,7 +165,7 @@ public class PlayerMovementScript : MonoBehaviour {
 		healthslider.GetComponent<Slider> ().minValue = 0;
 		healthslider.GetComponent<Slider> ().maxValue = player1.hp;
 		healthslider.GetComponent<Slider>().value = player1.hp;
-        anim = GameObject.Find("muzzleFlash").GetComponent<Animator>();
+        anim = mf.GetComponent<Animator>();
 
         
     }
