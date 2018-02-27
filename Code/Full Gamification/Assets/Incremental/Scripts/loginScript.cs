@@ -12,6 +12,7 @@ public class loginScript : MonoBehaviour {
     public GameObject pass;
     public Text status;
     public NetworkManager network;
+	public InputField loginField;
 
 	EventSystem system;
 	bool tryLogin = false;
@@ -20,13 +21,19 @@ public class loginScript : MonoBehaviour {
     {
         status.enabled = false;
         system = EventSystem.current;
+		loginField.OnPointerClick(new PointerEventData(system));
+		system.SetSelectedGameObject(loginField.gameObject, new BaseEventData(system));
     }
 
 	void Update()
     {
         if (Input.GetKeyDown(KeyCode.Tab))
-        {
-            Selectable next = system.currentSelectedGameObject.GetComponent<Selectable>().FindSelectableOnDown();
+		{
+			Selectable next = system.currentSelectedGameObject.GetComponent<Selectable>().FindSelectableOnDown();
+
+			if (next == null)
+				next = loginField.gameObject.GetComponent<Selectable>();
+
             if (next != null)
             {
                 InputField inputfield = next.GetComponent<InputField>();
