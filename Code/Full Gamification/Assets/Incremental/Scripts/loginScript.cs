@@ -12,17 +12,17 @@ public class loginScript : MonoBehaviour {
     public GameObject pass;
     public Text status;
     public NetworkManager network;
-    bool tryLogin = false;
-    EventSystem system;
-    // Use this for initialization
-    void Start ()
+
+	EventSystem system;
+	bool tryLogin = false;
+
+    void Start()
     {
         status.enabled = false;
         system = EventSystem.current;
     }
-	
-	// Update is called once per frame
-	void Update ()
+
+	void Update()
     {
         if (Input.GetKeyDown(KeyCode.Tab))
         {
@@ -37,57 +37,47 @@ public class loginScript : MonoBehaviour {
             }
             //else Debug.Log("next nagivation element not found");
         }
-        if(Input.GetKeyDown(KeyCode.Return))
-        {
+
+        if (Input.GetKeyDown(KeyCode.Return))
             login();
-        }
 
         if (tryLogin)
         {
             status.enabled = true;
             status.text = network.loginFlag.ToString();
-            if (network.loginFlag == -1)
-            {
-                status.text = "Username not found.";
-            }
-            //password doesn't match
-            else if (network.loginFlag == -2)
-            {
-                status.text = "Password doesn't match.";
-            }
-            else if (network.loginFlag == -3)
-            {
-                status.text = "Update game client.";
-            }
-            //login successful
-            else if (network.loginFlag == 1)
-            {
-                status.text = "Login successful.";
-            }
-            else if (network.loginFlag == 2)
-            {
-                status.text = "Loading player's data...";
-            }
-            else if (network.loginFlag == 3)
-            {
-                //network has all users data in string form;
-                
-                //_loginData[]
-                status.text = "Loading Done.";
-                //Debug.Log(NetworkManager.Instance.loaded_json);
-                player.load();
-                status.text = "Loading Done.";
-                player.isLocal = false;
-                gameStart();
-            }
-            else if (network.loginFlag == 0)
-            {
-                status.text = "Server is not connected.";
-            }
+
+			switch (network.loginFlag) {
+			// Unsuccessful login flags
+			case -1:
+				status.text = "Username not found.";
+				break;
+			case -2:
+				status.text = "Password doesn't match.";
+				break;
+			case -3:
+				status.text = "Update game client.";
+				break;
+			// Successful login flags
+			case 1:
+				status.text = "Login successful.";
+				break;
+			case 2:
+				status.text = "Loading player's data...";
+				break;
+			case 3:
+				player.load();
+				status.text = "Loading Done.";
+				player.isLocal = false;
+				gameStart();
+				break;
+			// No server flag
+			case 0:
+				status.text = "Server is not connected.";
+				break;
+			}
         }
     }
 
-    //Enter button pressed 
     public void login()
     {
         network.StartConnection(id.text, pass.GetComponent<InputField>().text);
@@ -104,7 +94,7 @@ public class loginScript : MonoBehaviour {
 
     public void gameStart()
     {
-        if(player.Incre.startNew)
+        if (player.Incre.startNew)
         {
             player.Incre.startNew = false;
         }

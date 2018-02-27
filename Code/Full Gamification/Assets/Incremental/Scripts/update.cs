@@ -210,7 +210,7 @@ public class update : MonoBehaviour {
 		if (player.Incre.passive)
         {
             txt_redeem_pc.text = string.Format("pc: +{0}",
-				bal.getPassiveCoinBonus()* player.Incre.coin.boosterRate);
+				bal.getPassiveCoinBonus() * player.Incre.coin.boosterRate);
             txt_redeem_ac.text = string.Format("ac: +{0}", 0);
             txt_redeem_exp.text = string.Format("exp: +{0}",
 				bal.getPassiveEXPRate() * player.Incre.exp.boosterRate);
