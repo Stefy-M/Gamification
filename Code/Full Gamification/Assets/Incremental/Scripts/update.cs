@@ -94,6 +94,7 @@ public class update : MonoBehaviour {
 	void Update()
     {
         updateModeButton();
+		updateTimeBar();
         updateStamina();
         updateProgressBar();
         updateLv();
@@ -235,34 +236,7 @@ public class update : MonoBehaviour {
     //returns true if it is full (100%)
     void updateProgressBar()
     {
-        //check over Progress
-        double gainedExp = 0;
-
-        if (player.Incre.debugging)
-        {
-            while (player.Incre.progress.cur > bal.getMaxProgress())
-            {
-                if (player.Incre.passive)
-                {
-                    earnPassiveCoin(bal.getPassiveCoinBonus());
-                    earnExp(bal.getPassiveEXPRate());
-                    player.Incre.progress.cur -= bal.getMaxProgress();
-                    gainedExp += bal.getPassiveEXPRate(); //debug
-                }
-                else  //debugging ONLY
-                {
-                    earnActiveCoin(bal.getActiveCoinBonus());
-                    earnPassiveCoin(bal.getPassiveCoinBonus());
-                    earnExp(bal.getActiveEXPRate());
-                    player.Incre.progress.cur -= bal.getMaxProgress();
-                    gainedExp += bal.getActiveEXPRate(); //debug
-                }
-            }
-
-            player.Incre.debugging = false;
-        }
-
-        //change color depends on mode
+		//change color depends on mode
         if (player.Incre.passive)
 			progressBarImage.color = new Color32(16, 203, 255, 255);
         else
@@ -295,12 +269,12 @@ public class update : MonoBehaviour {
 
             if (player.Incre.passive == true)
             {
-                txt_mode.text = "Passive MODE";
+                txt_mode.text = "Passive Mode";
                 player.Incre.progress.cur += bal.getPassiveProgressBarRate() * boosterRate;
             }
             else
             {
-                txt_mode.text = "Active MODE";
+                txt_mode.text = "Active Mode";
                 player.Incre.progress.cur += bal.getActiveProgressBarRate() * boosterRate;
             }
 
@@ -354,6 +328,20 @@ public class update : MonoBehaviour {
         txt_stamina.text = String.Format("STAMINA: {0}/{1}",
 			player.Incre.stamina.cur, player.Incre.stamina.max);
     }
+
+	void updateTimeBar()
+	{
+		if (!player.Incre.passive)
+		{
+			if (player.Incre.timeleft.cur > 0)
+				player.Incre.timeleft.cur -= Time.deltaTime;
+
+			if (player.Incre.timeleft.cur <= 0)
+				player.Incre.passive = true;
+		}
+
+		txt_timeLeft.text = changeToTime((float)player.Incre.timeleft.cur);
+	}
 
     void updateCoin()
     {
@@ -431,12 +419,11 @@ public class update : MonoBehaviour {
     {
         if (!player.Incre.gameON)
         {
-            showMessage("Minigame is not running. You can't change it to active mode!", "Minigame Not Running");
+            showMessage("Minigame not running. Can't change it to active mode.", "Minigame Not Running");
             player.Incre.passive = true;
             return;
         }
 
-        //have enough time and stamina
         if (player.Incre.timeleft.cur > 0 && player.Incre.stamina.cur > 0)
         {
             player.Incre.progress.cur = 0; //set to zero when switching between active and passive mode
@@ -519,13 +506,36 @@ public class update : MonoBehaviour {
             return true;
 
         return false;
-    }
+	}
+
+	void save()
+	{
+		player.Incre.lastLogOut = DateTime.Now;
+		Debug.Log("Last logout saved: " + player.Incre.lastLogOut.ToString());
+
+		if (player.isLocal)
+		{
+			Debug.Log("Local saving");
+			player.localIncreData = player.getJsonStr(game.incremental);
+			player.localMasterData = player.getJsonStr(game.mastermind);
+			player.localSeekerData = player.getJsonStr(game.seeker);
+			player.localConquerData = player.getJsonStr(game.conquer);
+		}
+		else
+		{
+			Debug.Log("Online saving");
+			NetworkManager.Instance.QueueMessage(new List<string>() { "INCREMENTAL", player.getJsonStr(game.incremental) });
+			NetworkManager.Instance.QueueMessage(new List<string>() { "MASTERMIND", player.getJsonStr(game.mastermind) });
+			NetworkManager.Instance.QueueMessage(new List<string>() { "SEEKER", player.getJsonStr(game.seeker) });
+			NetworkManager.Instance.QueueMessage(new List<string>() { "CONQUEROR", player.getJsonStr(game.conquer) });
+		}
+	}
 
     public void onClickGetBonus()
     {
         strDele fun = new strDele(showMessage);
         bonusCode.analyzeCode(bonusCodeInput.text, fun);
-    }
+	}
 
     public void debug_seekerReward(int usedStamina)
     {
@@ -591,37 +601,5 @@ public class update : MonoBehaviour {
     public void debug_gameON()
     {
         player.Incre.gameON = true;
-    }
-
-    public void debug_save()
-    {
-        save();
-    }
-
-    void save()
-	{
-        player.Incre.lastLogOut = DateTime.Now;
-        Debug.Log("Last logout saved: " + player.Incre.lastLogOut.ToString());
-
-        if (player.isLocal)
-        {
-            Debug.Log("Local saving");
-            player.localIncreData = player.getJsonStr(game.incremental);
-            player.localMasterData = player.getJsonStr(game.mastermind);
-            player.localSeekerData = player.getJsonStr(game.seeker);
-            player.localConquerData = player.getJsonStr(game.conquer);
-        }
-        else
-        {
-            Debug.Log("Online saving");
-            NetworkManager.Instance.QueueMessage(new List<string>() { "INCREMENTAL", player.getJsonStr(game.incremental) });
-            NetworkManager.Instance.QueueMessage(new List<string>() { "MASTERMIND", player.getJsonStr(game.mastermind) });
-            NetworkManager.Instance.QueueMessage(new List<string>() { "SEEKER", player.getJsonStr(game.seeker) });
-            NetworkManager.Instance.QueueMessage(new List<string>() { "CONQUEROR", player.getJsonStr(game.conquer) });
-        }
-    }
-
-    public void debug_load()
-    {
     }
 }
