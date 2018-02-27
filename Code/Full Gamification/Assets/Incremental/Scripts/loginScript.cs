@@ -128,7 +128,7 @@ public class loginScript : MonoBehaviour {
         return 0;
     }
 
-    //this function is ONLY for debuging purpose
+    //this function is ONLY for debugging purpose
     public static int updateActiveProgress(DateTime time)
     {
         TimeSpan span = DateTime.Now.Subtract(time);
