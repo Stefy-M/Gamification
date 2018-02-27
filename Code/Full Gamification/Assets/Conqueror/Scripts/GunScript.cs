@@ -13,8 +13,9 @@ public class Gun
     //type 2 = triple spray
     //type 3 = laser
     public int type = 2;
-	public float rof = 20f;
-	public float maxrof = 20f;
+	public float rof = 5f;
+	public float maxrof = 15f;
+
 
 	public Gun() {
 
@@ -31,13 +32,20 @@ public class Gun
         switch (type)
         {
 		case 0:
-			Vector3 mouse = Camera.main.ScreenToWorldPoint (new Vector3 (Input.mousePosition.x, Input.mousePosition.y, 1));
-			GameObject rocket = (GameObject)GameObject.Instantiate (Resources.Load ("BulletPrefab"), player.transform.position, player.transform.rotation);
-			mouse.x -= player.transform.position.x;
-			mouse.y -= player.transform.position.y;
-			mouse = mouse.normalized;
+                /*Vector3 mouse = Camera.main.ScreenToWorldPoint (new Vector3 (Input.mousePosition.x, Input.mousePosition.y, 1));
+                GameObject rocket = (GameObject)GameObject.Instantiate (Resources.Load ("BulletPrefab"), player.transform.position, player.transform.rotation);
+                mouse.x -= player.transform.position.x;
+                mouse.y -= player.transform.position.y;
+                mouse = mouse.normalized;
 
-			rocket.GetComponent<Rigidbody2D> ().AddForce(new Vector2 (mouse.x * speed,mouse.y * speed));
+                rocket.GetComponent<Rigidbody2D> ().AddForce(new Vector2 (mouse.x * speed,mouse.y * speed));
+                */
+
+                Vector3 worldMousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                Vector2 direction = (Vector2)((worldMousePos - player.transform.position));
+                direction.Normalize();
+                GameObject rocket = (GameObject)GameObject.Instantiate(Resources.Load("BulletPrefab"), player.transform.position + (Vector3)(direction * 0.2f), Quaternion.identity);
+                rocket.GetComponent<Rigidbody2D>().velocity = direction * speed;
                 break;
 		case 1:
 			Vector3 mouse2 = Camera.main.ScreenToWorldPoint (new Vector3 (Input.mousePosition.x, Input.mousePosition.y, 1));

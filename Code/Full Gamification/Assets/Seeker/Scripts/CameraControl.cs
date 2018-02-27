@@ -10,6 +10,7 @@ public class CameraControl : MonoBehaviour {
     private Vector3 previous_position;
     private Vector3 target_position;
     public float move_speed;
+    public bool teleported;
 
     public Vector3 min_cam_position;
     public Vector3 max_cam_position;
@@ -67,14 +68,29 @@ public class CameraControl : MonoBehaviour {
         target_position = new Vector3(target.transform.position.x, target.transform.position.y, transform.position.z);
         if (target_position.x <= min_cam_position.x || target_position.x >= max_cam_position.x)
         {
-            target_position.x = previous_position.x;
+            if (!teleported)
+                target_position.x = previous_position.x;
+            else
+                target_position.x = min_cam_position.x;
         }
         if (target_position.y <= min_cam_position.y || target_position.y >= max_cam_position.y)
         {
-            target_position.y = previous_position.y;
+            if (!teleported)
+                target_position.y = previous_position.y;
+            else
+                target_position.x = min_cam_position.y;
+            
         }
+
+        if(teleported)
+            setTeleported(false);
 
         transform.position = Vector3.Lerp(transform.position, target_position, move_speed * Time.deltaTime);
         previous_position = target_position;
 	}
+
+    public void setTeleported(bool val)
+    {
+        teleported = val;
+    }
 }

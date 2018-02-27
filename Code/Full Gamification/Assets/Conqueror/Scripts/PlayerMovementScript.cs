@@ -125,15 +125,18 @@ public class PlayerMovementScript : MonoBehaviour {
     //public conqueror cplayer;
     private Rigidbody2D _player;
 	Vector3 xyvec;
+    Animator anim;
+    public AudioClip playerHit;
 
 	GameObject rocket;
 	void Start () {
 		player1 = new Player ();
         //player1 = player.Conqueror;
 
+
 		if (player.Conqueror.hp != 30) {
 			//init values
-			player.Conqueror.g = new Gun(1, 150, 0);
+			player.Conqueror.g = new Gun(1, 1, 0);
 			player.Conqueror.hp = 30;
 			player.Conqueror.damage = .3f;
 			player.Conqueror.skill = 2;
@@ -150,7 +153,7 @@ public class PlayerMovementScript : MonoBehaviour {
         }
         else
         {
-            player1.g = new Gun(1, 150, 0);
+            player1.g = new Gun(1, 1, 0);
             player1.hp = 30;
             player1.damage = .3f;
             player1.skill = 2;
@@ -161,7 +164,10 @@ public class PlayerMovementScript : MonoBehaviour {
 		healthslider.GetComponent<Slider> ().minValue = 0;
 		healthslider.GetComponent<Slider> ().maxValue = player1.hp;
 		healthslider.GetComponent<Slider>().value = player1.hp;
-	}
+        anim = GameObject.Find("muzzleFlash").GetComponent<Animator>();
+
+        
+    }
 		
 	// Update is called once per frame
 
@@ -173,10 +179,18 @@ public class PlayerMovementScript : MonoBehaviour {
         player.Conqueror.skill = player1.skill;
         player.Conqueror.guns = player1.guns;
 
+        var mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Quaternion rot = Quaternion.LookRotation(transform.position - mousePosition, Vector3.forward);
+        transform.rotation = rot;
+        transform.eulerAngles = new Vector3(0, 0, transform.eulerAngles.z);
+        
+
+
         //change rate of fire
         player1.g.rof--;
 		if ((Input.GetMouseButton (1) && player1.g.rof <= 0) || (Input.GetMouseButton(0) && player1.g.rof <= 0)) {
-			player1.g.shoot();
+            anim.SetTrigger("Attack");
+            player1.g.shoot();
 			player1.g.rof = player1.g.maxrof;
 		}
 
@@ -241,6 +255,7 @@ public class PlayerMovementScript : MonoBehaviour {
 			return;
 		}
 		player1.hp--;
+        SoundManager.instance.PlaySingle(playerHit);
 		//update slider
 		GameObject healthslider = GameObject.Find("PlayerHP");
 		healthslider.GetComponent<Slider> ().value = player1.hp;

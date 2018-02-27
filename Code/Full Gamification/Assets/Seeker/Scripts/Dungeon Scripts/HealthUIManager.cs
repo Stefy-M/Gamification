@@ -18,12 +18,14 @@ public class HealthUIManager : MonoBehaviour {
     public Text insight_text;
     public SpriteRenderer armor_image;
     public Text armor_text;
+    public GameObject flagButton;
 
     public UnityEvent death;
 
 	// Use this for initialization
 	void Start () {
-		
+        if (GlobalControl.Instance.quest_progress > 6)
+            flagButton.SetActive(true);
 	}
 	
 	// Update is called once per frame

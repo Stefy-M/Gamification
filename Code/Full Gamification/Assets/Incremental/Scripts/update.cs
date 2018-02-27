@@ -132,6 +132,12 @@ public class update : MonoBehaviour {
 			saveCount++;
     }
 
+    private void OnApplicationQuit()
+    {
+        Debug.Log("Application ending after " + Time.time + " seconds");
+        save();
+    }
+
     public void sendMsg(string msg)
     {
         msglog.text = ">> " + msg;
