@@ -60,13 +60,10 @@ public class update : MonoBehaviour {
     dialogMode _dialogMode;
     string localSaveData;
 
-    int saveCount = 0;
-
     void Start()
     {
         //test purpose
 //        player.Incre.stamina.cur = 10;
-//        player.Incre.needTutorial = false;
 //        player.Incre.timeleft.cur = 60 * 60;
 
 		sendMsg (randomWelcomeMessage ());
@@ -90,10 +87,7 @@ public class update : MonoBehaviour {
 
 		player.Incre.passive = !player.Incre.gameON;
 
-//		if (player.Incre.timeleft.cur <= 0)
-//            ("Active time finished.", "Active Time");
-//        Vector3 newpos = new Vector3(0, 0, 0);
-//        upgrade.transform.position = newpos;
+		InvokeRepeating ("save", 3, 3);
     }
 
 	// Update is called once per frame
@@ -115,15 +109,6 @@ public class update : MonoBehaviour {
             bar_exp.value = 0.021f;
 		
 		txt_exit.text = player.Incre.gameON ? "Close Game" : "Exit Game";
-
-        if (saveCount >= 60 * 3)
-        {
-            Debug.Log("Saving...");
-            save();
-            saveCount = 0;
-        }
-        else
-			saveCount++;
     }
 
     public void sendMsg(string msg)
@@ -207,7 +192,7 @@ public class update : MonoBehaviour {
 
     void updateRedeemText()
     {
-		if (player.Incre.passive) //passive mode
+		if (player.Incre.passive)
         {
             txt_redeem_pc.text = string.Format("pc: +{0}",
 				bal.getPassiveCoinBonus()* player.Incre.coin.boosterRate);
@@ -291,17 +276,16 @@ public class update : MonoBehaviour {
                 if (isPlayerActive())
                 {
                     //redeem both
-                    earnPassiveCoin(bal.getPassiveCoinBonus()*(int)player.Incre.coin.boosterRate);
+                    earnPassiveCoin(bal.getPassiveCoinBonus() * (int)player.Incre.coin.boosterRate);
                     earnActiveCoin(bal.getActiveCoinBonus() * (int)player.Incre.coin.boosterRate);
-                    earnExp(bal.getActiveEXPRate()*player.Incre.exp.boosterRate);
+                    earnExp(bal.getActiveEXPRate() * player.Incre.exp.boosterRate);
                     player.Incre.progress.cur = 0;
                 }
             }
 			else //Passive MODE
             {
-                earnPassiveCoin(bal.getPassiveCoinBonus()* (int)player.Incre.coin.boosterRate);
+                earnPassiveCoin(bal.getPassiveCoinBonus() * (int)player.Incre.coin.boosterRate);
                 earnExp(bal.getPassiveEXPRate() * player.Incre.exp.boosterRate);
-                //set to zero
                 player.Incre.progress.cur = 0;
             }
         }
@@ -339,7 +323,30 @@ public class update : MonoBehaviour {
     {
 		DateTime t = new DateTime() + TimeSpan.FromSeconds(sec);
 		return t.ToString("HH:mm:ss");
-    }
+	}
+
+	string randomWelcomeMessage()
+	{
+		string[] wels = {
+			"Welcome!!!!!!!!!!!!!!!!!!!!!!",
+			"Hello!!!!!!",
+			"Lootboxes will be coming soon!",
+			"Some numbers got bigger!",
+			"No anime girls!",
+			"Hostile takeover!",
+			"Glorious!",
+			"Fearless!",
+			"Spoilers!",
+			"Activated with moisture!",
+			"We'd probably be better off with a Minecraft clone!",
+			"Games as a service!",
+			"Gold team rules!",
+			"Ellipsis warning!",
+			"Better than nothing!"
+		};
+
+		return wels[UnityEngine.Random.Range(0, wels.Length)];
+	}
 
     void updateStamina()
     {
@@ -371,7 +378,7 @@ public class update : MonoBehaviour {
             updateLv();
             player.Incre.exp.cur = (float)remain;
         }
-    }
+	}
 
     public void earnPassiveCoin(int amount)
     {
@@ -417,7 +424,7 @@ public class update : MonoBehaviour {
 
 	public void helpButtonPressed()
 	{
-		tut.Reset ();
+		tut.Reset();
 	}
 
     public void changeMODE()
@@ -499,10 +506,7 @@ public class update : MonoBehaviour {
     private bool isPlayerActive()
     {
         if (Input.GetMouseButtonDown(0))
-        {
-            Debug.Log("Clicked");
             return true;
-        }
 
 		if (Input.GetAxis("Mouse X") != 0 || Input.GetAxis("Mouse Y") != 0)
             return true;
@@ -522,31 +526,6 @@ public class update : MonoBehaviour {
         strDele fun = new strDele(showMessage);
         bonusCode.analyzeCode(bonusCodeInput.text, fun);
     }
-
-	private string randomWelcomeMessage ()
-	{
-		string[] wels = {
-			"Welcome!!!!!!!!!!!!!!!!!!!!!!",
-			"Hello!!!!!!",
-			"Lootboxes will be coming soon!",
-			"Some numbers got bigger!",
-			"No anime girls!",
-			"Hostile takeover!",
-			"Glorious!",
-			"Fearless!",
-			"Spoilers!",
-			"Activated with moisture!",
-			"We'd probably be better off with a Minecraft clone!",
-			"Games as a service!",
-			"Gold team rules!",
-			"Ellipsis warning!",
-			"Better than nothing!"
-		};
-
-		int i = UnityEngine.Random.Range (0, wels.Length);
-
-		return wels [i];
-	}
 
     public void debug_seekerReward(int usedStamina)
     {
@@ -620,7 +599,7 @@ public class update : MonoBehaviour {
     }
 
     void save()
-    {
+	{
         player.Incre.lastLogOut = DateTime.Now;
         Debug.Log("Last logout saved: " + player.Incre.lastLogOut.ToString());
 
