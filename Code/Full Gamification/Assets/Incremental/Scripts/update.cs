@@ -66,16 +66,30 @@ public class update : MonoBehaviour {
 //        player.Incre.stamina.cur = 10;
 //        player.Incre.timeleft.cur = 60 * 60;
 
-		sendMsg (randomWelcomeMessage ());
-
         if (!player.Incre.startMessageDisplayed)
-        {
+		{
             showMessage("While you were not playing the game, "
 				+ " (" + TimeSpan.FromSeconds(player.Incre.LogOutpassiveProgressGained) + ")"
 				+ (bal.getPassiveProgressBarRate() * player.Incre.LogOutpassiveProgressGained * 60).ToString("##.##") + "%"
 				+ " Passive Progress were collected.", "Passive Progress Gain");
-            player.Incre.startMessageDisplayed = true;
+			player.Incre.startMessageDisplayed = true;
         }
+
+		// This changes every time the scene is changed.
+		switch (player.Incre.currentGame) {
+		case minigame.seeker:
+			sendMsg("I wanted Minecraft!");
+			break;
+		case minigame.mastermind:
+			sendMsg("Commit it to your mind!");
+			break;
+		case minigame.conquer:
+			sendMsg("Rooty-tooty-point-and-shooty!");
+			break;
+		default:
+			sendMsg(randomWelcomeMessage());
+			break;
+		}
 
         updatePlayerInfo();
 
@@ -249,7 +263,6 @@ public class update : MonoBehaviour {
             {
                 if (isPlayerActive())
                 {
-                    //redeem both
                     earnPassiveCoin(bal.getPassiveCoinBonus() * (int)player.Incre.coin.boosterRate);
                     earnActiveCoin(bal.getActiveCoinBonus() * (int)player.Incre.coin.boosterRate);
                     earnExp(bal.getActiveEXPRate() * player.Incre.exp.boosterRate);
@@ -302,9 +315,9 @@ public class update : MonoBehaviour {
 	string randomWelcomeMessage()
 	{
 		string[] wels = {
-			"Welcome!!!!!!!!!!!!!!!!!!!!!!",
+			"Welcome!!!!",
 			"Hello!!!!!!",
-			"Lootboxes will be coming soon!",
+			"Lootboxes coming eventually!",
 			"Some numbers got bigger!",
 			"No anime girls!",
 			"Hostile takeover!",
@@ -312,11 +325,22 @@ public class update : MonoBehaviour {
 			"Fearless!",
 			"Spoilers!",
 			"Activated with moisture!",
-			"We'd probably be better off with a Minecraft clone!",
 			"Games as a service!",
 			"Gold team rules!",
 			"Ellipsis warning!",
-			"Better than nothing!"
+			"Better than nothing!",
+			"Determination!",
+			"Pride and accomplishment!",
+			"Oldest trick in the book!",
+			"Bonus codes never EVER!",
+			"Self-regulation!",
+			"Self-censorship!",
+			"Absolute nightmare!",
+			"We exist!",
+			"Progress!",
+			"Integrity!",
+			"Turning players into statistics!",
+			"Ad friendly!"
 		};
 
 		return wels[UnityEngine.Random.Range(0, wels.Length)];
@@ -324,7 +348,6 @@ public class update : MonoBehaviour {
 
     void updateStamina()
     {
-        //stamina decreases when player enters some area in minigames
         txt_stamina.text = String.Format("STAMINA: {0}/{1}",
 			player.Incre.stamina.cur, player.Incre.stamina.max);
     }
