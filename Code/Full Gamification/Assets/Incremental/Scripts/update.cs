@@ -26,7 +26,6 @@ public class update : MonoBehaviour {
     public GameObject mainScreen;
     public Slider bar_progress;
     public Slider bar_exp;
-    public Slider bar_timeLeft;
 
     public Text txt_progress;
     public Text txt_exp;
@@ -56,30 +55,41 @@ public class update : MonoBehaviour {
 	public Tutorial tut;
 
     string nextScene;
-    int frameCount; // Throttles update of progress bar
     bool upgradeWindow;
     bool bonusWindow;
     dialogMode _dialogMode;
     string localSaveData;
 
-    int saveCount = 0;
-
     void Start()
     {
         //test purpose
 //        player.Incre.stamina.cur = 10;
-//        player.Incre.needTutorial = false;
 //        player.Incre.timeleft.cur = 60 * 60;
-//        sendMsg("Welcome " + player.Incre.username);
 
         if (!player.Incre.startMessageDisplayed)
-        {
+		{
             showMessage("While you were not playing the game, "
 				+ " (" + TimeSpan.FromSeconds(player.Incre.LogOutpassiveProgressGained) + ")"
 				+ (bal.getPassiveProgressBarRate() * player.Incre.LogOutpassiveProgressGained * 60).ToString("##.##") + "%"
 				+ " Passive Progress were collected.", "Passive Progress Gain");
-            player.Incre.startMessageDisplayed = true;
+			player.Incre.startMessageDisplayed = true;
         }
+
+		// This changes every time the scene is changed.
+		switch (player.Incre.currentGame) {
+		case minigame.seeker:
+			sendMsg("I wanted Minecraft!");
+			break;
+		case minigame.mastermind:
+			sendMsg("Commit it to your mind!");
+			break;
+		case minigame.conquer:
+			sendMsg("Rooty-tooty-point-and-shooty!");
+			break;
+		default:
+			sendMsg(randomWelcomeMessage());
+			break;
+		}
 
         updatePlayerInfo();
 
@@ -89,23 +99,16 @@ public class update : MonoBehaviour {
         upgrade.SetActive(upgradeWindow);
         bonus.SetActive(bonusWindow);
 
-        frameCount = 100;
 		player.Incre.passive = !player.Incre.gameON;
 
-//		if (player.Incre.timeleft.cur <= 0)
-//            ("Active time finished.", "Active Time");
-//        Vector3 newpos = new Vector3(0, 0, 0);
-//        upgrade.transform.position = newpos;
+		InvokeRepeating ("save", 3, 3);
     }
 
 	// Update is called once per frame
 	void Update()
     {
-		if (Input.GetKeyUp ("h"))
-			tut.Reset ();
-		
         updateModeButton();
-        updateTimeBar();
+		updateTimeBar();
         updateStamina();
         updateProgressBar();
         updateLv();
@@ -121,15 +124,6 @@ public class update : MonoBehaviour {
             bar_exp.value = 0.021f;
 		
 		txt_exit.text = player.Incre.gameON ? "Close Game" : "Exit Game";
-
-        if (saveCount >= 60 * 3)
-        {
-            Debug.Log("Saving...");
-            save();
-            saveCount = 0;
-        }
-        else
-			saveCount++;
     }
 
     public void sendMsg(string msg)
@@ -207,16 +201,16 @@ public class update : MonoBehaviour {
     void updatePlayerInfo()
     {
         if (playerInfoDisplay != null)
-            playerInfoDisplay.text = string.Format("-player info-\r\nid: {0}\r\nreset: {1}",
-				player.Incre.username, player.Incre.permanentPerksLV);
+            playerInfoDisplay.text = string.Format("-player info-\r\nid: {0}\r\nresets: {1}",
+				player.Incre.username, player.Incre.permanentPerksLV - 1);
     }
 
     void updateRedeemText()
     {
-		if (player.Incre.passive) //passive mode
+		if (player.Incre.passive)
         {
             txt_redeem_pc.text = string.Format("pc: +{0}",
-				bal.getPassiveCoinBonus()* player.Incre.coin.boosterRate);
+				bal.getPassiveCoinBonus() * player.Incre.coin.boosterRate);
             txt_redeem_ac.text = string.Format("ac: +{0}", 0);
             txt_redeem_exp.text = string.Format("exp: +{0}",
 				bal.getPassiveEXPRate() * player.Incre.exp.boosterRate);
@@ -256,34 +250,7 @@ public class update : MonoBehaviour {
     //returns true if it is full (100%)
     void updateProgressBar()
     {
-        //check over Progress
-        double gainedExp = 0;
-
-        if (player.Incre.debugging)
-        {
-            while (player.Incre.progress.cur > bal.getMaxProgress())
-            {
-                if (player.Incre.passive)
-                {
-                    earnPassiveCoin(bal.getPassiveCoinBonus());
-                    earnExp(bal.getPassiveEXPRate());
-                    player.Incre.progress.cur -= bal.getMaxProgress();
-                    gainedExp += bal.getPassiveEXPRate(); //debug
-                }
-                else  //debugging ONLY
-                {
-                    earnActiveCoin(bal.getActiveCoinBonus());
-                    earnPassiveCoin(bal.getPassiveCoinBonus());
-                    earnExp(bal.getActiveEXPRate());
-                    player.Incre.progress.cur -= bal.getMaxProgress();
-                    gainedExp += bal.getActiveEXPRate(); //debug
-                }
-            }
-
-            player.Incre.debugging = false;
-        }
-
-        //change color depends on mode
+		//change color depends on mode
         if (player.Incre.passive)
 			progressBarImage.color = new Color32(16, 203, 255, 255);
         else
@@ -296,18 +263,16 @@ public class update : MonoBehaviour {
             {
                 if (isPlayerActive())
                 {
-                    //redeem both
-                    earnPassiveCoin(bal.getPassiveCoinBonus()*(int)player.Incre.coin.boosterRate);
+                    earnPassiveCoin(bal.getPassiveCoinBonus() * (int)player.Incre.coin.boosterRate);
                     earnActiveCoin(bal.getActiveCoinBonus() * (int)player.Incre.coin.boosterRate);
-                    earnExp(bal.getActiveEXPRate()*player.Incre.exp.boosterRate);
+                    earnExp(bal.getActiveEXPRate() * player.Incre.exp.boosterRate);
                     player.Incre.progress.cur = 0;
                 }
             }
 			else //Passive MODE
             {
-                earnPassiveCoin(bal.getPassiveCoinBonus()* (int)player.Incre.coin.boosterRate);
+                earnPassiveCoin(bal.getPassiveCoinBonus() * (int)player.Incre.coin.boosterRate);
                 earnExp(bal.getPassiveEXPRate() * player.Incre.exp.boosterRate);
-                //set to zero
                 player.Incre.progress.cur = 0;
             }
         }
@@ -317,12 +282,12 @@ public class update : MonoBehaviour {
 
             if (player.Incre.passive == true)
             {
-                txt_mode.text = "Passive MODE";
+                txt_mode.text = "Passive Mode";
                 player.Incre.progress.cur += bal.getPassiveProgressBarRate() * boosterRate;
             }
             else
             {
-                txt_mode.text = "Active MODE";
+                txt_mode.text = "Active Mode";
                 player.Incre.progress.cur += bal.getActiveProgressBarRate() * boosterRate;
             }
 
@@ -335,15 +300,9 @@ public class update : MonoBehaviour {
             else
                 progressRate = bal.getActiveProgressBarRate() * boosterRate;
 
-            if (frameCount >= 10)
-            {
-                txt_progress.text = string.Format("Prog {0}/100(+{1})",
-					((player.Incre.progress.cur / bal.getMaxProgress() * 100)).ToString("N2"),
-					(progressRate / bal.getMaxProgress() * 10000).ToString("N3"));
-                frameCount = 0;
-            }
-            else
-                frameCount++;
+            txt_progress.text = string.Format("Prog {0}/100(+{1})",
+				((player.Incre.progress.cur / bal.getMaxProgress() * 100)).ToString("N2"),
+				(progressRate / bal.getMaxProgress() * 10000).ToString("N3"));
         }
     }
 
@@ -351,36 +310,61 @@ public class update : MonoBehaviour {
     {
 		DateTime t = new DateTime() + TimeSpan.FromSeconds(sec);
 		return t.ToString("HH:mm:ss");
-    }
+	}
+
+	string randomWelcomeMessage()
+	{
+		string[] wels = {
+			"Welcome!!!!",
+			"Hello!!!!!!",
+			"Lootboxes coming eventually!",
+			"Some numbers got bigger!",
+			"No anime girls!",
+			"Hostile takeover!",
+			"Glorious!",
+			"Fearless!",
+			"Spoilers!",
+			"Activated with moisture!",
+			"Games as a service!",
+			"Gold team rules!",
+			"Ellipsis warning!",
+			"Better than nothing!",
+			"Determination!",
+			"Pride and accomplishment!",
+			"Oldest trick in the book!",
+			"Bonus codes never EVER!",
+			"Self-regulation!",
+			"Self-censorship!",
+			"Absolute nightmare!",
+			"We exist!",
+			"Progress!",
+			"Integrity!",
+			"Turning players into statistics!",
+			"Ad friendly!"
+		};
+
+		return wels[UnityEngine.Random.Range(0, wels.Length)];
+	}
 
     void updateStamina()
     {
-        //stamina decreases when player enters some area in minigames
         txt_stamina.text = String.Format("STAMINA: {0}/{1}",
 			player.Incre.stamina.cur, player.Incre.stamina.max);
     }
 
-    void updateTimeBar()
-    {
-        if (!player.Incre.passive)
-        {
-            if (player.Incre.timeleft.cur > 0)
+	void updateTimeBar()
+	{
+		if (!player.Incre.passive)
+		{
+			if (player.Incre.timeleft.cur > 0)
 				player.Incre.timeleft.cur -= Time.deltaTime;
-			
-            if (player.Incre.timeleft.cur <= 0)
-            {
-//                player.Incre.gameON = false;
-                player.Incre.passive = true;
-				// This is the intended behavior (but not really)
-				// Stamina is meant to handle that.
-//				player.Incre.nextGame = minigame.none; 
-//                SceneManager.LoadScene("ui", LoadSceneMode.Single);
-            }
-        }
 
-        bar_timeLeft.value = (float)(player.Incre.timeleft.cur / player.Incre.timeleft.max);
-        txt_timeLeft.text = changeToTime((float)player.Incre.timeleft.cur);
-    }
+			if (player.Incre.timeleft.cur <= 0)
+				player.Incre.passive = true;
+		}
+
+		txt_timeLeft.text = changeToTime((float)player.Incre.timeleft.cur);
+	}
 
     void updateCoin()
     {
@@ -405,7 +389,7 @@ public class update : MonoBehaviour {
             updateLv();
             player.Incre.exp.cur = (float)remain;
         }
-    }
+	}
 
     public void earnPassiveCoin(int amount)
     {
@@ -449,16 +433,20 @@ public class update : MonoBehaviour {
         bonus.SetActive(bonusWindow);
     }
 
+	public void helpButtonPressed()
+	{
+		tut.Reset();
+	}
+
     public void changeMODE()
     {
         if (!player.Incre.gameON)
         {
-            showMessage("Minigame is not running. You can't change it to active mode!", "Minigame Not Running");
+            showMessage("Minigame not running. Can't change it to active mode.", "Minigame Not Running");
             player.Incre.passive = true;
             return;
         }
 
-        //have enough time and stamina
         if (player.Incre.timeleft.cur > 0 && player.Incre.stamina.cur > 0)
         {
             player.Incre.progress.cur = 0; //set to zero when switching between active and passive mode
@@ -528,10 +516,7 @@ public class update : MonoBehaviour {
     private bool isPlayerActive()
     {
         if (Input.GetMouseButtonDown(0))
-        {
-            Debug.Log("Clicked");
             return true;
-        }
 
 		if (Input.GetAxis("Mouse X") != 0 || Input.GetAxis("Mouse Y") != 0)
             return true;
@@ -544,13 +529,36 @@ public class update : MonoBehaviour {
             return true;
 
         return false;
-    }
+	}
+
+	void save()
+	{
+		player.Incre.lastLogOut = DateTime.Now;
+		Debug.Log("Last logout saved: " + player.Incre.lastLogOut.ToString());
+
+		if (player.isLocal)
+		{
+			Debug.Log("Local saving");
+			player.localIncreData = player.getJsonStr(game.incremental);
+			player.localMasterData = player.getJsonStr(game.mastermind);
+			player.localSeekerData = player.getJsonStr(game.seeker);
+			player.localConquerData = player.getJsonStr(game.conquer);
+		}
+		else
+		{
+			Debug.Log("Online saving");
+			NetworkManager.Instance.QueueMessage(new List<string>() { "INCREMENTAL", player.getJsonStr(game.incremental) });
+			NetworkManager.Instance.QueueMessage(new List<string>() { "MASTERMIND", player.getJsonStr(game.mastermind) });
+			NetworkManager.Instance.QueueMessage(new List<string>() { "SEEKER", player.getJsonStr(game.seeker) });
+			NetworkManager.Instance.QueueMessage(new List<string>() { "CONQUEROR", player.getJsonStr(game.conquer) });
+		}
+	}
 
     public void onClickGetBonus()
     {
         strDele fun = new strDele(showMessage);
         bonusCode.analyzeCode(bonusCodeInput.text, fun);
-    }
+	}
 
     public void debug_seekerReward(int usedStamina)
     {
@@ -616,37 +624,5 @@ public class update : MonoBehaviour {
     public void debug_gameON()
     {
         player.Incre.gameON = true;
-    }
-
-    public void debug_save()
-    {
-        save();
-    }
-
-    void save()
-    {
-        player.Incre.lastLogOut = DateTime.Now;
-        Debug.Log("Last logout saved: " + player.Incre.lastLogOut.ToString());
-
-        if (player.isLocal)
-        {
-            Debug.Log("Local saving");
-            player.localIncreData = player.getJsonStr(game.incremental);
-            player.localMasterData = player.getJsonStr(game.mastermind);
-            player.localSeekerData = player.getJsonStr(game.seeker);
-            player.localConquerData = player.getJsonStr(game.conquer);
-        }
-        else
-        {
-            Debug.Log("Online saving");
-            NetworkManager.Instance.QueueMessage(new List<string>() { "INCREMENTAL", player.getJsonStr(game.incremental) });
-            NetworkManager.Instance.QueueMessage(new List<string>() { "MASTERMIND", player.getJsonStr(game.mastermind) });
-            NetworkManager.Instance.QueueMessage(new List<string>() { "SEEKER", player.getJsonStr(game.seeker) });
-            NetworkManager.Instance.QueueMessage(new List<string>() { "CONQUEROR", player.getJsonStr(game.conquer) });
-        }
-    }
-
-    public void debug_load()
-    {
     }
 }

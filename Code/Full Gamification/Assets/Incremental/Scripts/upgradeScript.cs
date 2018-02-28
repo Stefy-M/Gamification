@@ -48,18 +48,14 @@ public class upgradeScript : MonoBehaviour {
     //public Text price16;
 
     static int passivePriceRate = 10;
-
     int upgradeMaxLevel = 10;
 
-
-    // Use this for initialization
     void Start()
     {
         updateTitle();
         updatePrice();
     }
 
-    // Update is called once per frame
     void Update()
     {
 
@@ -69,6 +65,7 @@ public class upgradeScript : MonoBehaviour {
     {
         updateTitle();
         updatePrice();
+
         if (player.Incre.lv >= 30)
         {
             int previousLV = player.Incre.permanentPerksLV;
@@ -80,10 +77,7 @@ public class upgradeScript : MonoBehaviour {
             //player.coin.active += 100000;
             //player.coin.passive += 100000;
         }
-        else
-        {
 
-        }
         updateTitle();
         updatePrice();
     }
@@ -97,7 +91,7 @@ public class upgradeScript : MonoBehaviour {
         upgrademode2 mode2 = upgrademode2.coinBonus;
         purchaseBy coin = purchaseBy.activeCoin;
 
-        if(param.Length != 3)
+        if (param.Length != 3)
         {
             Debug.Log("param error!");
             return;
@@ -109,118 +103,75 @@ public class upgradeScript : MonoBehaviour {
         char subParam3 = param[2]; //coin mode ---> p, a
 
         if (subParam1 == 'p')
-        {
             mode1 = upgrademode.passive;
-        }
-        if(subParam1 == 'a')
-        {
+        else if (subParam1 == 'a')
             mode1 = upgrademode.active;
-        }
 
-        if(subParam2 == 'c')
-        {
+        if (subParam2 == 'c')
             mode2 = upgrademode2.coinBonus;
-        }
-        if (subParam2 == 'e')
-        {
+        else if (subParam2 == 'e')
             mode2 = upgrademode2.expBonus;
-        }
-        if (subParam2 == 'p')
-        {
+        else if (subParam2 == 'p')
             mode2 = upgrademode2.progressBarRate;
-        }
+        
         if (subParam3 == 'p')
-        {
             coin = purchaseBy.passiveCoin;
-        }
-        if (subParam3 == 'a')
-        {
+        else if (subParam3 == 'a')
             coin = purchaseBy.activeCoin;
-        }
 
-
-        //active
         if (mode1 == upgrademode.active)
         {
             switch (mode2)
             {
                 case upgrademode2.coinBonus:
-                    if(player.Incre.coin.A_upgradeLv < upgradeMaxLevel)
-                    {
-                        if (purchase(coin, bal.getPrice_ActiveCoinBonus()))
-                        {
-                            player.Incre.coin.A_upgradeLv++;
-                        }
-                    }
+                    if (player.Incre.coin.A_upgradeLv < upgradeMaxLevel
+                        && purchase(coin, bal.getPrice_ActiveCoinBonus()))
+                        player.Incre.coin.A_upgradeLv++;
                     break;
                 case upgrademode2.expBonus:
-                    if(player.Incre.exp.A_upgradeLv < upgradeMaxLevel)
-                    {
-                        if (purchase(coin, bal.getPrice_ActiveExpBonus()))
-                        {
-                            player.Incre.exp.A_upgradeLv++;
-                        }
-                    }
+                    if (player.Incre.exp.A_upgradeLv < upgradeMaxLevel
+                        && purchase(coin, bal.getPrice_ActiveExpBonus()))
+                        player.Incre.exp.A_upgradeLv++;
                     break;
                 case upgrademode2.progressBarRate:
-                    if (player.Incre.progress.A_upgradeLv < upgradeMaxLevel)
-                    {
-                        if (purchase(coin, bal.getPrice_ActiveProgressBarRate()))
-                        {
-                            player.Incre.progress.A_upgradeLv++;
-                        }
-                    }
+                    if (player.Incre.progress.A_upgradeLv < upgradeMaxLevel
+                        && purchase(coin, bal.getPrice_ActiveProgressBarRate()))
+                        player.Incre.progress.A_upgradeLv++;
                     break;
             }
         }
-
-        //passive
         else
         {
             switch (mode2)
             {
                 case upgrademode2.coinBonus:
-                    if (player.Incre.coin.P_upgradeLv < upgradeMaxLevel)
-                    {
-                        if (purchase(coin, bal.getPrice_PassiveCoinBonus()))
-                        {
-                            player.Incre.coin.P_upgradeLv++;
-                        }
-                    }
+                    if (player.Incre.coin.P_upgradeLv < upgradeMaxLevel
+                        && purchase(coin, bal.getPrice_PassiveCoinBonus()))
+                        player.Incre.coin.P_upgradeLv++;
                     break;
                 case upgrademode2.expBonus:
-                    if (player.Incre.exp.P_upgradeLv < upgradeMaxLevel)
-                    {
-                        if (purchase(coin, bal.getPrice_PassiveExpBonus()))
-                        {
-                            player.Incre.exp.P_upgradeLv++;
-                        }
-                    }
+                    if (player.Incre.exp.P_upgradeLv < upgradeMaxLevel
+                        && purchase(coin, bal.getPrice_PassiveExpBonus()))
+                        player.Incre.exp.P_upgradeLv++;
                     break;
                 case upgrademode2.progressBarRate:
-                    if (player.Incre.progress.P_upgradeLv < upgradeMaxLevel)
-                    {
-                        if (purchase(coin, bal.getPrice_PassiveProgressBarRate()))
-                        {
-                            player.Incre.progress.P_upgradeLv++;
-                        }
-                    }
+                    if (player.Incre.progress.P_upgradeLv < upgradeMaxLevel
+                        && purchase(coin, bal.getPrice_PassiveProgressBarRate()))
+                        player.Incre.progress.P_upgradeLv++;
                     break;
             }
         }
+
         updateTitle();
         updatePrice();
     }
+
     private string level2String(int lv, int maxLv)
     {
-        if(lv < maxLv)
-        {
+        if (lv < maxLv)
             return lv.ToString();
-        }
         else
-        {
             return "MAX";
-        }
     }
 
     public void updateTitle()
@@ -229,23 +180,17 @@ public class upgradeScript : MonoBehaviour {
 
         //update text for title of each upgrades 
         int max = upgradeMaxLevel;
-        //---passive ---
-        //Passive Progress Bar Rate
 
+        //Passive Progress Bar Rate
         passive_progress.text = string.Format("Progress Bar Rate(LV.{0})",
            level2String(player.Incre.progress.P_upgradeLv, max));
-
         //Passive Exp Bonus
         passive_exp.text = string.Format("Exp Bonus(LV.{0})",
           level2String(player.Incre.exp.P_upgradeLv, max));
-
         //Passive Coin Bonus
         passive_coin.text = string.Format("Coin Bonus(LV.{0})",
            level2String(player.Incre.coin.P_upgradeLv, max));
 
-
-
-        //---active ---
         //Active Progress Bar Rate
         active_progress.text = string.Format("Progress Bar Rate(LV.{0})",
            level2String(player.Incre.progress.A_upgradeLv, max));
@@ -255,10 +200,8 @@ public class upgradeScript : MonoBehaviour {
         //Active Coin Bonus
         active_coin.text = string.Format("Coin Bonus(LV.{0})",
            level2String(player.Incre.coin.A_upgradeLv, max));
-
-
-
     }
+
     public void updatePrice()
     {
         //passive
@@ -270,8 +213,8 @@ public class upgradeScript : MonoBehaviour {
 
         price5.text = price2String("PC", bal.getPrice_PassiveCoinBonus()* passivePriceRate, player.Incre.coin.P_upgradeLv, upgradeMaxLevel);
         price6.text = price2String("AC", bal.getPrice_PassiveCoinBonus(), player.Incre.coin.P_upgradeLv, upgradeMaxLevel);
-        //active
 
+        //active
         price7.text = price2String("PC", bal.getPrice_ActiveProgressBarRate()* passivePriceRate, player.Incre.progress.A_upgradeLv, upgradeMaxLevel);
         price8.text = price2String("AC", bal.getPrice_ActiveProgressBarRate(), player.Incre.progress.A_upgradeLv, upgradeMaxLevel);
 
@@ -290,26 +233,24 @@ public class upgradeScript : MonoBehaviour {
     private string price2String(string coin, int price, int lv, int max)
     {
         if (lv >= max)
-        {
             return "MAX";
-        }
         else
             return string.Format("{0} -{1}", coin, price);
     }
 
     private bool purchase(purchaseBy coin, int price)
     {
-        if(coin == purchaseBy.activeCoin)
+        if (coin == purchaseBy.activeCoin)
         {
-            if(player.Incre.coin.active >= price)
+            if (player.Incre.coin.active >= price)
             {
                 player.Incre.coin.active -= price;
                 return true;
             }
         }
-        else if(coin == purchaseBy.passiveCoin)
+        else if (coin == purchaseBy.passiveCoin)
         {
-            if(player.Incre.coin.passive >= price * passivePriceRate)
+            if (player.Incre.coin.passive >= price * passivePriceRate)
             {
                 player.Incre.coin.passive -= price * passivePriceRate;
                 return true;
@@ -317,6 +258,4 @@ public class upgradeScript : MonoBehaviour {
         }
         return false;
     }
-
-
 }

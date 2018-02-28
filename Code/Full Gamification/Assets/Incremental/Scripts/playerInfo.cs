@@ -114,32 +114,8 @@ public class IncrementalData
     public int lv = 1;
     public string username = "Username";
     public int permanentPerksLV = 1;
-    //string _DateTimeStr = "";
     public bool startMessageDisplayed = false;
     public DateTime lastLogOut = DateTime.Now;
-        /*
-    {
-        get
-        {
-            string now;
-            if (_DateTimeStr == "")
-            {
-                now = DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss.fff", CultureInfo.InvariantCulture);
-                return Convert.ToDateTime(now);
-            }
-            else
-            {
-                DateTime dt = Convert.ToDateTime(_DateTimeStr);
-                return dt;
-            }
-        }
-        set
-        {
-            string dateTimeStr = DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss.fff", CultureInfo.InvariantCulture);
-            _DateTimeStr = dateTimeStr;
-
-        }
-    }*/
     public bool passive = false;
     public bool gameON = false;
     public minigame currentGame;
@@ -162,6 +138,7 @@ public enum game
 public static class player
 {
     public static bool isLocal = true;
+
     public static string localIncreData
     {
         get
@@ -173,6 +150,7 @@ public static class player
             PlayerPrefs.SetString("localIncreData", value);
         }
     }
+
     public static string localMasterData
     {
         get
@@ -184,6 +162,7 @@ public static class player
             PlayerPrefs.SetString("localMasterData", value);
         }
     }
+
     public static string localSeekerData
     {
         get
@@ -195,6 +174,7 @@ public static class player
             PlayerPrefs.SetString("localSeekerData", value);
         }
     }
+
     public static string localConquerData
     {
         get
@@ -208,7 +188,6 @@ public static class player
     }
     
     public static string JsonStr = "";
-
     public static IncrementalData Incre = new IncrementalData();
     public static sudokuData Sudoku = new sudokuData();
     //public static Player Conqueror = new Player();
@@ -216,16 +195,19 @@ public static class player
     public static seeker seekerData = new seeker();
 
     public static string getJsonStr(game g)
-    {
-        if (g == game.incremental)
-            return JsonConvert.SerializeObject(Incre);
-        else if (g == game.mastermind)
-            return JsonConvert.SerializeObject(Sudoku);
-        else if (g == game.seeker)
-            return JsonConvert.SerializeObject(seekerData);
-        else if (g == game.conquer)
-            return JsonConvert.SerializeObject(Conqueror);
-        return "";
+	{
+		switch (g) {
+		case game.incremental:
+			return JsonConvert.SerializeObject(Incre);
+		case game.mastermind:
+			return JsonConvert.SerializeObject(Sudoku);
+		case game.seeker:
+			return JsonConvert.SerializeObject(seekerData);
+		case game.conquer:
+			return JsonConvert.SerializeObject(Conqueror);
+		default:
+			return "";
+		}
     }
 
     public static void localLoad()
@@ -263,6 +245,7 @@ public static class player
     public static void load()
     {
         JsonStrings loadedjsonStrings;
+
         try
         {
              loadedjsonStrings = JsonConvert.DeserializeObject<JsonStrings>(NetworkManager.Instance.loaded_json);
@@ -271,10 +254,12 @@ public static class player
         {
             loadedjsonStrings = new JsonStrings();
         }
+
         Debug.Log(loadedjsonStrings.Incremental);
         Debug.Log(loadedjsonStrings.Mastermind);
         Debug.Log(loadedjsonStrings.Conqueror);
         Debug.Log(loadedjsonStrings.Seeker);
+
         if (loadedjsonStrings.Incremental.Length > 0) //doesn't go in blocks if loaded string is empty string
         {
             try
@@ -288,6 +273,7 @@ public static class player
         }
         else
             Incre = new IncrementalData();
+		
         if (loadedjsonStrings.Mastermind.Length > 0)
         {
             try
@@ -301,6 +287,7 @@ public static class player
         }
         else
             Sudoku = new sudokuData();
+		
         if (loadedjsonStrings.Conqueror.Length > 0)
         {
             try
@@ -311,10 +298,10 @@ public static class player
             {
                 Conqueror = new conqueror();
             }
-            //Debug.Log("");
         }
         else
             Conqueror = new conqueror();
+		
         if (loadedjsonStrings.Seeker.Length > 0)
         {
             try
@@ -328,6 +315,8 @@ public static class player
         }
         else
             seekerData = new seeker();
+
+		Incre.username = NetworkManager.Instance.GetUsername ();
     }
 
     /// <summary>
@@ -339,27 +328,27 @@ public static class player
     public static void getReward(minigame type, int usedStamina)
     {
         //invalid input
-        if(usedStamina <= 0)
-        {
+        if (usedStamina <= 0)
             return;
-        }
 
         //This part will be adjusted based on necessary playing time for each minigame 
         double percentage = 0;  //total 100 %
-        double rewardRate = 2.5;  
-        if (type == minigame.conquer)
-        {
-            percentage = 20;
-        }
-        if (type == minigame.mastermind)
-        {
-            percentage = 40;
-        }
-        if (type == minigame.seeker)
-        {
-            percentage = 30;
-        }
+        double rewardRate = 2.5;
+
+		switch (type) {
+		case minigame.conquer:
+			percentage = 20;
+			break;
+		case minigame.mastermind:
+			percentage = 40;
+			break;
+		case minigame.seeker:
+			percentage = 30;
+			break;
+		}
+		
         percentage = percentage * 0.01;
+
         //reward coin
         double activeCoinReward = bal.getActiveCoinBonus() * usedStamina * percentage * rewardRate;
         double passiveCoinReward = bal.getPassiveCoinBonus() * usedStamina * percentage * rewardRate;
@@ -370,5 +359,4 @@ public static class player
         double expReward = bal.getActiveEXPRate() * usedStamina * percentage * rewardRate;
         player.Incre.exp.cur += expReward;
     }
-
 }
