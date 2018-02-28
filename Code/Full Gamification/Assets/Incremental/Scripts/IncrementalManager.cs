@@ -22,6 +22,10 @@ public class IncrementalManager : MonoBehaviour {
         {
         }
     }
+    public void maxStamina()
+    {
+        player.Incre.stamina.cur = player.Incre.stamina.max;
+    }
     public void gainExp(int i)
     {
         player.Incre.exp.cur += i;

@@ -7,9 +7,20 @@ public class bulletScript : MonoBehaviour {
 	// Use this for initialization
 	GameObject bullet;
 	GameObject player;
+    public AudioClip gunSound1;
+    public AudioClip gunSound2;
+    public AudioClip damagedBoss;
+
 	void Start () {
-		player = GameObject.Find ("player");
-	}
+        player = GameObject.Find ("player");
+        //Debug.Log("Should Play a sound");
+        SoundManager.instance.RandomizeSfx(gunSound1, gunSound2);
+
+        var mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Quaternion rot = Quaternion.LookRotation(transform.position - mousePosition, Vector3.forward);
+        transform.rotation = rot;
+        transform.eulerAngles = new Vector3(0, 0, transform.eulerAngles.z);
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -30,6 +41,7 @@ public class bulletScript : MonoBehaviour {
 			//GameObject r = (GameObject)GameObject.Instantiate(Resources.Load ("BossTextPrefab"), GameObject.Find("Boss").transform.position, GameObject.Find("Boss").transform.rotation);
 			//r.transform.SetParent (GameObject.Find ("Canvas").transform);
             GameObject.Find("Boss").GetComponent<bossScript>().boss1.hp -= player.GetComponent<PlayerMovementScript>().player1.g.damage;
+            SoundManager.instance.PlaySingle(damagedBoss);
         }
 		if (col.gameObject.tag == "Enemy") {
 			/*Vector3 mouse = GameObject.Find ("player").transform.position;

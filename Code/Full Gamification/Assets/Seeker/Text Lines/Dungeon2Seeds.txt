@@ -17,4 +17,7 @@ You: I know the Arch Wizard? There is a secret to this world? I erased my own me
 You: This is a lot to take in. Should I ask the villagers?
 You: The first line says it's only for my eyes. But that doesn't mean I can't tell them right?
 You gain a feeling of excitement and yet fear.
-You: I'll think over this later. I have to get out. The vines look like they're creeping towards me.
+You: I'll think over this later. I have to get out. The vines look like they're creeping towards me. 
+You: It looks like a pool appeared in the distance, maybe I should check that out first.
+
+You approach the pool. The water then rushes out and surrounds you, dragging you in.	

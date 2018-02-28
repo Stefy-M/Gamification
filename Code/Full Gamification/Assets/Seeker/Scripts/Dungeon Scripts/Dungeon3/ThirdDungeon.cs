@@ -41,6 +41,7 @@ public class ThirdDungeon : MonoBehaviour {
     {
         has_cows++;
         number_cows.text = "Cows tamed: " + has_cows.ToString() + "/" + required_cows.ToString();
+        number_fruits.text = "Fruits in possesion of: " + has_fruit.ToString();
     }
 
     public void AttemptLeave()

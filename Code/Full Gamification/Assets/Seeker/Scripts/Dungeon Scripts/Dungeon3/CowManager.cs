@@ -31,8 +31,8 @@ public class CowManager : MonoBehaviour {
             cow.GetComponent<Following>().target = player.GetComponent<Followers>().LastFollower();
             cow.GetComponent<Following>().SetTarget();
             player.GetComponent<Followers>().AddFollower(cow);
-            dungeon_stuff.GetCow();
             dungeon_stuff.has_fruit--;
+            dungeon_stuff.GetCow();            
             notification.AddText("You hold out a fresh vine fruit and the beast happily consumes it.");
             notification.AddText("It begins following you around.");
             gameObject.SetActive(false);

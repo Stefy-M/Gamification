@@ -338,7 +338,7 @@ public class NetworkManager : MonoBehaviour
     //*/ //OnUpdate
 
     //Close the TCP and UDP clients when the game exits
-    private void OnApplicationQuit()
+    private void OnDisable()
     {
 
         //*

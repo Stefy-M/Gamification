@@ -37,7 +37,25 @@ public class ShopItem : MonoBehaviour {
         //Upgrades
         if (item_id >= 56 && item_id<= 59)
         {
-            rep_cost = GlobalControl.Instance.full_items_list[item_id].value * 10;
+            switch (item_id)
+            {
+                case 56://Health
+                    rep_cost = GlobalControl.Instance.hp;
+                    break;
+                case 57://Stamina
+                    rep_cost = GlobalControl.Instance.stam;
+                    break;
+                case 58://Dexterity
+                    rep_cost = GlobalControl.Instance.dex * 10;
+                    break;
+                case 59://Insight
+                    rep_cost = GlobalControl.Instance.ins * 10;
+                    break;
+                default:
+                    break;
+            }
+            //Below line does not work, full_items_list is not properly saved to the server.
+            //rep_cost = GlobalControl.Instance.full_items_list[item_id].value * 10;
             display_price.text = rep_cost.ToString() + " Rep";
         }
         else if (item_id >= 68 && item_id <= 72)
@@ -130,7 +148,7 @@ public class ShopItem : MonoBehaviour {
         {
             rep_cost = 500;
             display_price.text = rep_cost.ToString() + " Rep";
-            description = "Trade in reputation for" + (bal.getActiveCoinBonus() * 10) + "active coins!";
+            description = "Trade in reputation for" + (bal.getActiveCoinBonus()*10) + "active coins!";
         }
 
     }
@@ -237,22 +255,27 @@ public class ShopItem : MonoBehaviour {
                 {
                     case 56://Health
                         GlobalControl.Instance.hp += 10 * upgrade_multiplier;
+                        rep_cost = GlobalControl.Instance.hp;
                         break;
                     case 57://Stamina
                         GlobalControl.Instance.stam += 10 * upgrade_multiplier;
+                        rep_cost = GlobalControl.Instance.stam;
                         break;
                     case 58://Dexterity
                         GlobalControl.Instance.dex += 1 * upgrade_multiplier;
+                        rep_cost = GlobalControl.Instance.dex * 10;
                         break;
                     case 59://Insight
                         GlobalControl.Instance.ins += 1 * upgrade_multiplier;
+                        rep_cost = GlobalControl.Instance.ins * 10;
                         break;
                     default:
                         break;
                 }
                 GlobalControl.Instance.reputation -= rep_cost;
-                GlobalControl.Instance.full_items_list[item_id].value++;
-                rep_cost = GlobalControl.Instance.full_items_list[item_id].value * 10;
+                //Below lines do not work, full_items_list is not saved to the server.
+                //GlobalControl.Instance.full_items_list[item_id].value++;
+                //rep_cost = GlobalControl.Instance.full_items_list[item_id].value * 10;
                 display_price.text = rep_cost.ToString() + " Rep";
             }
             else if (item_id >= 68 && item_id <= 72)
