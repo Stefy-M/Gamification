@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using UnityEngine;
 using Newtonsoft.Json;
-
+using Conqueror;
 
 #region structs
 public struct coin
@@ -190,23 +190,22 @@ public static class player
     public static string JsonStr = "";
     public static IncrementalData Incre = new IncrementalData();
     public static sudokuData Sudoku = new sudokuData();
-    //public static Player Conqueror = new Player();
-    public static conqueror Conqueror = new conqueror();
+    public static ConquerorSave conqueror = new ConquerorSave();
     public static seeker seekerData = new seeker();
 
     public static string getJsonStr(game g)
 	{
 		switch (g) {
-		case game.incremental:
-			return JsonConvert.SerializeObject(Incre);
-		case game.mastermind:
-			return JsonConvert.SerializeObject(Sudoku);
-		case game.seeker:
-			return JsonConvert.SerializeObject(seekerData);
-		case game.conquer:
-			return JsonConvert.SerializeObject(Conqueror);
-		default:
-			return "";
+		    case game.incremental:
+			    return JsonConvert.SerializeObject(Incre);
+		    case game.mastermind:
+			    return JsonConvert.SerializeObject(Sudoku);
+		    case game.seeker:
+			    return JsonConvert.SerializeObject(seekerData);
+		    case game.conquer:
+                return JsonConvert.SerializeObject(conqueror);
+		    default:
+			    return "";
 		}
     }
 
@@ -255,16 +254,16 @@ public static class player
             loadedjsonStrings = new JsonStrings();
         }
 
-        Debug.Log(loadedjsonStrings.Incremental);
-        Debug.Log(loadedjsonStrings.Mastermind);
-        Debug.Log(loadedjsonStrings.Conqueror);
-        Debug.Log(loadedjsonStrings.Seeker);
+        Debug.Log(loadedjsonStrings.incremental);
+        Debug.Log(loadedjsonStrings.mastermind);
+        Debug.Log(loadedjsonStrings.conqueror);
+        Debug.Log(loadedjsonStrings.seeker);
 
-        if (loadedjsonStrings.Incremental.Length > 0) //doesn't go in blocks if loaded string is empty string
+        if (loadedjsonStrings.incremental.Length > 0) //doesn't go in blocks if loaded string is empty string
         {
             try
             {
-                Incre = JsonConvert.DeserializeObject<IncrementalData>(loadedjsonStrings.Incremental);
+                Incre = JsonConvert.DeserializeObject<IncrementalData>(loadedjsonStrings.incremental);
             }
             catch
             {
@@ -274,11 +273,11 @@ public static class player
         else
             Incre = new IncrementalData();
 		
-        if (loadedjsonStrings.Mastermind.Length > 0)
+        if (loadedjsonStrings.mastermind.Length > 0)
         {
             try
             {
-                Sudoku = JsonConvert.DeserializeObject<sudokuData>(loadedjsonStrings.Mastermind);
+                Sudoku = JsonConvert.DeserializeObject<sudokuData>(loadedjsonStrings.mastermind);
             }
             catch
             {
@@ -288,25 +287,25 @@ public static class player
         else
             Sudoku = new sudokuData();
 		
-        if (loadedjsonStrings.Conqueror.Length > 0)
+        if (loadedjsonStrings.conqueror.Length > 0)
         {
             try
             {
-                Conqueror = JsonConvert.DeserializeObject<conqueror>(loadedjsonStrings.Conqueror);
+                conqueror = JsonConvert.DeserializeObject<ConquerorSave>(loadedjsonStrings.conqueror);
             }
             catch
             {
-                Conqueror = new conqueror();
+                conqueror = new ConquerorSave();
             }
         }
         else
-            Conqueror = new conqueror();
+            conqueror = new ConquerorSave();
 		
-        if (loadedjsonStrings.Seeker.Length > 0)
+        if (loadedjsonStrings.seeker.Length > 0)
         {
             try
             {
-                seekerData = JsonConvert.DeserializeObject<seeker>(loadedjsonStrings.Seeker);
+                seekerData = JsonConvert.DeserializeObject<seeker>(loadedjsonStrings.seeker);
             }
             catch
             {

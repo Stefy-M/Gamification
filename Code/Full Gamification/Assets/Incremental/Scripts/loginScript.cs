@@ -141,8 +141,8 @@ public class loginScript : MonoBehaviour {
 
 public class JsonStrings
 {
-    public string Seeker = "";
-    public string Mastermind = "";
-    public string Incremental = "";
-    public string Conqueror = "";
+    public string seeker = "";
+    public string mastermind = "";
+    public string incremental = "";
+    public string conqueror = "";
 }

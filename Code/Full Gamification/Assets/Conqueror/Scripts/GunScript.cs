@@ -4,107 +4,171 @@ using UnityEngine;
 using System;
 using System.IO;
 using UnityEngine.UI;
-public class Gun
-{
-    public float damage = 1f;
-    public float speed = 50;
-    //type 0 = single spray
-    //type 1 = double spray
-    //type 2 = triple spray
-    //type 3 = laser
-    public int type = 2;
-	public float rof = 5f;
-	public float maxrof = 15f;
 
+namespace Conqueror {
+    public enum GunType {
+        SingleSpray = 0,
+        DoubleSpray = 1,
+        TripleSpray = 2,
+        Laser = 3
+    }
 
-	public Gun() {
-
-	}
-	public Gun(float d, float s, int t) {
-		damage = d;
-		speed = s;
-		type = t;
-	}
-    public void shoot ()
+    public class GunScript : MonoBehaviour
     {
-		GameObject player = GameObject.Find ("player");
-		Debug.Log(speed.ToString ());
-        switch (type)
+        public void Awake()
         {
-		case 0:
-                /*Vector3 mouse = Camera.main.ScreenToWorldPoint (new Vector3 (Input.mousePosition.x, Input.mousePosition.y, 1));
-                GameObject rocket = (GameObject)GameObject.Instantiate (Resources.Load ("BulletPrefab"), player.transform.position, player.transform.rotation);
-                mouse.x -= player.transform.position.x;
-                mouse.y -= player.transform.position.y;
-                mouse = mouse.normalized;
-
-                rocket.GetComponent<Rigidbody2D> ().AddForce(new Vector2 (mouse.x * speed,mouse.y * speed));
-                */
-
-                Vector3 worldMousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                Vector2 direction = (Vector2)((worldMousePos - player.transform.position));
-                direction.Normalize();
-                GameObject rocket = (GameObject)GameObject.Instantiate(Resources.Load("BulletPrefab"), player.transform.position + (Vector3)(direction * 0.2f), Quaternion.identity);
-                rocket.GetComponent<Rigidbody2D>().velocity = direction * speed;
-                break;
-		case 1:
-			Vector3 mouse2 = Camera.main.ScreenToWorldPoint (new Vector3 (Input.mousePosition.x, Input.mousePosition.y, 1));
-			GameObject rocket2 = (GameObject)GameObject.Instantiate (Resources.Load ("BulletPrefab"), player.transform.position, player.transform.rotation);
-			GameObject rocket3 = (GameObject)GameObject.Instantiate (Resources.Load ("BulletPrefab"), player.transform.position, player.transform.rotation);
-			mouse2.x -= player.transform.position.x;
-			mouse2.y -= player.transform.position.y;
-			mouse2 = mouse2.normalized;
-
-			Vector2 mouse3 = mouse2;
-                         
-                mouse2.x = mouse2.x * Mathf.Cos(45);
-                mouse2.y = mouse2.y * Mathf.Sin(45);
-                mouse3.x = mouse3.x * Mathf.Sin(45);
-                mouse3.y = mouse3.y * Mathf.Cos(45); 
-                
-			rocket2.GetComponent<Rigidbody2D> ().AddForce( new Vector2 (mouse2.x * speed,mouse2.y * speed));
-			rocket3.GetComponent<Rigidbody2D> ().AddForce( new Vector2 (mouse3.x * speed,mouse3.y * speed));
-                break;
-
-
-
-            case 2:
-			Vector3 mouse4 = Camera.main.ScreenToWorldPoint (new Vector3 (Input.mousePosition.x, Input.mousePosition.y, 1));
-			GameObject rocket4 = (GameObject)GameObject.Instantiate (Resources.Load ("BulletPrefab"), player.transform.position, player.transform.rotation);
-			GameObject rocket5 = (GameObject)GameObject.Instantiate (Resources.Load ("BulletPrefab"), player.transform.position, player.transform.rotation);
-			GameObject rocket6 = (GameObject)GameObject.Instantiate (Resources.Load ("BulletPrefab"), player.transform.position, player.transform.rotation);
-			mouse4.x -= player.transform.position.x;
-			mouse4.y -= player.transform.position.y;
-			//mouse4 = mouse4.normalized;
-			rocket6.GetComponent<Rigidbody2D> ().AddForce( new Vector2 (mouse4.x * speed,mouse4.y * speed));
-			Vector2 mouse5 = mouse4;
-
-			mouse4.x = mouse4.x * Mathf.Cos(45);
-			mouse4.y = mouse4.y * Mathf.Sin(45);
-			mouse5.x = mouse5.x * Mathf.Sin(45);
-			mouse5.y = mouse5.y * Mathf.Cos(45);
-
-			rocket4.GetComponent<Rigidbody2D> ().AddForce( new Vector2 (mouse4.x * speed,mouse4.y * speed));
-			rocket5.GetComponent<Rigidbody2D> ().AddForce( new Vector2 (mouse5.x * speed,mouse5.y * speed));
-
-
-                break;
-            case 3:
-                break;
         }
     }
 
-}
+    /// <summary>
+    /// Gun. Plan is to make certain archetypes of weapons and have those scale.
+    /// </summary>
+    public class Gun {
+        public float damage;
+        public float rof;
+        public float velocity;
+        public GunType type;
 
-public class GunScript : MonoBehaviour {
+        GameObject bullet;
+        GameObject shooter;
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+        float timeLastFired;
+
+        public string name {
+            get
+            {
+                string ts = "";
+
+                switch (type)
+                {
+                    case GunType.SingleSpray:
+                        ts = "A";
+                        break;
+                    case GunType.DoubleSpray:
+                        ts = "B";
+                        break;
+                    case GunType.TripleSpray:
+                        ts = "C";
+                        break;
+                    case GunType.Laser:
+                        ts = "D";
+                        break;
+                }
+
+                return "D" + damage.ToString(".00") + "R" + rof.ToString(".00") + "V" + velocity.ToString(".00") + ts;
+            }
+        }
+
+        public Gun()
+            : this(1f, 30f/111, 20f, GunType.SingleSpray) {}
+
+        public Gun(float d, float r, float v, int t)
+            : this(d, r, v, (GunType)t) {}
+
+        public Gun(float d, float r, float v, GunType t)
+        {
+            damage = d;
+            rof = r; // in seconds
+            velocity = v;
+            type = t;
+            bullet = GameManager.instance.bulletPrefab;
+            ResetFireRate();
+        }
+
+        public void SetParent(GameObject p)
+        {
+            shooter = p;
+        }
+
+        public void Fire()
+        {
+            if (AttemptFire())
+            {
+                FireShot();
+                DelayFireRate();
+            }
+        }
+
+        public bool AttemptFire()
+        {
+            if (Time.time <= (timeLastFired + rof))
+                return false;
+            return true;
+        }
+
+        public void ResetFireRate() // So you can immediately fire again
+        {
+            timeLastFired = Time.time - rof;
+        }
+
+        public void DelayFireRate()
+        {
+            timeLastFired = Time.time;
+        }
+
+        public void FireShot()
+        {
+            // mouse's relative position to ship
+            var mousePos = (Vector2)(Camera.main.ScreenToWorldPoint(Input.mousePosition) - shooter.transform.position);
+            var dir = mousePos.normalized;
+            var bPos = shooter.transform.position + (Vector3)(dir * 0.2f);
+
+            switch (type) {
+                case GunType.SingleSpray:
+                    {
+                        var b = GameObject.Instantiate(bullet, bPos, Quaternion.identity);
+                        b.GetComponent<Rigidbody2D>().velocity = dir * velocity;
+                        b.GetComponent<Bullet>().damage = damage;
+                        break;
+                    }
+                case GunType.DoubleSpray:
+                    {
+                        var b1 = GameObject.Instantiate(bullet, bPos, shooter.transform.rotation);
+                        b1.GetComponent<Bullet>().damage = damage * .8f;
+                        var b2 = GameObject.Instantiate(bullet, bPos, shooter.transform.rotation);
+                        b2.GetComponent<Bullet>().damage = damage * .8f;
+
+                        var angle = Vector2.SignedAngle(Vector2.right, dir);
+                        var leftAngle = new Vector2();
+                        var rightAngle = new Vector2();
+                        leftAngle.x = Mathf.Cos(Mathf.Deg2Rad * (angle - 25));
+                        leftAngle.y = Mathf.Sin(Mathf.Deg2Rad * (angle - 25));
+                        rightAngle.x = Mathf.Cos(Mathf.Deg2Rad * (angle + 25));
+                        rightAngle.y = Mathf.Sin(Mathf.Deg2Rad * (angle + 25));
+
+                        b1.GetComponent<Rigidbody2D>().velocity = leftAngle * velocity;
+                        b2.GetComponent<Rigidbody2D>().velocity = rightAngle * velocity;
+                        break;
+                    }
+                case GunType.TripleSpray:
+                    {
+                        var b = GameObject.Instantiate(bullet, bPos, Quaternion.identity);
+                        b.GetComponent<Bullet>().damage = damage * .8f;
+                        var b1 = GameObject.Instantiate(bullet, bPos, shooter.transform.rotation);
+                        b1.GetComponent<Bullet>().damage = damage * .6f;
+                        var b2 = GameObject.Instantiate(bullet, bPos, shooter.transform.rotation);
+                        b2.GetComponent<Bullet>().damage = damage * .6f;
+
+                        var angle = Vector2.SignedAngle(Vector2.right, dir);
+                        var leftAngle = new Vector2();
+                        var rightAngle = new Vector2();
+                        leftAngle.x = Mathf.Cos(Mathf.Deg2Rad * (angle - 50));
+                        leftAngle.y = Mathf.Sin(Mathf.Deg2Rad * (angle - 50));
+                        rightAngle.x = Mathf.Cos(Mathf.Deg2Rad * (angle + 50));
+                        rightAngle.y = Mathf.Sin(Mathf.Deg2Rad * (angle + 50));
+
+                        b.GetComponent<Rigidbody2D>().velocity = dir * velocity;
+                        b1.GetComponent<Rigidbody2D>().velocity = leftAngle * velocity;
+                        b2.GetComponent<Rigidbody2D>().velocity = rightAngle * velocity;
+                        break;
+                    }
+                case GunType.Laser:
+                    {
+                        var b = GameObject.Instantiate(bullet, bPos, Quaternion.identity);
+                        b.GetComponent<Bullet>().damage = damage * 2f;
+                        break;
+                    }
+            }
+        }
+    }
 }
