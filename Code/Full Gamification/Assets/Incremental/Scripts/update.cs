@@ -481,7 +481,7 @@ public class update : MonoBehaviour {
                 selectedGame = minigame.mastermind;
                 break;
             case 3:
-                sceneName = "Menu";
+                sceneName = "Conq";
                 selectedGame = minigame.conquer;
                 break;
         }

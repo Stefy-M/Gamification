@@ -22,6 +22,13 @@ namespace Conqueror {
             DontDestroyOnLoad(gameObject);
         }
 
+        void Update()
+        {
+            // Something that kills this when switching to a different game.
+            if (player.Incre.currentGame != minigame.conquer)
+                Destroy(gameObject);
+        }
+
         public void PlaySingle(AudioClip clip)
         {
             efxSource.clip = clip;
