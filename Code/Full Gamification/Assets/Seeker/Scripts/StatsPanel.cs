@@ -11,6 +11,7 @@ public class StatsPanel : MonoBehaviour {
     public Text insight;
     public Text population;
     public Text rep;
+    public Text totalUpgrades;
 
 
 	// Use this for initialization
@@ -21,7 +22,7 @@ public class StatsPanel : MonoBehaviour {
         insight.text = "Insight: " + GlobalControl.Instance.ins.ToString();
         population.text = "Population: " + GlobalControl.Instance.current_population + "/" + GlobalControl.Instance.max_population;
         rep.text = "Reputation: " + GlobalControl.Instance.reputation;
-
+        totalUpgrades.text = "Total Upgrades: " + (((GlobalControl.Instance.hp / 10) - 1) + ((GlobalControl.Instance.stam / 10) - 1) + (GlobalControl.Instance.dex - 1) + (GlobalControl.Instance.ins - 1)).ToString();
     }
 	
 	// Update is called once per frame

@@ -2,95 +2,46 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-public class BossDrop : MonoBehaviour {
-	System.Random rand;
-	// Use this for initialization
-	void Start () {
-		rand = new System.Random ();
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+using Random = UnityEngine.Random;
 
-	void OnCollisionEnter2D(Collision2D col) {
-        //GameObject play = GameObject.Find ("player");
-        player.Incre.coin.active += 5;
-        player.Incre.coin.passive += 5;
-		//add bonus to incremental
+namespace Conqueror {
+    public class BossDrop : MonoBehaviour
+    {
+        // Use this for initialization
+        void Start()
+        {
+        }
 
-		//add drop to player
-		//player.GetComponent<PlayerMovementScript> ().player1.guns [3] = new Gun (1, 2, 2);
-		if (GameObject.FindGameObjectWithTag ("Boss") != null) {
-			return;
-		}
+        void OnTriggerEnter2D(Collider2D other)
+        {
+            int level = GameManager.instance.level;
+            if (!other.CompareTag("Player"))
+                return;
 
-		//dont award guns for the farming stage
-		if (SceneManager.GetActiveScene ().name != "Farm") {
+            // Add bonus to incremental
+            player.Incre.coin.active += (int) Mathf.Pow(1.3f, level);
+            player.Incre.coin.passive += (int) (Mathf.Pow(1.3f, level) / 10);
 
-			//add stronger gun based on current level
-			Gun g;
-			if (SceneManager.GetActiveScene ().name == "Scene1") {
-				g = new Gun (rand.Next (1, 3), rand.Next (100, 221), rand.Next (0, 1));
-			} else if (SceneManager.GetActiveScene ().name == "Scene2") {
-				g = new Gun (rand.Next (1, 4), rand.Next (100, 241), rand.Next (0, 2));
-			} else if (SceneManager.GetActiveScene ().name == "Scene3") {
-				g = new Gun (rand.Next (1, 5), rand.Next (100, 261), rand.Next (0, 3));
-			} else if (SceneManager.GetActiveScene ().name == "Scene4") {
-				g = new Gun (rand.Next (2, 6), rand.Next (100, 281), rand.Next (0, 3));
-			} else if (SceneManager.GetActiveScene ().name == "Scene5") {
-				g = new Gun (rand.Next (3, 7), rand.Next (100, 301), rand.Next (0, 3));
-			} else if (SceneManager.GetActiveScene ().name == "Scene6") {
-				g = new Gun (rand.Next (4, 8), rand.Next (100, 321), rand.Next (0, 3));
-			} else if (SceneManager.GetActiveScene ().name == "Scene7") {
-				g = new Gun (rand.Next (5, 9), rand.Next (100, 341), rand.Next (0, 3));
-			} else if (SceneManager.GetActiveScene ().name == "Scene8") {
-				g = new Gun (rand.Next (6, 10), rand.Next (100, 361), rand.Next (0, 3));
-			} else if (SceneManager.GetActiveScene ().name == "Scene9") {
-				g = new Gun (rand.Next (7, 11), rand.Next (100, 381), rand.Next (0, 3));
-			} else if (SceneManager.GetActiveScene ().name == "Scene10") {
-				g = new Gun (rand.Next (8, 12), rand.Next (100, 401), rand.Next (0, 3));
-			} else {
-				g = new Gun (rand.Next (1, 3), rand.Next (100, 221), rand.Next (0, 1));
-			}
-			Debug.Log ("Generating gun.");
-			//string[] lines = PlayerPrefsX.GetStringArray("ConqSave");
+            // Add stronger gun based on current level
+            Gun g;
+            float damage = (int)Random.Range(Mathf.Max(level - 2f, 1f), level + 2f);
+            float rof = Random.Range((30f/111) / (1 + 0.1f * level), 30f/111);
+            float speed = Random.Range(5, 20 + level * 2);
+            int type = Random.Range(0, Mathf.Min(level, 3));
 
-			//new gun generation
-			//player.Conqueror.guns [1] = g;
+            var ship = other.GetComponent<PlayerShip>();
+            g = new Gun(damage, rof, speed, type);
+            g.SetParent(other.gameObject);
 
-			for (int i = 0;i < 10; i++) {
-				Debug.Log (player.Conqueror.guns [i]);
-				if (player.Conqueror.guns [i] == null) {
-					//Debug.Log (i + "SHOULD BE 2");
-					player.Conqueror.guns [i] = g;
-					break;
-				}
-			}
+            // Debug gun
+            Debug.Log("Generating gun: " + g.name);
+            GameManager.instance.AddGun(g);
 
-//			int j = 0;
-//			foreach (string line in lines ) {
-//				
-//				if (line == null) {
-//					lines[j] = "gun"  + rand.Next(10).ToString() + " " + g.damage.ToString () + " " + g.speed.ToString () + " " + g.type.ToString ();
-//					break;
-//				}
-//				j++;
-//			}
-//			PlayerPrefsX.SetStringArray("ConqSave", lines);
-
-
-		//string gun = "gun"  + rand.Next(10).ToString() + " " + g.damage.ToString () + " " + g.speed.ToString () + " " + g.type.ToString ();
-		//using (System.IO.StreamWriter file = new System.IO.StreamWriter (System.IO.Directory.GetCurrentDirectory() + "\\save.txt", true)) {
-		//	file.WriteLine (gun);
-		//}
-			
-
-			SceneManager.LoadScene ("Farm");
-		}
-
-
-
-	}
+            int i = GameManager.instance.workingSave.guns.Count - 1;
+            GameManager.instance.workingSave.currentGun = i;
+            ship.WorkingGun = GameManager.instance.workingSave.guns[i];
+            
+            Destroy(gameObject);
+        }
+    }
 }

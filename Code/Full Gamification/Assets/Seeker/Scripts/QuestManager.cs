@@ -31,7 +31,7 @@ public class QuestManager : MonoBehaviour {
                 dialogue_set.Reset(GlobalControl.Instance.quest_dialogue[1]);
                 dialogue_set.enabled = true;
                 dialogue_set.EnableTextBox();
-                QuestChange("Go to the dungeon outside of the village with the animals key and bring back the work animals.");
+                QuestChange("Go_to_the_dungeon_outside_of_the_village_with_the_animals_key_and_bring_back_the_work_animals._Recommended_Stats:_20_Upgrades.");
                 Reward(500);
                 GlobalControl.Instance.QuestUpdate();
                 break;
@@ -44,7 +44,7 @@ public class QuestManager : MonoBehaviour {
                 dialogue_set.Reset(GlobalControl.Instance.quest_dialogue[3]);
                 dialogue_set.enabled = true;
                 dialogue_set.EnableTextBox();
-                QuestChange("Please wait for the next installment of The Seeker Quest!");
+                QuestChange("Please_wait_for_the_next_update_of_New_Reality!");
                 Reward(2000);
                 GlobalControl.Instance.QuestUpdate();
                 break;

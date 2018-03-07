@@ -338,7 +338,7 @@ public class NetworkManager : MonoBehaviour
     //*/ //OnUpdate
 
     //Close the TCP and UDP clients when the game exits
-    private void OnApplicationQuit()
+    private void OnDisable()
     {
 
         //*
@@ -354,8 +354,10 @@ public class NetworkManager : MonoBehaviour
         //if (_udp != null) _udp.Close();
     }
 
-    
-
+	public string GetUsername()
+	{
+		return Instance._username;
+	}
 
     /********************************************************************************
     ------------------------ NETWORK AND ENCRYPTION SECTION -------------------------

@@ -9,7 +9,8 @@ public class QuestTab : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        quest_box.text = GlobalControl.Instance.current_quest;
+        string temp = GlobalControl.Instance.current_quest.Replace('_', ' ');     
+        quest_box.text = temp;
 	}
 	
 	// Update is called once per frame
@@ -19,6 +20,7 @@ public class QuestTab : MonoBehaviour {
 
     public void SetQuest()
     {
-        quest_box.text = GlobalControl.Instance.current_quest;
+        string temp = GlobalControl.Instance.current_quest.Replace('_', ' ');
+        quest_box.text = temp;
     }
 }
