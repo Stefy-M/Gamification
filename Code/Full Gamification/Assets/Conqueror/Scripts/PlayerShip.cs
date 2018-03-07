@@ -175,20 +175,33 @@ namespace Conqueror {
 
         void OnTriggerEnter2D(Collider2D other)
         {
-            if (!other.CompareTag("BossBullet"))
-                return;
-            
-            SoundManager.instance.PlaySingle(playerHit);
+			if (other.CompareTag("BossBullet"))
+			{
 
-            health--;
 
-            if (healthBar)
-                healthBar.value = health;
+				SoundManager.instance.PlaySingle(playerHit);
 
-            Destroy(other.gameObject);
+				health--;
 
-            if (health <= 0)
-                GameManager.instance.GoToMenu();
+				if (healthBar)
+					healthBar.value = health;
+
+				Destroy(other.gameObject);
+
+				if (health <= 0)
+					GameManager.instance.GoToMenu();
+			}
+			if (other.CompareTag("Boss"))
+			{
+				SoundManager.instance.PlaySingle(playerHit);
+				//player loses 50% of remaining hp
+				int half = health / 2;
+				health -= half;
+
+				transform.Translate(new Vector3(2.2f, 0f));
+
+
+			}
         }
 
         public void useSkill()
