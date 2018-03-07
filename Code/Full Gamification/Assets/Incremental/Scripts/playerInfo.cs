@@ -291,10 +291,11 @@ public static class player
         {
             try
             {
-                conqueror = JsonConvert.DeserializeObject<ConquerorSave>(loadedjsonStrings.conqueror);
+                conqueror = JsonConvert.DeserializeObject<ConquerorSave>(loadedjsonStrings.conqueror.ToString());
             }
-            catch
+            catch(Exception ex)
             {
+                Debug.Log(ex.ToString());
                 conqueror = new ConquerorSave();
             }
         }
