@@ -25,6 +25,8 @@ namespace Conqueror {
 
         private GameObject currentArena;
 
+        private CountdownScript cs = GameObject.Find("GameManager").GetComponent<CountdownScript>();
+
         void Awake()
         {
             if (instance == null)

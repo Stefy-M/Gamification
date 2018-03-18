@@ -34,6 +34,8 @@ namespace Conqueror {
 
         float timeLastFired;
 
+        private CountdownScript cs = GameObject.Find("GameManager").GetComponent<CountdownScript>();
+
         public string name {
             get
             {

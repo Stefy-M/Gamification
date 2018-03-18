@@ -9,6 +9,7 @@ using UnityEngine.EventSystems;
 namespace Conqueror {
     public class StartButton : MonoBehaviour
     {
+
         public void Start()
         {
             ChangeSkillText();
