@@ -118,8 +118,9 @@ namespace Conqueror {
             gameUI.SetActive(false);
             startMenu.SetActive(true);
             playerShip.gameObject.SetActive(false);
-
-            //Destroys Everything From Previous Arean
+            //Cancels invocation of next level
+            CancelInvoke("TransitionToNextLevel");
+            //Destroys Everything From Previous Arena
             GameObject[] temp = GameObject.FindGameObjectsWithTag("Boss");
             foreach(GameObject toDelete in temp)
             {
