@@ -42,6 +42,9 @@ namespace Conqueror {
         int maxHealth = 30;
         public float moveSpeed;
         float defaultMoveSpeed = 5;
+        private bool invincible = false;
+        private float flashTimer = 0.0f;
+        private bool inBoss = false;
 
         private Gun workingGun;
         private Vector3 defaultPos = new Vector3(0f, -2.8f, 0f);
@@ -103,9 +106,13 @@ namespace Conqueror {
         {
             playerName.text = player.Incre.username;
             sprite = GetComponent<SpriteRenderer>();
+            originalColor = sprite.color;
             transform.position = defaultPos;
             health = maxHealth;
             moveSpeed = defaultMoveSpeed;
+            inBoss = false;
+            flashTimer = 0.0f;
+            invincible = false;
 
             switch (GameManager.instance.workingSave.currentSkill)
             {
@@ -166,6 +173,15 @@ namespace Conqueror {
 
             if (Input.GetMouseButton(0))
                 workingGun.Fire();
+
+            if(invincible == true)
+            {
+                invincibleFlashing(.05f);
+            }
+            //if player stays inside boss, damage them if not invincible
+            if (inBoss && !invincible)
+                inBossDamage();
+
         }
 
         void LateUpdate()
@@ -173,22 +189,118 @@ namespace Conqueror {
             skillCooldownBar.value = (skillCooldownTime - skillTimer);
         }
 
+        
         void OnTriggerEnter2D(Collider2D other)
         {
-            if (!other.CompareTag("BossBullet"))
-                return;
-            
+
+            if (!invincible)
+            {
+                if (other.CompareTag("BossBullet"))
+                {
+
+                    SoundManager.instance.PlaySingle(playerHit);
+
+                    health--;
+
+                    if (healthBar)
+                        healthBar.value = health;
+
+                    Destroy(other.gameObject);
+                }
+                else if (other.CompareTag("Boss"))
+                {
+                    SoundManager.instance.PlaySingle(playerHit);
+                    //Sets flag that player is in boss hitbox
+                    inBoss = true;
+                    //Reduces HP by third of max hp if hit by boss
+                    health -= (maxHealth / 3);
+                    if (healthBar)
+                        healthBar.value = health;
+                    //Adds iFrames
+                    invincible = true;
+                    //Become vulnurable again in 2 seconds
+                    Invoke("resetInvulnerability", 2f);
+                }
+            }
+            //If invincible only set flag if colliding with boss
+            else
+            {
+                if (other.CompareTag("Boss"))
+                {
+                    //Sets flag that player is in boss hitbox
+                    inBoss = true;
+                }
+            }
+            if (health <= 0)
+            {
+                resetInvulnerability();
+                ResetSpeed();
+                CancelInvoke();
+                GameManager.instance.GoToMenu();
+            }
+        }
+
+        //If player stays inside boss
+        void OnTriggerExit2D(Collider2D other)
+        {
+            if (other.CompareTag("Boss"))
+            {
+                inBoss = false;   
+            }       
+        }
+
+        //so sprite flashes when invincible (called from update function)
+        void invincibleFlashing(float duration)
+        {
+            Color temp = sprite.color;
+            flashTimer += Time.deltaTime;
+
+            if (flashTimer >= duration)
+            {
+                if (temp.a == 255f)
+                {
+                    temp.a = 0f;
+                    sprite.color = temp;
+                }
+                else
+                {
+                    temp.a = 255f;
+                    sprite.color = temp;
+                }
+                flashTimer = 0f;
+            }
+        }
+
+        void resetInvulnerability()
+        {
+            //Resetting back to regular color (full opacity)
+            Color temp;
+            temp = sprite.color;
+            temp.a = 255f;
+            sprite.color = temp;
+            //not invincible anymore
+            invincible = false;
+        }
+
+        void inBossDamage()
+        {
             SoundManager.instance.PlaySingle(playerHit);
-
-            health--;
-
+            //Reduces HP by third of max hp if hit by boss
+            health -= (maxHealth / 3);
             if (healthBar)
                 healthBar.value = health;
-
-            Destroy(other.gameObject);
+            //Adds iFrames
+            invincible = true;
+            //Become vulnurable again in 2 seconds
+            Invoke("resetInvulnerability", 2f);
 
             if (health <= 0)
+            {
+                resetInvulnerability();
+                ResetSpeed();
+                CancelInvoke();
                 GameManager.instance.GoToMenu();
+            }
         }
 
         public void useSkill()

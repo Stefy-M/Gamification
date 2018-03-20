@@ -113,7 +113,7 @@ namespace Conqueror {
 
         public void GoToMenu()
         {
-            //TO ADD -needs something here that cancels invoked call of transistion to next leve
+            
             startingGame = false;
             gameUI.SetActive(false);
             startMenu.SetActive(true);
