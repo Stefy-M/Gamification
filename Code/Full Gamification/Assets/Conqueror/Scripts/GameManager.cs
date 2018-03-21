@@ -29,6 +29,9 @@ namespace Conqueror {
 
         void Awake()
         {
+            //Uncomment this line to test the game
+            //player.Incre.stamina.cur = player.Incre.stamina.max;
+
             if (instance == null)
                 instance = this;
             else if (instance != this)
@@ -112,17 +115,47 @@ namespace Conqueror {
 
         public void GoToMenu()
         {
+            
             startingGame = false;
             gameUI.SetActive(false);
             startMenu.SetActive(true);
             playerShip.gameObject.SetActive(false);
+            //Cancels invocation of next level
+            CancelInvoke("TransitionToNextLevel");
+            //Destroys Everything From Previous Arena
+            GameObject[] temp = GameObject.FindGameObjectsWithTag("Boss");
+            foreach(GameObject toDelete in temp)
+            {
+                Destroy(toDelete);
+            }
+            temp = GameObject.FindGameObjectsWithTag("Drops");
+            foreach (GameObject toDelete in temp)
+            {
+                Destroy(toDelete);
+            }
+            temp = GameObject.FindGameObjectsWithTag("Bullet");
+            foreach (GameObject toDelete in temp)
+            {
+                Destroy(toDelete);
+            }
+            temp = GameObject.FindGameObjectsWithTag("BossBullet");
+            foreach (GameObject toDelete in temp)
+            {
+                Destroy(toDelete);
+            }
+
+            Destroy(currentArena);
         }
 
         private void TransitionToNextLevel()
         {
             level++;
-            workingSave.highestLevelReached = level;
+            //so highest level reached is not replaced after each level.
+            if(level > workingSave.highestLevelReached)
+                workingSave.highestLevelReached = level;
+            //Save occurs
             player.conqueror = workingSave;
+            //Just destroys Arena, keeps bossdrops, bullets active (boss should be dead at this point)
             Destroy(currentArena);
             StartGame();
         }
