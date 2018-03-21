@@ -27,6 +27,9 @@ namespace Conqueror {
         private bool movingRight = false;
         private Vector3 targetPosition;
 
+        //Allows access to the setCountDown class inorder to access the countDownDone variable.
+        private CountdownScript cs = GameObject.Find("GameManager").GetComponent<CountdownScript>();
+
         void Start()
         {
             level = GameManager.instance.level;
@@ -59,7 +62,10 @@ namespace Conqueror {
             }
 
             Move();
-            Shoot();
+
+            //Add logic here to get the boss to not shoot while the countDownDone is still false. The boss will only shoot when the countDownDone is true.
+            if(cs.countDownDone == true)
+                Shoot();
         }
 
         void Update()
@@ -134,23 +140,29 @@ namespace Conqueror {
         public void Shoot()
         {
             var player = GameObject.FindGameObjectWithTag("Player");
-            switch (index) {
-                case 0:
-                    rof--;
-                    if (rof <= 0) {
-                        var rocket = (GameObject)GameObject.Instantiate(GameManager.instance.bossBulletPrefab, gameObject.transform.position, gameObject.transform.rotation);
-                        rocket.GetComponent<Rigidbody2D>().velocity = new Vector2(Random.Range(-4, 4) * level, Random.Range(-4, 4) * level);
-                        rof = maxrof;
-                    }
-                    break;
-                case 1:
-                    rof--;
-                    if (rof <= 0) {
-                        var rocket2 = (GameObject)GameObject.Instantiate(GameManager.instance.bossBulletPrefab, gameObject.transform.position, gameObject.transform.rotation);
-                        rocket2.GetComponent<Rigidbody2D>().velocity = directionToPlayer() * level;
-                        rof = maxrof;
-                    }
-                    break;
+            if (cs.counterDownDone == true)
+            {
+                switch (index)
+                {
+                    case 0:
+                        rof--;
+                        if (rof <= 0)
+                        {
+                            var rocket = (GameObject)GameObject.Instantiate(GameManager.instance.bossBulletPrefab, gameObject.transform.position, gameObject.transform.rotation);
+                            rocket.GetComponent<Rigidbody2D>().velocity = new Vector2(Random.Range(-4, 4) * level, Random.Range(-4, 4) * level);
+                            rof = maxrof;
+                        }
+                        break;
+                    case 1:
+                        rof--;
+                        if (rof <= 0)
+                        {
+                            var rocket2 = (GameObject)GameObject.Instantiate(GameManager.instance.bossBulletPrefab, gameObject.transform.position, gameObject.transform.rotation);
+                            rocket2.GetComponent<Rigidbody2D>().velocity = directionToPlayer() * level;
+                            rof = maxrof;
+                        }
+                        break;
+                }
             }
         }
 

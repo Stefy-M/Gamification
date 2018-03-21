@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class CountdownScript : MonoBehaviour {
 
-    public bool counterDownDone = false;
+    //Count down variable that is set to false while the counter is greater than 1.
+    public bool countDownDone = false;
 
 	// Use this for initialization
 	void Start () {
