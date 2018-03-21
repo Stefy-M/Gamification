@@ -19,11 +19,8 @@ public class MenuButton : MonoBehaviour {
                 {
                     FindObject(GameObject.Find("QuestButton"), "QuestPanel").SetActive(true);
                     FindObject(GameObject.Find("InventoryButton"), "InventoryPanel").SetActive(false);
-                    GameObject.Find("InventoryButton").GetComponent<MenuButton>().isClicked = false;
                     FindObject(GameObject.Find("StatsButton"), "StatsPanel").SetActive(false);
-                    GameObject.Find("StatsButton").GetComponent<MenuButton>().isClicked = false;
                     FindObject(GameObject.Find("MapButton"), "MapPanel").SetActive(false);
-                    GameObject.Find("MapButton").GetComponent<MenuButton>().isClicked = false;
                     FindObject(GameObject.Find("UI"), "Overlay").SetActive(true);
                     isClicked = true;
                 }
@@ -38,12 +35,9 @@ public class MenuButton : MonoBehaviour {
                 if (!isClicked)
                 {
                     FindObject(GameObject.Find("QuestButton"), "QuestPanel").SetActive(false);
-                    GameObject.Find("QuestButton").GetComponent<MenuButton>().isClicked = false;
                     FindObject(GameObject.Find("InventoryButton"), "InventoryPanel").SetActive(false);
-                    GameObject.Find("InventoryButton").GetComponent<MenuButton>().isClicked = false;
-                    FindObject(GameObject.Find("StatsButton"), "StatsPanel").SetActive(true);           
+                    FindObject(GameObject.Find("StatsButton"), "StatsPanel").SetActive(true);
                     FindObject(GameObject.Find("MapButton"), "MapPanel").SetActive(false);
-                    GameObject.Find("MapButton").GetComponent<MenuButton>().isClicked = false;
                     FindObject(GameObject.Find("UI"), "Overlay").SetActive(true);
                     isClicked = true;
                 }
@@ -58,12 +52,9 @@ public class MenuButton : MonoBehaviour {
                 if (!isClicked)
                 {
                     FindObject(GameObject.Find("QuestButton"), "QuestPanel").SetActive(false);
-                    GameObject.Find("QuestButton").GetComponent<MenuButton>().isClicked = false;
                     FindObject(GameObject.Find("InventoryButton"), "InventoryPanel").SetActive(true);
                     FindObject(GameObject.Find("StatsButton"), "StatsPanel").SetActive(false);
-                    GameObject.Find("StatsButton").GetComponent<MenuButton>().isClicked = false;
                     FindObject(GameObject.Find("MapButton"), "MapPanel").SetActive(false);
-                    GameObject.Find("MapButton").GetComponent<MenuButton>().isClicked = false;
                     FindObject(GameObject.Find("UI"), "Overlay").SetActive(true);
                     isClicked = true;
                 }
@@ -78,12 +69,9 @@ public class MenuButton : MonoBehaviour {
                 if (!isClicked)
                 {
                     FindObject(GameObject.Find("QuestButton"), "QuestPanel").SetActive(false);
-                    GameObject.Find("QuestButton").GetComponent<MenuButton>().isClicked = false;
                     FindObject(GameObject.Find("InventoryButton"), "InventoryPanel").SetActive(false);
-                    GameObject.Find("InventoryButton").GetComponent<MenuButton>().isClicked = false;
                     FindObject(GameObject.Find("StatsButton"), "StatsPanel").SetActive(false);
-                    GameObject.Find("StatsButton").GetComponent<MenuButton>().isClicked = false;
-                    FindObject(GameObject.Find("MapButton"), "MapPanel").SetActive(true);                    
+                    FindObject(GameObject.Find("MapButton"), "MapPanel").SetActive(true);
                     FindObject(GameObject.Find("UI"), "Overlay").SetActive(true);
                     isClicked = true;
                 }

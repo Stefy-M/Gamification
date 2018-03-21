@@ -13,9 +13,7 @@ namespace Conqueror {
         public void Start()
         {
             ChangeSkillText();
-            ChangeSkillDescription();
             ChangeGunText();
-            GameObject.Find("Selected Level").GetComponent<Text>().text = "Stage " + (GameManager.instance.level + 1);
         }
 
         public void StartGame()
@@ -26,27 +24,17 @@ namespace Conqueror {
             }
         }
 
-        //This is so fields can be updated properly after user presses escape or dies
-        void OnEnable()
-        {
-            ChangeSkillText();
-            ChangeGunText();
-            ChangeSkillDescription();
-            GameObject.Find("Selected Level").GetComponent<Text>().text = "Stage " + (GameManager.instance.level + 1);
-        }
-
         public void IncrementStage()
         {
-            //if something went wrong
             if (GameManager.instance.workingSave.highestLevelReached < 0)
                 GameManager.instance.workingSave.highestLevelReached = 0;
-            
-            GameManager.instance.level++;   
-            if (GameManager.instance.level > GameManager.instance.workingSave.highestLevelReached)
+
+            if (GameManager.instance.level >= GameManager.instance.workingSave.highestLevelReached)
                 GameManager.instance.level = 0;
+            else
+                GameManager.instance.level++;
 
             GameObject.Find("Selected Level").GetComponent<Text>().text = "Stage " + (GameManager.instance.level + 1);
-            
             Debug.Log("Level = " + GameManager.instance.level);
         }
 
@@ -55,17 +43,15 @@ namespace Conqueror {
             if (GameManager.instance.workingSave.highestLevelReached < 0)
                 GameManager.instance.workingSave.highestLevelReached = 0;
 
-
-            GameManager.instance.level--;
-            if (GameManager.instance.level < 0)
+            if (GameManager.instance.level <= 0)
                 GameManager.instance.level = GameManager.instance.workingSave.highestLevelReached;
-                                     
-            GameObject.Find("Selected Level").GetComponent<Text>().text = "Stage " + (GameManager.instance.level + 1);
+            else
+                GameManager.instance.level--;
             
+            GameObject.Find("Selected Level").GetComponent<Text>().text = "Stage " + (GameManager.instance.level + 1);
             Debug.Log("Level = " + GameManager.instance.level);
         }
 
-        //These will need to be changed in the future if more skills are added.
         public void IncrementSkill()
         {
             GameManager.instance.workingSave.currentSkill = Mathf.Clamp(GameManager.instance.workingSave.currentSkill, 0, 2);
@@ -76,7 +62,6 @@ namespace Conqueror {
                 GameManager.instance.workingSave.currentSkill++;
 
             ChangeSkillText();
-            ChangeSkillDescription();
             GameManager.instance.Save();
         }
 
@@ -90,7 +75,6 @@ namespace Conqueror {
                 GameManager.instance.workingSave.currentSkill--;
 
             ChangeSkillText();
-            ChangeSkillDescription();
             GameManager.instance.Save();
         }
 
@@ -135,21 +119,12 @@ namespace Conqueror {
             GameObject.Find("Skill Name").GetComponent<Text>().text = PlayerShip.PlayerSkillToString(GameManager.instance.workingSave.currentSkill);
         }
 
-        private void ChangeSkillDescription()
-        {
-            GameObject.Find("Skill Description").GetComponent<Text>().text = PlayerShip.PlayerSkillDescriptionToString(GameManager.instance.workingSave.currentSkill);
-        }
-
         private void ChangeGunText()
         {
             GameObject.Find("Weapon Name").GetComponent<Text>().text = "No gun";
 
-            //This makes gun the same as the last gun in your array (last earned) be the one that is displayed.
-            /*if (GameManager.instance.workingSave.guns.Count > GameManager.instance.workingSave.currentGun)
+            if (GameManager.instance.workingSave.guns.Count > GameManager.instance.workingSave.currentGun)
                 GameObject.Find("Weapon Name").GetComponent<Text>().text = GameManager.instance.workingSave.guns[GameManager.instance.workingSave.currentGun].name;
-            */
-            //This makes current gun be displayed: 
-            GameObject.Find("Weapon Name").GetComponent<Text>().text = GameManager.instance.workingSave.guns[GameManager.instance.workingSave.currentGun].name;
         }
     }
 }

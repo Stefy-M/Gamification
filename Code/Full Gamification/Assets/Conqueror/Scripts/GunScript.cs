@@ -23,26 +23,20 @@ namespace Conqueror {
     /// <summary>
     /// Gun. Plan is to make certain archetypes of weapons and have those scale.
     /// </summary>
-    [System.Serializable]
-    public class Gun
-    {
-        // [JsonProperty("damage")]
-        public float damage { get; set; }
-        // [JsonProperty("rof")]
-        public float rof { get; set; }
-        //[JsonProperty("velocity")]
-        public float velocity { get; set; }
-        //[JsonProperty("type")]
-        public GunType type { get; set; }
+    public class Gun {
+        public float damage;
+        public float rof;
+        public float velocity;
+        public GunType type;
 
         GameObject bullet;
         GameObject shooter;
 
         float timeLastFired;
 
-        //[JsonProperty("name")]
-        public string name
-        {
+        private CountdownScript cs = GameObject.Find("GameManager").GetComponent<CountdownScript>();
+
+        public string name {
             get
             {
                 string ts = "";
@@ -67,27 +61,19 @@ namespace Conqueror {
             }
         }
 
-        /*public Gun()
-         {
-            damage = 0;
-            rof = 0;
-            velocity = 0;
-            type = 0;
-            name = "";
-         }*/
-
-        /*
-    public Gun(float d, float r, float v, int t)
-        : this(d, r, v, (GunType)t) { }
-        */
+        public Gun()
+            : this(1f, 30f/111, 20f, GunType.SingleSpray) {}
 
         public Gun(float d, float r, float v, int t)
+            : this(d, r, v, (GunType)t) {}
+
+        public Gun(float d, float r, float v, GunType t)
         {
             damage = d;
             rof = r; // in seconds
             velocity = v;
-            type = (GunType)t;
-            //name = n;         
+            type = t;
+            bullet = GameManager.instance.bulletPrefab;
             ResetFireRate();
         }
 
@@ -125,13 +111,11 @@ namespace Conqueror {
         public void FireShot()
         {
             // mouse's relative position to ship
-            bullet = GameManager.instance.bulletPrefab;
             var mousePos = (Vector2)(Camera.main.ScreenToWorldPoint(Input.mousePosition) - shooter.transform.position);
             var dir = mousePos.normalized;
             var bPos = shooter.transform.position + (Vector3)(dir * 0.2f);
 
-            switch (type)
-            {
+            switch (type) {
                 case GunType.SingleSpray:
                     {
                         var b = GameObject.Instantiate(bullet, bPos, Quaternion.identity);
