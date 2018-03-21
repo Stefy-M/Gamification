@@ -17,7 +17,14 @@ public class TreasureManager : MonoBehaviour {
     public GameObject treasure_items;
     public GameObject inventory;
 
+    private bool beenChecked = false;
+
     void Start()
+    {
+            
+    }
+
+    void initializeChestContents()
     {
         treasure_items = GameObject.Find("Loot");
         inventory = GameObject.Find("InventoryDungeon");
@@ -32,6 +39,7 @@ public class TreasureManager : MonoBehaviour {
             else
             {
                 float y = Random.Range(1.0f, 100.0f);
+                //Could add scaling to this
                 //75% chance of regular set items
                 //20% chance of lower rank item;
                 //5% chance of higher rank item;
@@ -40,7 +48,7 @@ public class TreasureManager : MonoBehaviour {
                 {
                     rewards[x] = GlobalControl.Instance.dungeon.regular_rewards[Random.Range(0, GlobalControl.Instance.dungeon.regular_rewards.Length)];
                 }
-                else if(y >= 75 && y <= 95) //Lower set
+                else if (y >= 75 && y <= 95) //Lower set
                 {
                     rewards[x] = GlobalControl.Instance.dungeon.lower_rewards[Random.Range(0, GlobalControl.Instance.dungeon.lower_rewards.Length)];
                 }
@@ -50,7 +58,7 @@ public class TreasureManager : MonoBehaviour {
                 }
             }
         }
-            
+
     }
 
 
@@ -58,6 +66,9 @@ public class TreasureManager : MonoBehaviour {
     {
         if (other.gameObject.name == "Player")
         {
+            //Instead of initializing chest contents when the dungeon is loaded, do it here. This will increase performance (less load time)
+            if(!beenChecked)
+                initializeChestContents();
             if (num_rewards > 0)
             {
                 this.GetComponent<SpriteRenderer>().sprite = opened;    // Changes looks of chest to signify it's been looked in
@@ -73,6 +84,8 @@ public class TreasureManager : MonoBehaviour {
     {
         if (other.gameObject.name == "Player")
         {
+            if(!beenChecked)
+                beenChecked = true;
 
             if (num_rewards <= 0)
             {
