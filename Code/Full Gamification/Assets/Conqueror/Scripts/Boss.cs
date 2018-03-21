@@ -62,10 +62,11 @@ namespace Conqueror {
                 counter = 0f;
             }
 
+			Shoot();
 			//Add logic here to get the boss to not shoot while the countDownDone is still false. The boss will only shoot when the countDownDone is true.
 			if (cs.countDownDone == true)
             	Move();           
-				Shoot();            
+			            
         }
 
         void Update()
