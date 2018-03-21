@@ -119,6 +119,8 @@ namespace Conqueror {
             startingGame = false;
             gameUI.SetActive(false);
             startMenu.SetActive(true);
+            GameObject.Find("Player").GetComponent<PlayerShip>().ResetSpeed();
+            GameObject.Find("Player").GetComponent<PlayerShip>().resetInvulnerability();
             playerShip.gameObject.SetActive(false);
             //Cancels invocation of next level
             CancelInvoke("TransitionToNextLevel");
