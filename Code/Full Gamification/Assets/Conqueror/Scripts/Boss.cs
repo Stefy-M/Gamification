@@ -28,10 +28,11 @@ namespace Conqueror {
         private Vector3 targetPosition;
 
         //Allows access to the setCountDown class inorder to access the countDownDone variable.
-        private CountdownScript cs = GameObject.Find("GameManager").GetComponent<CountdownScript>();
+		private CountdownScript cs;
 
         void Start()
         {
+			cs = GameObject.Find("GameManager").GetComponent<CountdownScript>();
             level = GameManager.instance.level;
 
             maxhp = 20 + 10 * (Mathf.Pow(1.3f, level));
@@ -61,12 +62,10 @@ namespace Conqueror {
                 counter = 0f;
             }
 
-            Move();
-			Shoot();
-            //Add logic here to get the boss to not shoot while the countDownDone is still false. The boss will only shoot when the countDownDone is true.
+			//Add logic here to get the boss to not shoot while the countDownDone is still false. The boss will only shoot when the countDownDone is true.
 			if (cs.countDownDone == true)
-				Shoot();
-            
+            	Move();           
+				Shoot();            
         }
 
         void Update()
