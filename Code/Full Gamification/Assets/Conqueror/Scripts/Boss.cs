@@ -144,7 +144,7 @@ namespace Conqueror {
         public void Shoot()
         {
             var player = GameObject.FindGameObjectWithTag("Player");
-            if (cs.counterDownDone == true)
+            if (cs.countDownDone == true)
             {
                 switch (index)
                 {
