@@ -99,6 +99,7 @@ namespace Conqueror {
 
         void Start()
         {
+            originalColor = sprite.color;
             Init();
         }
 
@@ -106,7 +107,7 @@ namespace Conqueror {
         {
             playerName.text = player.Incre.username;
             sprite = GetComponent<SpriteRenderer>();
-            originalColor = sprite.color;
+            
             transform.position = defaultPos;
             health = maxHealth;
             moveSpeed = defaultMoveSpeed;
@@ -271,7 +272,7 @@ namespace Conqueror {
             }
         }
 
-        void resetInvulnerability()
+        public void resetInvulnerability()
         {
             //Resetting back to regular color (full opacity)
             Color temp;
@@ -361,7 +362,7 @@ namespace Conqueror {
             }
         }
 
-        void ResetSpeed()
+        public void ResetSpeed()
         {
             sprite.color = originalColor;
             moveSpeed = defaultMoveSpeed;

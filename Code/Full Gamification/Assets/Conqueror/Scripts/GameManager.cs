@@ -30,7 +30,7 @@ namespace Conqueror {
         void Awake()
         {
             //Uncomment this line to test the game
-            //player.Incre.stamina.cur = player.Incre.stamina.max;
+            player.Incre.stamina.cur = player.Incre.stamina.max;
 
             if (instance == null)
                 instance = this;
@@ -156,6 +156,9 @@ namespace Conqueror {
             //Save occurs
             player.conqueror = workingSave;
             //Just destroys Arena, keeps bossdrops, bullets active (boss should be dead at this point)
+            GameObject.Find("Player").GetComponent<PlayerShip>().ResetSpeed();
+            GameObject.Find("Player").GetComponent<PlayerShip>().resetInvulnerability();
+
             Destroy(currentArena);
             StartGame();
         }
