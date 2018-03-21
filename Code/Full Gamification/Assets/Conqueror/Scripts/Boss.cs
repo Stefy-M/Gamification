@@ -41,7 +41,7 @@ namespace Conqueror {
             movespeed = Mathf.Max(5f, Mathf.Log(level, 2f) * 2);
 
             bossName = GameObject.Find("EnemyName").GetComponent<Text>();
-            bossName.text = "Boss Lv" + level;
+            bossName.text = "Boss Lv" + (level+1);
             bossHealthBar = GameObject.Find("EnemyHealth").GetComponent<Slider>();
             bossHealthBar.minValue = 0;
             bossHealthBar.maxValue = maxhp;
@@ -88,7 +88,11 @@ namespace Conqueror {
                 return;
             if (other.CompareTag("Player"))
                 return;
+            if (other.CompareTag("Boss"))
+                return;
 
+            //Will destroy boss drops if it comes in contact (this might be an alright feature to leave in for now because that is the only way to get rid of the boss drop.
+            //Later we could add an option to accept the boss drop and if user selects no it will be destroyed.
             Destroy(other.gameObject);
         }
 

@@ -50,9 +50,7 @@ public class TrapManager : MonoBehaviour {
                 this.GetComponent<SpriteRenderer>().sprite = traps[2];
                 break;
 
-        }
-
-        
+        }        
     }
 
 	// Update is called once per frame
@@ -65,8 +63,10 @@ public class TrapManager : MonoBehaviour {
 
     void OnTriggerEnter2D(Collider2D other)
     {
+        
         if (other.gameObject.name == "Player")
         {
+            Debug.Log("Trap Level: " + level + ", Trap Power: " + power + ", Trap Speed: " + speed + ", Trap Disable: " + disable);
             if (found)
             {
                 choice.SetActive(true);
