@@ -29,7 +29,7 @@ namespace Conqueror {
         void Awake()
         {
             //Uncomment this line to test the game
-            player.Incre.stamina.cur = player.Incre.stamina.max;
+            //player.Incre.stamina.cur = player.Incre.stamina.max;
 
             if (instance == null)
                 instance = this;
