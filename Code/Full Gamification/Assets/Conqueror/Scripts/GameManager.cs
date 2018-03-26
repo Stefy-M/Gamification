@@ -22,13 +22,14 @@ namespace Conqueror {
         public GameObject startMenu;
         public GameObject gameUI;
         public PlayerShip playerShip;
+        public GameObject countDown;
 
         private GameObject currentArena;
 
         void Awake()
         {
             //Uncomment this line to test the game
-            //player.Incre.stamina.cur = player.Incre.stamina.max;
+            player.Incre.stamina.cur = player.Incre.stamina.max;
 
             if (instance == null)
                 instance = this;
@@ -52,9 +53,11 @@ namespace Conqueror {
             if (startingGame && bossesLeft <= 0)
             {
                 bossesLeft = 1;
-                Invoke("TransitionToNextLevel", 5);
+                //Changed it to 3 seconds between levels and added countdown
+                countDown.GetComponent<CountdownScript>().resetCounter();
+                Invoke("TransitionToNextLevel", 3);
             }
-
+            
     		// Something that kills this when switching to a different game.
             if (player.Incre.currentGame != minigame.conquer)
                 Destroy(gameObject);
@@ -116,7 +119,11 @@ namespace Conqueror {
             
             startingGame = false;
             gameUI.SetActive(false);
+            //reset the countdown
+            countDown.GetComponent<CountdownScript>().resetCounterMenu();
             startMenu.SetActive(true);
+            GameObject.Find("Player").GetComponent<PlayerShip>().ResetSpeed();
+            GameObject.Find("Player").GetComponent<PlayerShip>().resetInvulnerability();
             playerShip.gameObject.SetActive(false);
             //Cancels invocation of next level
             CancelInvoke("TransitionToNextLevel");
@@ -147,6 +154,7 @@ namespace Conqueror {
 
         private void TransitionToNextLevel()
         {
+            
             level++;
             //so highest level reached is not replaced after each level.
             if(level > workingSave.highestLevelReached)
@@ -154,6 +162,9 @@ namespace Conqueror {
             //Save occurs
             player.conqueror = workingSave;
             //Just destroys Arena, keeps bossdrops, bullets active (boss should be dead at this point)
+            GameObject.Find("Player").GetComponent<PlayerShip>().ResetSpeed();
+            GameObject.Find("Player").GetComponent<PlayerShip>().resetInvulnerability();
+
             Destroy(currentArena);
             StartGame();
         }

@@ -27,8 +27,12 @@ namespace Conqueror {
         private bool movingRight = false;
         private Vector3 targetPosition;
 
+        //Allows access to the setCountDown class inorder to access the countDownDone variable.
+		private CountdownScript cs;
+
         void Start()
         {
+			cs = GameObject.Find("Countdown").GetComponent<CountdownScript>();
             level = GameManager.instance.level;
 
             maxhp = 20 + 10 * (Mathf.Pow(1.3f, level));
@@ -57,9 +61,14 @@ namespace Conqueror {
 
                 counter = 0f;
             }
-
-            Move();
-            Shoot();
+            //Add logic here to get the boss to not shoot while the countDownDone is still false. The boss will only shoot when the countDownDone is true.
+            //Did it for shoot and move because of the fast moving bosses at later levels.
+            if (cs.countDownDone == true)
+            {
+                Shoot();
+                Move();
+            }
+			            
         }
 
         void Update()
@@ -138,10 +147,12 @@ namespace Conqueror {
         public void Shoot()
         {
             var player = GameObject.FindGameObjectWithTag("Player");
-            switch (index) {
+            switch (index)
+            {
                 case 0:
                     rof--;
-                    if (rof <= 0) {
+                    if (rof <= 0)
+                    {
                         var rocket = (GameObject)GameObject.Instantiate(GameManager.instance.bossBulletPrefab, gameObject.transform.position, gameObject.transform.rotation);
                         rocket.GetComponent<Rigidbody2D>().velocity = new Vector2(Random.Range(-4, 4) * level, Random.Range(-4, 4) * level);
                         rof = maxrof;
@@ -149,7 +160,8 @@ namespace Conqueror {
                     break;
                 case 1:
                     rof--;
-                    if (rof <= 0) {
+                    if (rof <= 0)
+                    {
                         var rocket2 = (GameObject)GameObject.Instantiate(GameManager.instance.bossBulletPrefab, gameObject.transform.position, gameObject.transform.rotation);
                         rocket2.GetComponent<Rigidbody2D>().velocity = directionToPlayer() * level;
                         rof = maxrof;

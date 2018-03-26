@@ -41,6 +41,9 @@ namespace Conqueror {
         public int health;
         int maxHealth = 30;
         public float moveSpeed;
+        
+
+
         float defaultMoveSpeed = 5;
         private bool invincible = false;
         private float flashTimer = 0.0f;
@@ -50,6 +53,7 @@ namespace Conqueror {
         private Vector3 defaultPos = new Vector3(0f, -2.8f, 0f);
         private SpriteRenderer sprite;
         private Color originalColor;
+        private CountdownScript countdown;
 
         public Gun WorkingGun
         {
@@ -99,6 +103,8 @@ namespace Conqueror {
 
         void Start()
         {
+            originalColor = sprite.color;
+            countdown = GameObject.Find("Countdown").GetComponent<CountdownScript>();
             Init();
         }
 
@@ -106,7 +112,7 @@ namespace Conqueror {
         {
             playerName.text = player.Incre.username;
             sprite = GetComponent<SpriteRenderer>();
-            originalColor = sprite.color;
+            
             transform.position = defaultPos;
             health = maxHealth;
             moveSpeed = defaultMoveSpeed;
@@ -114,6 +120,7 @@ namespace Conqueror {
             flashTimer = 0.0f;
             invincible = false;
 
+            //can be used to balance skills in the future
             switch (GameManager.instance.workingSave.currentSkill)
             {
                 case 0:
@@ -171,8 +178,12 @@ namespace Conqueror {
             if (Input.GetKeyDown(KeyCode.Space))
                 useSkill();
 
-            if (Input.GetMouseButton(0))
-                workingGun.Fire();
+            //only prevent shooting on inital countdown, shooting at level transitions is OK
+            if (countdown.initialCountDownDone)
+            {
+                if (Input.GetMouseButton(0))
+                    workingGun.Fire();
+            }
 
             if(invincible == true)
             {
@@ -271,7 +282,7 @@ namespace Conqueror {
             }
         }
 
-        void resetInvulnerability()
+        public void resetInvulnerability()
         {
             //Resetting back to regular color (full opacity)
             Color temp;
@@ -361,7 +372,7 @@ namespace Conqueror {
             }
         }
 
-        void ResetSpeed()
+        public void ResetSpeed()
         {
             sprite.color = originalColor;
             moveSpeed = defaultMoveSpeed;
