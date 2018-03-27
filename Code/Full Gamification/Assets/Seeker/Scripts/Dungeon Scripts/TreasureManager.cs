@@ -16,7 +16,7 @@ public class TreasureManager : MonoBehaviour {
 
     public GameObject treasure_items;
     public GameObject inventory;
-    private GameObject descriptionBox;
+    public GameObject descriptionBox;
 
     private bool beenChecked = false;
 
@@ -27,7 +27,9 @@ public class TreasureManager : MonoBehaviour {
 
     void initializeChestContents()
     {
+        
         descriptionBox = GameObject.Find("DescriptionBox");
+
         treasure_items = GameObject.Find("Loot");
         inventory = GameObject.Find("InventoryDungeon");
         rewards = new int[30];
@@ -99,6 +101,8 @@ public class TreasureManager : MonoBehaviour {
             }
 
             treasure_items.GetComponent<ItemManager>().show = false;
+            if(!descriptionBox)
+                descriptionBox = GameObject.Find("DescriptionBox");
             descriptionBox.SetActive(false);
         }
     }
