@@ -149,6 +149,8 @@ namespace Conqueror {
 
         private void TransitionToNextLevel()
         {
+			
+
             level++;
             //so highest level reached is not replaced after each level.
             if(level > workingSave.highestLevelReached)
@@ -160,6 +162,7 @@ namespace Conqueror {
             GameObject.Find("Player").GetComponent<PlayerShip>().resetInvulnerability();
 
             Destroy(currentArena);
+
             StartGame();
         }
     }

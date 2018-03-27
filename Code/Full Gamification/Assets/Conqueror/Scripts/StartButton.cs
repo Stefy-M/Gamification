@@ -9,9 +9,11 @@ using UnityEngine.EventSystems;
 namespace Conqueror {
     public class StartButton : MonoBehaviour
     {
+		private CountdownScript cs;
 
         public void Start()
         {
+			cs = GameObject.Find("GameManager").GetComponent<CountdownScript>();
             ChangeSkillText();
             ChangeSkillDescription();
             ChangeGunText();
@@ -37,6 +39,7 @@ namespace Conqueror {
 
         public void IncrementStage()
         {
+			cs.countDownDone = false;
             //if something went wrong
             if (GameManager.instance.workingSave.highestLevelReached < 0)
                 GameManager.instance.workingSave.highestLevelReached = 0;
