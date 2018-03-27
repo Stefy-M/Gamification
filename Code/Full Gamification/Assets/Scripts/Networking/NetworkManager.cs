@@ -840,7 +840,7 @@ public class NetworkManager : MonoBehaviour
     //Queue message
     public void QueueMessage(List<string> message)
     {
-        Debug.Log("QueueMessage called");
+        //Debug.Log("QueueMessage called");
         Instance._messagesToSend.Add(message);
     }
 

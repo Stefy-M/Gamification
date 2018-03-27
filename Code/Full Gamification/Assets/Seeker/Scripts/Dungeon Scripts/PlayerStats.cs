@@ -41,6 +41,7 @@ public class PlayerStats : MonoBehaviour {
         add_insight = 0;
         add_dexterity = 0;
         SetArmor(GlobalControl.Instance.armor, GlobalControl.Instance.durability, GlobalControl.Instance.armor_id);
+        autodisable = false;
     }
 
     // Update is called once per frame

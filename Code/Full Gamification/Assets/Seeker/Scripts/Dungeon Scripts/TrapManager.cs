@@ -5,12 +5,20 @@ using UnityEngine.SceneManagement;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
+//Trap logic rough draft:
+/*
+1. Make trap initialized properly with values for the difficulty level
+2. Make trap be specialized properly to type. (Maybe add difficulty level or square to current level)
+3. Change combat system so it works to match players level.
+4.   
+*/
 public class TrapManager : MonoBehaviour {
 
     public int level = 1;
-    public int power = 1;
-    public int speed = 1;
-    public int disable = 1;
+    private int power = 1;
+    private int speed = 1;
+    private int disable = 1;
+    private int stamPenalty = 1;
     public Sprite[] traps;
 
     private GameObject player;
@@ -25,9 +33,17 @@ public class TrapManager : MonoBehaviour {
         player = GameObject.Find("Player");
         notification = GameObject.Find("Notifications");
         choice = GameObject.Find("Choice Panel");
-	}
+
+        //Initialize each aspect of trap based on level divides by the four because 4 main stats.
+        power = Mathf.CeilToInt((float)level / 8.0f);
+        speed = Mathf.CeilToInt((float)level / 4.0f);
+        disable = Mathf.CeilToInt((float)level / 4.0f);
+        //Divided by 16 because this penalty happens at least twice per fight
+        stamPenalty = Mathf.CeilToInt((float)level / 16.0f);
+    }
 	
     // Initialize type of trap and strength
+    //Now it just multiplies certain buffed aspect by 1.5
     void Start()
     {
         trap_type = Random.Range(0, 3);
@@ -38,15 +54,15 @@ public class TrapManager : MonoBehaviour {
         switch (trap_type)
         {
             case 0:
-                speed *= (level * level) + 1;
+                speed += (speed / 2);
                 this.GetComponent<SpriteRenderer>().sprite = traps[0];
                 break;
             case 1:
-                disable *= (level * level) + 1;
+                disable += (disable / 2);
                 this.GetComponent<SpriteRenderer>().sprite = traps[1];
                 break;
             case 2:
-                power *= (level * level) + 1;
+                power += (power / 2);
                 this.GetComponent<SpriteRenderer>().sprite = traps[2];
                 break;
 
@@ -67,6 +83,7 @@ public class TrapManager : MonoBehaviour {
         if (other.gameObject.name == "Player")
         {
             Debug.Log("Trap Level: " + level + ", Trap Power: " + power + ", Trap Speed: " + speed + ", Trap Disable: " + disable);
+            player.GetComponent<PlayerMovement>().can_move = false;
             if (found)
             {
                 choice.SetActive(true);
@@ -110,22 +127,24 @@ public class TrapManager : MonoBehaviour {
             return;
         }
         // Use player stamina. If player doesn't have 3 or more stamina, use all and apply it to dodge chance
-        if (player.GetComponent<PlayerStats>().current_stamina <= 2)
+        if (player.GetComponent<PlayerStats>().current_stamina < 1 + stamPenalty)
         {
             notification.GetComponent<TextInfo>().AddText("You're too tired to put full strength into dodging.");
-            x = Random.Range(0.0f, player.GetComponent<PlayerStats>().GetTotalDexterity()) * ((player.GetComponent<PlayerStats>().current_stamina)/3);
+            x = Random.Range(0.0f, player.GetComponent<PlayerStats>().GetTotalDexterity() * 0.2f);
             player.GetComponent<PlayerStats>().current_stamina = 0;
         }
         else
         {
-            player.GetComponent<PlayerStats>().Tired(3);
+            player.GetComponent<PlayerStats>().Tired(1 + stamPenalty);
             x = Random.Range(0.0f, player.GetComponent<PlayerStats>().GetTotalDexterity());
+            Debug.Log("Player Dexterity: " + player.GetComponent<PlayerStats>().GetTotalDexterity());
         }
         
         // Rolls to see if player dodges trap
 
         // If fails roll
-        if (x + (player.GetComponent<PlayerStats>().GetTotalInsight() * .1) <= speed)
+        //simple model for now, if x is less than speed of trap, fail the dodge
+        if (x <= speed)
         {
             // If the player's dexterity roll was fast enough, take reduced damage
             if (x >= Mathf.CeilToInt(speed * 0.75f))
@@ -134,7 +153,6 @@ public class TrapManager : MonoBehaviour {
                 notification.GetComponent<TextInfo>().AddText("You weren't fast enough to escape completely unscathed.");
 
             }
-
             // Take full damage
             else
             {
@@ -142,7 +160,6 @@ public class TrapManager : MonoBehaviour {
                 notification.GetComponent<TextInfo>().AddText("You weren't fast enough to dodge the trap.");
             }
         }
-
         // Roll succeeds, take no damage
         else
         {
@@ -164,7 +181,7 @@ public class TrapManager : MonoBehaviour {
         }
 
         // If no stamina, reduce chance of success
-        if (player.GetComponent<PlayerStats>().current_stamina <= 0)
+        if (player.GetComponent<PlayerStats>().current_stamina < stamPenalty)
         {
             x = Random.Range(0.0f, player.GetComponent<PlayerStats>().GetTotalInsight() * 0.2f);
             notification.GetComponent<TextInfo>().AddText("You sluggishly attempt to disable the trap");
@@ -173,17 +190,16 @@ public class TrapManager : MonoBehaviour {
         else
         {
             x = Random.Range(0.0f, player.GetComponent<PlayerStats>().GetTotalInsight());
-
-            player.GetComponent<PlayerStats>().Tired(1);
+            player.GetComponent<PlayerStats>().Tired(stamPenalty);
         }
 
         // If failed to disable trap completely, reduce the trap's durability
-        if (x + (player.GetComponent<PlayerStats>().GetTotalDexterity() * 0.1f) <= disable)
+        //simple model, if insight roll is less than disable, fail the roll.
+        if (x <= disable)
         {
             notification.GetComponent<TextInfo>().AddText("You failed to completely disable the trap.");
             disable -= Mathf.FloorToInt(x);
         }
-
         // If success, completely remove trap.
         else
         {
@@ -192,7 +208,6 @@ public class TrapManager : MonoBehaviour {
         }
 
     }
-
     // Activate trap on first encounter of the trap.
     public void FirstEncounter ()
     {
@@ -215,7 +230,6 @@ public class TrapManager : MonoBehaviour {
     // If the player runs into a trap they've already activated but didn't disable, ask if they wish to disable it again.
     // If they choose to attempt to disable the trap and fail, they must dodge again and can move past trap.
     // If they don't attempt to disable the trap, the player must dodge still but can move past the trap.
-
     public void AnswerYes()
     {
         notification.GetComponent<TextInfo>().AddText("You attempt to disable the trap.");
@@ -236,7 +250,6 @@ public class TrapManager : MonoBehaviour {
 
         choice.SetActive(false);
     }
-    
     public void AnswerNo()
     {
         notification.GetComponent<TextInfo>().AddText("You decide to just try to dodge the trap.");

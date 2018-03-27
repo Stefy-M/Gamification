@@ -17,8 +17,8 @@ public class HiddenTreasureManager : MonoBehaviour {
 
             if (!received)
             {
-                // Give player active coins 20 * dungeon level.
-                player.Incre.coin.active += GlobalControl.Instance.dungeon.level * 20 * bal.getActiveCoinBonus();
+                // Give player active coins equal to dungeon level.
+                player.Incre.coin.active += GlobalControl.Instance.dungeon.level;
                 received = true;
             }
         }
