@@ -30,8 +30,6 @@ namespace Conqueror {
 
         void Awake()
         {
-            //Uncomment this line to test the game
-            player.Incre.stamina.cur = player.Incre.stamina.max;
             cs = GetComponent<CountdownScript>();
             
             if (instance == null)
