@@ -542,8 +542,19 @@ public class BoardCreator : MonoBehaviour
         // The position to be instantiated at is based on the coordinates.
         Vector3 position = new Vector3(xCoord, yCoord, 0f);
 
+
+        //If it is a trap, need to set level correctly
+        if (prefabs[randomIndex].CompareTag("Trap"))
+        {
+            prefabs[randomIndex].GetComponent<TrapManager>().level = dungeon_stats.level;
+            Debug.Log("Trap level " + dungeon_stats.level + "initialized at X:" + xCoord + ", Y:" + yCoord);
+        }
+
         // Create an instance of the prefab from the random index of the array.
         GameObject tileInstance = Instantiate(prefabs[randomIndex], position, Quaternion.identity) as GameObject;
+
+
+
 
         // Set the tile's parent to the board holder.
         tileInstance.transform.parent = boardHolder.transform;

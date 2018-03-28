@@ -148,8 +148,11 @@ public class ShopItem : MonoBehaviour {
         {
             rep_cost = 500;
             display_price.text = rep_cost.ToString() + " Rep";
-            description = "Trade in reputation for" + (bal.getActiveCoinBonus()*10) + "active coins!";
+            description = "Trade in reputation for " + (bal.getActiveCoinBonus()*10) + " active coins!";
+            item_description.text = description;
         }
+
+        
 
     }
 	

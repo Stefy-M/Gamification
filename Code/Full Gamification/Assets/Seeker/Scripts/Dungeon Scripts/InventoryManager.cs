@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class InventoryManager : MonoBehaviour {
+public class InventoryManager : MonoBehaviour
+{
 
     public Button[] inventory_list;
 
@@ -16,6 +17,8 @@ public class InventoryManager : MonoBehaviour {
 
     public delegate void DiscoveredItem();
     public static event DiscoveredItem OnDiscovery;
+    public GameObject inventoryDisplay;
+    private bool isClicked;
 
 
     void Start()
@@ -115,6 +118,20 @@ public class InventoryManager : MonoBehaviour {
         if (description_display != null)
         {
             description_display.SetActive(false);
+        }
+    }
+
+    public void clickBehavior()
+    {
+        if (isClicked)
+        {
+            inventoryDisplay.SetActive(false);
+            isClicked = false;
+        }
+        else
+        {
+            inventoryDisplay.SetActive(true);
+            isClicked = true;
         }
     }
 }
