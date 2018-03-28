@@ -24,12 +24,16 @@ namespace Conqueror {
         public PlayerShip playerShip;
 
         private GameObject currentArena;
+        public GameObject countdown;
+        private CountdownScript cs;
+
 
         void Awake()
         {
             //Uncomment this line to test the game
             player.Incre.stamina.cur = player.Incre.stamina.max;
-
+            cs = GetComponent<CountdownScript>();
+            
             if (instance == null)
                 instance = this;
             else if (instance != this)
@@ -52,7 +56,10 @@ namespace Conqueror {
             if (startingGame && bossesLeft <= 0)
             {
                 bossesLeft = 1;
-                Invoke("TransitionToNextLevel", 5);
+                //plays the countdown, player still allowed to shoot          
+                countdown.GetComponent<setCountDown>().playCountdown();
+
+                Invoke("TransitionToNextLevel", 3);
             }
 
     		// Something that kills this when switching to a different game.
@@ -113,7 +120,8 @@ namespace Conqueror {
 
         public void GoToMenu()
         {
-            
+            //resets countdown so that countdowndone flag gets set back to false for next play
+            countdown.GetComponent<setCountDown>().resetCountdown();
             startingGame = false;
             gameUI.SetActive(false);
             startMenu.SetActive(true);

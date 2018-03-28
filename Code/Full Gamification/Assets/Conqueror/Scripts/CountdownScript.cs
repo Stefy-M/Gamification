@@ -3,19 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace Conqueror {
-	public class CountdownScript : MonoBehaviour {
-
+    //this class literally just holds a bool right now lol #ObjectOriented
+    public class CountdownScript : MonoBehaviour {
 	    //Count down variable that is set to false while the counter is greater than 1.
 	    public bool countDownDone = false;
-
-		// Use this for initialization
-		void Start () {
-			
-		}
-		
-		// Update is called once per frame
-		void Update () {
-			
-		}
 	}
 }

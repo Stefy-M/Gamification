@@ -51,6 +51,9 @@ namespace Conqueror {
         private SpriteRenderer sprite;
         private Color originalColor;
 
+        //player wont be able to shoot when countdown animation plays when selecting play
+        private CountdownScript cs;
+
         public Gun WorkingGun
         {
             get
@@ -100,6 +103,7 @@ namespace Conqueror {
         void Start()
         {
             originalColor = sprite.color;
+            cs = GameObject.Find("GameManager").GetComponent<CountdownScript>();
             Init();
         }
 
@@ -172,8 +176,11 @@ namespace Conqueror {
             if (Input.GetKeyDown(KeyCode.Space))
                 useSkill();
 
-            if (Input.GetMouseButton(0))
-                workingGun.Fire();
+            if (cs.countDownDone)
+            {
+                if (Input.GetMouseButton(0))
+                    workingGun.Fire();
+            }
 
             if(invincible == true)
             {
