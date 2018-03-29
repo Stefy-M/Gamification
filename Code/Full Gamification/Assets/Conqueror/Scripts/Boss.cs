@@ -131,7 +131,7 @@ namespace Conqueror {
                     break;
                 case 2:
                     moveTimer = 0;
-                    // Revolve around player type
+                    // Stay in one place type
                     break;
                 case 3:
                     // Randumb type
@@ -156,7 +156,19 @@ namespace Conqueror {
                     if (rof <= 0)
                     {
                         var rocket = (GameObject)GameObject.Instantiate(GameManager.instance.bossBulletPrefab, gameObject.transform.position, gameObject.transform.rotation);
-                        rocket.GetComponent<Rigidbody2D>().velocity = new Vector2(Random.Range(-4, 4) * level, Random.Range(-4, 4) * level);
+                        Vector2 dir = new Vector2(Random.Range(-4, 4) * level, Random.Range(-4, 4) * level);
+                        while ((-1.0 < dir.x && dir.x <= 0) || (0 <= dir.x && dir.x < 1))
+                        {
+                            dir.x = Random.Range(-4, 4) * level;
+                        }
+                        while ((-1.0 < dir.y && dir.y <= 0) || (0 <= dir.y && dir.y < 1))
+                        {
+                            dir.y = Random.Range(-4, 4) * level;
+                        }
+
+
+
+                        rocket.GetComponent<Rigidbody2D>().velocity = dir;
                         rof = maxrof;
                     }
                     break;
