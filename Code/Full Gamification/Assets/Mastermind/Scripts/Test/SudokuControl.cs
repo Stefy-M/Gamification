@@ -704,18 +704,30 @@ public class SudokuControl : MonoBehaviour
                 // Adding active coin for the plater who finish the board
                 player.Incre.coin.active += 160;
             }
-
+            //Now player gets rewards for fixed mode.
             else if(difficult.fix_easy == Difficulty.diff)
             {
                 player.Sudoku.fix_easy_index++;
+                player.Sudoku.Easy_complete_count += 1;
+                player.Sudoku.Easy_complete_sec += player.Sudoku.only_second;
+
+                player.Incre.coin.active += 30;
+
             }
             else if (difficult.fix_medium == Difficulty.diff)
             {
                 player.Sudoku.fix_medium_index++;
+                player.Sudoku.Medium_complete_count += 1;
+                player.Sudoku.Medium_complete_sec += player.Sudoku.only_second;
+
+                player.Incre.coin.active += 70;
             }
             else if (difficult.fix_hard == Difficulty.diff)
             {
                 player.Sudoku.fix_hard_index++;
+                player.Sudoku.Hard_complete_count += 1;
+                player.Sudoku.Hard_complete_sec += player.Sudoku.only_second;
+                player.Incre.coin.active += 160;
             }
             player.Sudoku.Total_complete_count += 1;
             player.Sudoku.Total_complete_sec += player.Sudoku.only_second;
