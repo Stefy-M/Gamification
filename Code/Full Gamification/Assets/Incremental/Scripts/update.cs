@@ -190,6 +190,7 @@ public class update : MonoBehaviour {
 				player.Incre.currentGame = minigame.none;
 				player.Incre.gameON = false;
 				player.Incre.passive = true;
+                GameObject.Find("PlayerData").GetComponent<GlobalControl>().stopMusic();
 				SceneManager.LoadScene("ui", LoadSceneMode.Single);
 				break;
 			case dialogMode.exitapplication:
