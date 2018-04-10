@@ -249,6 +249,7 @@ public class ShopItem : MonoBehaviour {
     public void BuyUpgrade()
     {
         int upgrade_multiplier = GlobalControl.Instance.training_level;
+        int oldRepCost = 0;
         can_buy = CheckRep();
         if (can_buy)
         {
@@ -257,25 +258,29 @@ public class ShopItem : MonoBehaviour {
                 switch (item_id)
                 {
                     case 56://Health
+                        oldRepCost = GlobalControl.Instance.hp;
                         GlobalControl.Instance.hp += 10 * upgrade_multiplier;
                         rep_cost = GlobalControl.Instance.hp;
                         break;
                     case 57://Stamina
+                        oldRepCost = GlobalControl.Instance.stam;
                         GlobalControl.Instance.stam += 10 * upgrade_multiplier;
                         rep_cost = GlobalControl.Instance.stam;
                         break;
                     case 58://Dexterity
+                        oldRepCost = GlobalControl.Instance.dex;
                         GlobalControl.Instance.dex += 1 * upgrade_multiplier;
                         rep_cost = GlobalControl.Instance.dex * 10;
                         break;
                     case 59://Insight
+                        oldRepCost = GlobalControl.Instance.ins;
                         GlobalControl.Instance.ins += 1 * upgrade_multiplier;
                         rep_cost = GlobalControl.Instance.ins * 10;
                         break;
                     default:
                         break;
                 }
-                GlobalControl.Instance.reputation -= rep_cost;
+                GlobalControl.Instance.reputation -= oldRepCost;
                 //Below lines do not work, full_items_list is not saved to the server.
                 //GlobalControl.Instance.full_items_list[item_id].value++;
                 //rep_cost = GlobalControl.Instance.full_items_list[item_id].value * 10;
