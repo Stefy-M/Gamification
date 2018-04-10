@@ -23,10 +23,10 @@ public class TownUpgradesShow : MonoBehaviour
     void Update()
     {
         maxpop.text = "Maximum Population: " + GlobalControl.Instance.max_population;
-        training.text = "Training Multiplier: " + GlobalControl.Instance.full_items_list[69].value + "x";
-        forge.text = "Forge Shop: Level " + GlobalControl.Instance.full_items_list[70].value;
-        herb.text = "Herb Shop:  Level " + GlobalControl.Instance.full_items_list[71].value;
-        bakery.text = "Bakery Shop: Level " + GlobalControl.Instance.full_items_list[72].value;
+        training.text = "Training Multiplier: " + GlobalControl.Instance.training_level.ToString() + "x";
+        forge.text = "Forge Shop: Level " + GlobalControl.Instance.forge_level.ToString();
+        herb.text = "Herb Shop:  Level " + GlobalControl.Instance.herb_level.ToString();
+        bakery.text = "Bakery Shop: Level " + GlobalControl.Instance.bakery_level.ToString();
         reputation.text = GlobalControl.Instance.reputation.ToString() + " Rep";
     }
 }

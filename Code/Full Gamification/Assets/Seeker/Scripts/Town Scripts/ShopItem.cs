@@ -63,11 +63,11 @@ public class ShopItem : MonoBehaviour {
             switch (item_id)
             {
                 case 68:
-                    rep_cost = GlobalControl.Instance.full_items_list[68].value * 300;
+                    rep_cost = (GlobalControl.Instance.max_population / 20) * 300;
                     display_price.text = rep_cost.ToString() + " Rep";
                     break;
                 case 69:
-                    rep_cost = GlobalControl.Instance.full_items_list[69].value * 200;
+                    rep_cost = (GlobalControl.Instance.training_level * 200);
                     display_price.text = rep_cost.ToString() + " Rep";
                     break;
                 case 70:
@@ -286,10 +286,11 @@ public class ShopItem : MonoBehaviour {
                 switch (item_id)
                 {
                     case 68://Maximum Population
-                        GlobalControl.Instance.max_population += 20 * GlobalControl.Instance.full_items_list[68].value;
+                        GlobalControl.Instance.max_population += 20;// * GlobalControl.Instance.full_items_list[68].value;
                         GlobalControl.Instance.full_items_list[68].value++;
                         GlobalControl.Instance.reputation -= rep_cost;
-                        rep_cost = GlobalControl.Instance.full_items_list[68].value * 300;
+                        //rep_cost = GlobalControl.Instance.full_items_list[68].value * 300;
+                        rep_cost = (GlobalControl.Instance.max_population / 20) * 300;
                         display_price.text = rep_cost.ToString() + " Rep";
 
                         break;
@@ -297,7 +298,7 @@ public class ShopItem : MonoBehaviour {
                         GlobalControl.Instance.training_level++;
                         GlobalControl.Instance.full_items_list[69].value++;
                         GlobalControl.Instance.reputation -= rep_cost;
-                        rep_cost = GlobalControl.Instance.full_items_list[69].value * 200;
+                        rep_cost = GlobalControl.Instance.training_level * 200;
                         display_price.text = rep_cost.ToString() + " Rep";
                         break;
                     case 70://Forge Shop

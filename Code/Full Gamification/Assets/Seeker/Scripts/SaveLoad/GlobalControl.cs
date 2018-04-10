@@ -73,7 +73,24 @@ public class GlobalControl : MonoBehaviour {
     public DungeonSetting dungeon;
 
     public List<ItemClass> full_items_list;
-    //public AudioClip[] music;
+    public AudioClip[] music;
+    public bool inTown = false;
+    public bool inDungeon = false;
+    public AudioSource musicSource;
+
+    public void playMusic(int musicIndex)
+    {
+        AudioClip musicToPlay = music[musicIndex];
+        musicSource.clip = musicToPlay;
+        musicSource.loop = true;
+        musicSource.Play();
+        
+    }
+
+    public void stopMusic()
+    {
+        musicSource.Stop();
+    }
 
     private void Start()
     {

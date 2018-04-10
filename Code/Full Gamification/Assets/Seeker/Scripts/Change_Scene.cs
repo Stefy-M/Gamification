@@ -50,6 +50,23 @@ public class Change_Scene : MonoBehaviour {
             GlobalControl.Instance.QuestUpdate();
         }
         SceneManager.LoadScene(next_level);
+        if (next_level == "Dungeons" || next_level == "First_Dungeon" || next_level == "Second_Dungeon" || next_level == "Third_Dungeon")
+        {
+            GlobalControl.Instance.inTown = false;
+            GlobalControl.Instance.inDungeon = true;
+            GlobalControl.Instance.playMusic(1);
+        }
+        else if((next_level == "Town_Market2" || next_level == "Town_Market3"))
+        {
+            GlobalControl.Instance.stopMusic();
+            GlobalControl.Instance.inDungeon = false;
+        }
+        else if ((next_level == "Town_Market4" || next_level == "Town_Market") && !GlobalControl.Instance.inTown)
+        {
+            GlobalControl.Instance.inDungeon = false;
+            GlobalControl.Instance.inTown = true;
+            GlobalControl.Instance.playMusic(0);
+        }
     }
 
     public void ChangeCanChange()
@@ -80,18 +97,26 @@ public class Change_Scene : MonoBehaviour {
                 break;
             case 1:
                 next_level = "Town_Market1";
+                //GlobalControl.Instance.inTown = true;
+                //GlobalControl.Instance.playMusic(0);
                 break;
             case 2:
                 next_level = "Forest2";
                 break;
             case 3:
                 next_level = "Town_Market2";
+                //GlobalControl.Instance.inTown = true;
+                //GlobalControl.Instance.playMusic(0);
                 break;
             case 4:
                 next_level = "Town_Home3";
+                //GlobalControl.Instance.inTown = true;
+                //GlobalControl.Instance.playMusic(0);
                 break;
             default:
                 next_level = "Town_Market";
+                GlobalControl.Instance.inTown = true;
+                GlobalControl.Instance.playMusic(0);
                 break;
         }
 
