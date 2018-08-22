@@ -426,6 +426,13 @@ public class update : MonoBehaviour {
         //calculateIncremental();
     }
 
+    public void increaseCoins()
+    {
+        sendMsg("Added Coins!");
+        earnActiveCoin(10000);
+        earnPassiveCoin(10000);
+    }
+
     public void upgradeButtonPressed()
     {
         upgradeWindow = !upgradeWindow;
