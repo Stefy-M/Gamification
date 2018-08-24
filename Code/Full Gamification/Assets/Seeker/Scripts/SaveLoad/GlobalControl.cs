@@ -214,7 +214,7 @@ public class GlobalControl : MonoBehaviour {
         in_dungeon = false;
     }
 
-    private void InitializePlayer()
+    public void InitializePlayer()
     {
         Debug.Log("Initializing Stuff Here.");
         initialized = true;
