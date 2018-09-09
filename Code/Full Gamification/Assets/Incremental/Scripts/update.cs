@@ -492,10 +492,6 @@ public class update : MonoBehaviour {
                 sceneName = "Conq";
                 selectedGame = minigame.conquer;
                 break;
-			case 4:
-				sceneName = "Dare";
-				selectedGame = minigame.daredevil;
-				break;
         }
 
         //if game is not on
