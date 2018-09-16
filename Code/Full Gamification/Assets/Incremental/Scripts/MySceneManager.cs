@@ -8,7 +8,8 @@ public enum minigame
     none,
     seeker,
     conquer,
-    mastermind
+    mastermind,
+    daredevil
 }
 
 public static class MySceneManager{
@@ -16,6 +17,7 @@ public static class MySceneManager{
     public static string scene_seeker = "";
     public static string scene_mastermind = "";
     public static string scene_conquer = "";
+    public static string scene_daredevil = "";
     public static minigame activeGame;
 
     public static void sceneChange(minigame type, string newScene)
@@ -24,18 +26,23 @@ public static class MySceneManager{
         //unload
         if (activeGame == minigame.seeker)
         {
-			SceneManager.UnloadSceneAsync(scene_seeker);
+            SceneManager.UnloadSceneAsync(scene_seeker);
             scene_seeker = "";
         }
         else if (activeGame == minigame.mastermind)
         {
-			SceneManager.UnloadSceneAsync(scene_mastermind);
+            SceneManager.UnloadSceneAsync(scene_mastermind);
             scene_mastermind = "";
         }
         else if (activeGame == minigame.conquer)
         {
-			SceneManager.UnloadSceneAsync(scene_conquer);
+            SceneManager.UnloadSceneAsync(scene_conquer);
             scene_conquer = "";
+        }
+        else if (activeGame == minigame.daredevil)
+        {
+            SceneManager.UnloadSceneAsync(scene_daredevil);
+            scene_daredevil = "";
         }
 
         //load
@@ -53,6 +60,11 @@ public static class MySceneManager{
         {
             SceneManager.LoadScene(newScene, LoadSceneMode.Additive);
             scene_conquer = newScene;
+        }
+        else if (type == minigame.daredevil)
+        {
+            SceneManager.LoadScene(newScene, LoadSceneMode.Additive);
+            scene_daredevil = newScene;
         }
         else
             Debug.Log("Please insert valid type");

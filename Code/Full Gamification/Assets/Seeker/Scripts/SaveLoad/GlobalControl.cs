@@ -33,7 +33,7 @@ public class seeker
     public int herb_level;
     public int bakery_level;
     public int training_level;
-    public bool scanner; //bool in GlobalControl
+    //public bool scanner; //bool in GlobalControl
 
 }
 
@@ -66,7 +66,7 @@ public class GlobalControl : MonoBehaviour {
     public int herb_level { get { return player.seekerData.herb_level; } set { player.seekerData.herb_level = value; } }
     public int bakery_level { get { return player.seekerData.bakery_level; } set { player.seekerData.bakery_level = value; } }
     public int training_level { get { return player.seekerData.training_level; } set { player.seekerData.training_level = value; } }
-    public bool scanner { get { return player.seekerData.scanner; } set { player.seekerData.scanner = value; } }
+    //public bool scanner { get { return player.seekerData.scanner; } set { player.seekerData.scanner = value; } }
     //=======================================
 
 
@@ -264,7 +264,7 @@ public class GlobalControl : MonoBehaviour {
         herb_level = 1;
         bakery_level = 1;
         training_level = 1;
-        scanner = false;
+        //scanner = false;
 
         //SaveInfo();
     }

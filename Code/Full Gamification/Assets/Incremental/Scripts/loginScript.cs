@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Newtonsoft.Json;
 using UnityEngine.EventSystems;
+using UnityEngine.Networking;
 using WebSocketSharp;
 
 

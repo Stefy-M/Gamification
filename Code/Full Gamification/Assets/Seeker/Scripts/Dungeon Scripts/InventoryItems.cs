@@ -93,10 +93,10 @@ public class InventoryItems : MonoBehaviour, IPointerClickHandler, IPointerEnter
         {
             if (!treasure.activeSelf)
             {
-                if (GlobalControl.Instance.scanner)
+                /*if (GlobalControl.Instance.scanner)
                 {
                     GlobalControl.Instance.reputation += Mathf.CeilToInt(GlobalControl.Instance.full_items_list[item_id].value * 0.75f);
-                }
+                }*/
                 inventory.RemoveItem(slot_num);
             }
         }

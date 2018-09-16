@@ -52,7 +52,7 @@ public class update : MonoBehaviour {
     public Image progressBarImage;
     public Text msglog;
 
-	public Tutorial tut;
+	public tutorial tut;
 
     string nextScene;
     bool upgradeWindow;
@@ -86,6 +86,9 @@ public class update : MonoBehaviour {
 		case minigame.conquer:
 			sendMsg("Rooty-tooty-point-and-shooty!");
 			break;
+        case minigame.daredevil:
+            sendMsg("Dare to fall!");
+            break;
 		default:
 			sendMsg(randomWelcomeMessage());
 			break;
@@ -491,6 +494,10 @@ public class update : MonoBehaviour {
             case 3:
                 sceneName = "Conq";
                 selectedGame = minigame.conquer;
+                break;
+            case 4:
+                sceneName = "Menu";
+                selectedGame = minigame.daredevil;
                 break;
         }
 

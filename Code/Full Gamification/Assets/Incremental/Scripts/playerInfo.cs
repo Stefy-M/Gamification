@@ -192,6 +192,7 @@ public static class player
     public static sudokuData Sudoku = new sudokuData();
     public static ConquerorSave conqueror = new ConquerorSave();
     public static seeker seekerData = new seeker();
+    //public static DareDevilSave daredevil = new DareDevilSave();
 
     public static string getJsonStr(game g)
 	{

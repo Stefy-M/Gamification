@@ -414,14 +414,14 @@ public class ShopItem : MonoBehaviour {
         }
     }
 
-    public void BuyScanner()
+    /*public void BuyScanner()
     {
         can_buy = CheckRep();
         if (can_buy)
         {
             GlobalControl.Instance.scanner = true;
         }
-    }
+    }*/
 
     private void RemoveItems()
     {

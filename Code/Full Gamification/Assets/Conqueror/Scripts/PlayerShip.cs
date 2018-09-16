@@ -317,7 +317,7 @@ namespace Conqueror {
                 switch (GameManager.instance.workingSave.currentSkill) {
                     case 0:
                         //Doubles movespeed for three seconds
-                        originalColor = sprite.color;
+                        //originalColor = sprite.color;
                         sprite.color = new Color(0, 0, 255, 255);
                         moveSpeed *= 2;
                         Invoke("ResetSpeed", 3);
