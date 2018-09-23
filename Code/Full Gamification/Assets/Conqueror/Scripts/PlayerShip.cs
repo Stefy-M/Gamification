@@ -28,9 +28,6 @@ namespace Conqueror {
         }
     }
 
-    
-
-
     public class PlayerShip : MonoBehaviour
     {
         public AudioClip playerHit;

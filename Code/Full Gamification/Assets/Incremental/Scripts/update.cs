@@ -89,9 +89,12 @@ public class update : MonoBehaviour {
         case minigame.daredevil:
             sendMsg("Dare to fall!");
             break;
-		default:
-			sendMsg(randomWelcomeMessage());
-			break;
+        case minigame.sokoban:
+            sendMsg("Think outside the box!");
+            break;
+        default:
+	        sendMsg(randomWelcomeMessage());
+		    break;
 		}
 
         updatePlayerInfo();
@@ -498,6 +501,10 @@ public class update : MonoBehaviour {
             case 4:
                 sceneName = "Menu";
                 selectedGame = minigame.daredevil;
+                break;
+            case 5:
+                sceneName = "MainMenu";
+                selectedGame = minigame.sokoban;
                 break;
         }
 

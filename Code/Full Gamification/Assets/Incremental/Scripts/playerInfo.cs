@@ -192,7 +192,9 @@ public static class player
     public static sudokuData Sudoku = new sudokuData();
     public static ConquerorSave conqueror = new ConquerorSave();
     public static seeker seekerData = new seeker();
-    //public static DareDevilSave daredevil = new DareDevilSave();
+    //TODO: add in saving with the server for new daredevil and sokoban games
+    //public static DaredevilSave daredevil = new DaredevilSave();
+    //public static SokobanSave sokobanSave = new SokobanSave();
 
     public static string getJsonStr(game g)
 	{

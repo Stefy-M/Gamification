@@ -3,6 +3,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//here we can add save data to daredevil game
+/*[System.Serializable]
+public class DaredevilSave
+{
+    [JsonProperty("guns")]
+    public List<Gun> guns { get; set; }
+    [JsonProperty("currentGun")]
+    public int currentGun { get; set; }
+    [JsonProperty("currentSkill")]
+    public int currentSkill { get; set; }
+    [JsonProperty("highestLevelReached")]
+    public int highestLevelReached { get; set; } // Starts at 0. 0 = Level 1.
+
+    public DaredevilSave()
+    {
+
+    }
+}*/
+
 public class ddPlayer : MonoBehaviour {
 
 	//Jumping variables
