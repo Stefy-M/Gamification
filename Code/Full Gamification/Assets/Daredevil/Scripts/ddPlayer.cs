@@ -24,43 +24,55 @@ public class DaredevilSave
 
 public class ddPlayer : MonoBehaviour {
 
-	//Jumping variables
+	//Jumping variables *Not being used yet*
 	bool grounded = false;
 	float groundCheckRadius = 0.2f;
 	public LayerMask groundLayer;
 	public Transform groundCheck;
-	public float jumpHeight;
-	public ScoreScript score;
-	private bool isDead = false;
 
-	public shroom_fly shroomsCollection;
-	public int playerHP = 3;
-	public GameObject heart1, heart2, heart3, restartButton,gameOverText;
-	int playerLayer, enemyLayer, shroomLayer;
-	bool coroutineAllowed = true;
+
+	//Player variables
+	private float fallConstraintY; // point at which the player will stop falling
+	public float maxSpeed;
+	private Rigidbody2D rb2d;
+	private int playerHP = 3;
+	Animator myAnim;
+	private static bool isStopped; // being used as a signal to tell when player has reached stopping point
+	private bool facingRight;
+	//public ScoreScript score;
+	private bool isDead = false;
+	public GameObject heart1, heart2, heart3;
+	public ScoreScript playerScore;
+
+
+
+	//In Game objects that effect player
+	public incremental_item coin;
+	public GameObject restartButton,gameOverText;
+	int playerLayer, enemyLayer, coinLayer; // used for collisions
+
+
+	bool coroutineAllowed = true; // used to make player invisible after collision
 	Color color;
 	Renderer rend;
 	
 	private bool stopped = false;
-
 	protected bool stoptimer = false;
-	public float maxSpeed;
-	private Rigidbody2D rb2d;
-	Animator myAnim;
-	private bool facingRight;
+	
 
 
-	float lowY; // point at which the player will stop falling
+	
 
-	public static bool isStopped; // being used as a signal to tell when player has reached stopping point
+	
 
 	// Use this for initialization
 	void Start () {
 
 
+		//score.ScoreTime = "0";
 		
 		playerLayer = this.gameObject.layer;
-		shroomLayer = LayerMask.NameToLayer("Shroom");
+		coinLayer = LayerMask.NameToLayer("Coin");
 		enemyLayer = LayerMask.NameToLayer("Enemy_bird");
 		Physics2D.IgnoreLayerCollision(playerLayer, enemyLayer, false);
 		heart1 = GameObject.Find("heart1");
@@ -71,17 +83,16 @@ public class ddPlayer : MonoBehaviour {
 		heart3.SetActive(true);
 		rend = GetComponent<Renderer>();
 		color = rend.material.color;
-
-		shroomsCollection = new shroom_fly();
-
+		coin = new incremental_item();
 		rb2d = GetComponent<Rigidbody2D>();
 		myAnim = GetComponent<Animator>();
+		
 
 		// track if player is facing right
 		facingRight = true;
 
 
-		lowY = -20; // player will stop at position in the Y coord of the game 
+		fallConstraintY = -20; // player will stop at position in the Y coord of the game 
 
 		restartButton.SetActive(false);
 		gameOverText.SetActive(false);
@@ -89,13 +100,14 @@ public class ddPlayer : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
-		if (transform.position.y < lowY) // condition to check when player has reached lowY
+
+		//Debug.Log(playerScore.ScoreTime);
+		if (transform.position.y < fallConstraintY) // condition to check when player has reached lowY
 		{
 			stopped = true;
-			maxSpeed = 20; // speed up 
+			maxSpeed = 20; // speed up player movement
 			myAnim.SetBool("isGrounded", false); //start parachute animation
-			transform.position = new Vector3(transform.position.x, lowY, transform.position.z); // player will only be able to move Horizontal
+			transform.position = new Vector3(transform.position.x, fallConstraintY, transform.position.z); // player will only be able to move Horizontal
 
 			GameController.instance.isPlayerStopped = true; // trigger game Instance that player has stopped in Global controller
 			
@@ -126,6 +138,8 @@ public class ddPlayer : MonoBehaviour {
 			switch (playerHP) {
 				case 2:
 					heart3.gameObject.SetActive(false);
+
+					//courttine used to allow player to be invisible for short amount of time
 					if (coroutineAllowed)
 					{
 						StartCoroutine("Immortal");
@@ -146,29 +160,33 @@ public class ddPlayer : MonoBehaviour {
 					}
 					break;
 			}
+
 			if (playerHP < 1) // do game over here
 			{
+				Debug.Log("Score: " + playerScore.ScoreTime + " Coins Collected: " + coin.Points);
 				isDead = true;
 				stoptimer = true;
 				gameOverText.SetActive(true);
 				restartButton.SetActive(true);
 				
+				
 			}
 		}
-		if (collision.gameObject.tag.Equals("Shroom"))
+
+		if (collision.gameObject.tag.Equals("Coin")) // when player collides with coin
 		{
-			shroomsCollection.Points++;
-			Debug.Log(shroomsCollection.Points);
+			coin.Points++;
+			
 		}
 	}
 
 	IEnumerator Immortal()
 	{
 		coroutineAllowed = false;
-		Physics2D.IgnoreLayerCollision(playerLayer, enemyLayer, true);
+		Physics2D.IgnoreLayerCollision(playerLayer, enemyLayer, true); // player cannot collide
 		color.a = 0.5f;
-		rend.material.color = color;
-		yield return new WaitForSeconds(3f);
+		rend.material.color = color; // causes the color to fade
+		yield return new WaitForSeconds(3f); // 3 sec timer of 'invisibility'
 		Physics2D.IgnoreLayerCollision(playerLayer, enemyLayer, false);
 		color.a = 1f;
 		rend.material.color = color;
@@ -203,7 +221,7 @@ public class ddPlayer : MonoBehaviour {
 		{
 
 			myAnim.SetTrigger("Die");
-			Physics2D.IgnoreLayerCollision(playerLayer, shroomLayer, true); //player cant collect shrooms when dead
+			Physics2D.IgnoreLayerCollision(playerLayer, coinLayer, true); //player cant collect shrooms when dead
 		}
 
 	}

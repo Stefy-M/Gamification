@@ -36,6 +36,8 @@ public class Bird_fly : MonoBehaviour {
 
 		}
 
+		
+
 		if (collision.gameObject.tag.Equals("Bird_enemy"))
 		{
 			

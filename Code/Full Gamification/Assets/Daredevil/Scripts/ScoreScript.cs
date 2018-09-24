@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,15 +14,18 @@ public class ScoreScript : MonoBehaviour {
 	private bool runTimer = true;
 	string minutes;
 	float t;
-	private string Scoretime;
+	private double Scoretime = 0.0;
 
 	// Use this for initialization
+
+
 	void Start () {
 		score = GetComponent<Text>();
+		
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void FixedUpdate () {
 
 		if (!p.Stopped)
 		{
@@ -36,13 +40,15 @@ public class ScoreScript : MonoBehaviour {
 			secs = (t % 60).ToString("f2");
 
 			score.text = secs;
+			Scoretime = Convert.ToDouble(score.text);
+			
 		}
 
 		if (p.StopTimer && p.DeadStatus == true) // stops timer when player runs out of lives
 		{
 
 			runTimer = false;
-			Scoretime = score.text; // record the time for score
+			Scoretime = Convert.ToDouble(score.text); // record the time for score
 			//Debug.Log(Scoretime);
 		}
 
@@ -50,8 +56,14 @@ public class ScoreScript : MonoBehaviour {
 		
 	}
 
-	public string ScoreTime
+	public double ScoreTime
 	{
 		get { return Scoretime; }
+		
 	}
+
+	//public int Score
+	//{
+	//	get { return int.Parse(score.text); }
+	//}
 }

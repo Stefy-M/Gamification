@@ -5,7 +5,7 @@ using UnityEngine;
 public class BirdSpawning : MonoBehaviour {
 
 	public GameObject bird;
-	float randX;
+	float randX; // randomized position where the birds will spawn
 	Vector2 whereToSpawn;
 	public float spawnRate;
 	float nextSpawn = 0.0f;
@@ -21,7 +21,7 @@ public class BirdSpawning : MonoBehaviour {
 		if (Time.time > nextSpawn)
 		{
 			nextSpawn = Time.time + spawnRate;
-			randX = Random.Range(10.3f, 94.0f);
+			randX = Random.Range(10.3f, 76.0f); 
 			whereToSpawn = new Vector2(randX, transform.position.y);
 			Instantiate(bird, whereToSpawn, Quaternion.identity);
 		}

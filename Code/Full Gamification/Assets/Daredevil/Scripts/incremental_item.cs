@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-public class shroom_fly : MonoBehaviour {
+public class incremental_item : MonoBehaviour {
 
 	Rigidbody2D rb2d;
 	public float vertspeed;
