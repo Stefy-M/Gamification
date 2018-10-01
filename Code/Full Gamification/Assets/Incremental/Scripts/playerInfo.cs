@@ -132,7 +132,7 @@ public class IncrementalData
 
 public enum game
 {
-    incremental, seeker, mastermind, conquer
+    incremental, seeker, mastermind, conquer, daredevil, sokoban
 }
 
 public static class player
@@ -193,8 +193,8 @@ public static class player
     public static ConquerorSave conqueror = new ConquerorSave();
     public static seeker seekerData = new seeker();
     //TODO: add in saving with the server for new daredevil and sokoban games
-    //public static DaredevilSave daredevil = new DaredevilSave();
-    //public static SokobanSave sokobanSave = new SokobanSave();
+    public static DaredevilSave daredevilSave = new DaredevilSave();
+    public static SokobanSave sokobanSave = new SokobanSave();
 
     public static string getJsonStr(game g)
 	{
@@ -207,7 +207,11 @@ public static class player
 			    return JsonConvert.SerializeObject(seekerData);
 		    case game.conquer:
                 return JsonConvert.SerializeObject(conqueror);
-		    default:
+            case game.daredevil:
+                return JsonConvert.SerializeObject(daredevilSave);
+            case game.sokoban:
+                return JsonConvert.SerializeObject(sokobanSave);
+            default:
 			    return "";
 		}
     }
@@ -261,6 +265,8 @@ public static class player
         Debug.Log(loadedjsonStrings.mastermind);
         Debug.Log(loadedjsonStrings.conqueror);
         Debug.Log(loadedjsonStrings.seeker);
+        Debug.Log(loadedjsonStrings.daredevil);
+        Debug.Log(loadedjsonStrings.sokoban);
 
         if (loadedjsonStrings.incremental.Length > 0) //doesn't go in blocks if loaded string is empty string
         {
@@ -319,7 +325,49 @@ public static class player
         else
             seekerData = new seeker();
 
-		Incre.username = NetworkManager.Instance.GetUsername ();
+        if (loadedjsonStrings.daredevil.Length > 0)
+        {
+            try
+            {
+                daredevilSave = JsonConvert.DeserializeObject<DaredevilSave>(loadedjsonStrings.daredevil);
+            }
+            catch
+            {
+                daredevilSave = new DaredevilSave();
+            }
+        }
+        else
+            daredevilSave = new DaredevilSave();
+
+        if (loadedjsonStrings.daredevil.Length > 0)
+        {
+            try
+            {
+                daredevilSave = JsonConvert.DeserializeObject<DaredevilSave>(loadedjsonStrings.daredevil);
+            }
+            catch
+            {
+                daredevilSave = new DaredevilSave();
+            }
+        }
+        else
+            daredevilSave = new DaredevilSave();
+
+        if (loadedjsonStrings.sokoban.Length > 0)
+        {
+            try
+            {
+                sokobanSave = JsonConvert.DeserializeObject<SokobanSave>(loadedjsonStrings.sokoban);
+            }
+            catch
+            {
+                sokobanSave = new SokobanSave();
+            }
+        }
+        else
+            sokobanSave = new SokobanSave();
+
+        Incre.username = NetworkManager.Instance.GetUsername ();
     }
 
     /// <summary>

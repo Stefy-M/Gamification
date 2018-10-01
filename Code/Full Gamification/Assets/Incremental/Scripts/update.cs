@@ -579,7 +579,9 @@ public class update : MonoBehaviour {
 			NetworkManager.Instance.QueueMessage(new List<string>() { "MASTERMIND", player.getJsonStr(game.mastermind) });
 			NetworkManager.Instance.QueueMessage(new List<string>() { "SEEKER", player.getJsonStr(game.seeker) });
 			NetworkManager.Instance.QueueMessage(new List<string>() { "CONQUEROR", player.getJsonStr(game.conquer) });
-		}
+            NetworkManager.Instance.QueueMessage(new List<string>() { "DAREDEVIL", player.getJsonStr(game.daredevil) });
+            NetworkManager.Instance.QueueMessage(new List<string>() { "SOKOBAN", player.getJsonStr(game.sokoban) });
+        }
 	}
 
     public void onClickGetBonus()

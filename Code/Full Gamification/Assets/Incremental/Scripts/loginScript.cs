@@ -238,4 +238,6 @@ public class JsonStrings
     public string mastermind = "";
     public string incremental = "";
     public string conqueror = "";
+    public string daredevil = "";
+    public string sokoban = "";
 }

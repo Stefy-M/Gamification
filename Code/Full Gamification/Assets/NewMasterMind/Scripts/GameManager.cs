@@ -2,25 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Newtonsoft.Json;
 
 //here we can add in save data for sokoban later
-/*[System.Serializable]
+[System.Serializable]
 public class SokobanSave
 {
-    [JsonProperty("guns")]
-    public List<Gun> guns { get; set; }
-    [JsonProperty("currentGun")]
-    public int currentGun { get; set; }
-    [JsonProperty("currentSkill")]
-    public int currentSkill { get; set; }
-    [JsonProperty("highestLevelReached")]
-    public int highestLevelReached { get; set; } // Starts at 0. 0 = Level 1.
+    [JsonProperty("test")]
+    public string test { get; set; }
 
     public SokobanSave()
     {
-
+        test = "test sokoban save";
     }
-}*/
+}
 
 public class GameManager : MonoBehaviour {
     public LevelBuilder m_LevelBuilder;
