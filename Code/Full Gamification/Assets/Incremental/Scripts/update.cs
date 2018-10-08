@@ -52,7 +52,7 @@ public class update : MonoBehaviour {
     public Image progressBarImage;
     public Text msglog;
 
-	public Tutorial tut;
+	public tutorial tut;
 
     string nextScene;
     bool upgradeWindow;
@@ -86,9 +86,15 @@ public class update : MonoBehaviour {
 		case minigame.conquer:
 			sendMsg("Rooty-tooty-point-and-shooty!");
 			break;
-		default:
-			sendMsg(randomWelcomeMessage());
-			break;
+        case minigame.daredevil:
+            sendMsg("Dare to fall!");
+            break;
+        case minigame.sokoban:
+            sendMsg("Think outside the box!");
+            break;
+        default:
+	        sendMsg(randomWelcomeMessage());
+		    break;
 		}
 
         updatePlayerInfo();
@@ -115,6 +121,7 @@ public class update : MonoBehaviour {
         updateCoin();
         updateRedeemText();
         updateExpBar();
+        updatePlayerInfo();
         mainScreen.SetActive(!player.Incre.gameON);
 
         if (bar_progress.value < 0.021f)
@@ -208,7 +215,7 @@ public class update : MonoBehaviour {
     void updatePlayerInfo()
     {
         if (playerInfoDisplay != null)
-            playerInfoDisplay.text = string.Format("-player info-\r\nid: {0}\r\nresets: {1}",
+            playerInfoDisplay.text = string.Format("-player info-\r\nid: {0}\r\nAscension: {1}",
 				player.Incre.username, player.Incre.permanentPerksLV - 1);
     }
 
@@ -426,6 +433,13 @@ public class update : MonoBehaviour {
         //calculateIncremental();
     }
 
+    public void increaseCoins()
+    {
+        sendMsg("Added Coins!");
+        earnActiveCoin(10000);
+        earnPassiveCoin(10000);
+    }
+
     public void upgradeButtonPressed()
     {
         upgradeWindow = !upgradeWindow;
@@ -484,6 +498,14 @@ public class update : MonoBehaviour {
             case 3:
                 sceneName = "Conq";
                 selectedGame = minigame.conquer;
+                break;
+            case 4:
+                sceneName = "Menu";
+                selectedGame = minigame.daredevil;
+                break;
+            case 5:
+                sceneName = "MainMenu";
+                selectedGame = minigame.sokoban;
                 break;
         }
 
@@ -558,7 +580,9 @@ public class update : MonoBehaviour {
 			NetworkManager.Instance.QueueMessage(new List<string>() { "MASTERMIND", player.getJsonStr(game.mastermind) });
 			NetworkManager.Instance.QueueMessage(new List<string>() { "SEEKER", player.getJsonStr(game.seeker) });
 			NetworkManager.Instance.QueueMessage(new List<string>() { "CONQUEROR", player.getJsonStr(game.conquer) });
-		}
+            NetworkManager.Instance.QueueMessage(new List<string>() { "DAREDEVIL", player.getJsonStr(game.daredevil) });
+            NetworkManager.Instance.QueueMessage(new List<string>() { "SOKOBAN", player.getJsonStr(game.sokoban) });
+        }
 	}
 
     public void onClickGetBonus()

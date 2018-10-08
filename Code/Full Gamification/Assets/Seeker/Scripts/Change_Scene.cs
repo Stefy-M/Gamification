@@ -93,6 +93,8 @@ public class Change_Scene : MonoBehaviour {
         switch (GlobalControl.Instance.quest_progress)
         {
             case 0:
+                if (!GlobalControl.Instance.initialized) //this will make sure player is initialized
+                    GlobalControl.Instance.InitializePlayer();
                 next_level = "Intro1";
                 break;
             case 1:

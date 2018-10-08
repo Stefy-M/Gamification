@@ -6,6 +6,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using Newtonsoft.Json;
 using UnityEngine.EventSystems;
+using UnityEngine.Networking;
+using WebSocketSharp;
+
 
 public class loginScript : MonoBehaviour {
     public Text id;
@@ -14,7 +17,17 @@ public class loginScript : MonoBehaviour {
     public NetworkManager network;
 	public InputField loginField;
 
-	EventSystem system;
+    //two different screens - one for login, one for create account
+    public GameObject loginScreen;
+    public GameObject createAccountScreen;
+
+    //stuff for create account screen
+    public GameObject newId;
+    public GameObject newPass;
+    public GameObject verificationCode;
+    public Text accountStatus;
+
+    EventSystem system;
 	bool tryLogin = false;
 
     void Start()
@@ -46,7 +59,18 @@ public class loginScript : MonoBehaviour {
         }
 
         if (Input.GetKeyDown(KeyCode.Return))
-            login();
+        {
+            
+            if (loginScreen.active)
+            {
+                login();
+            }
+            else
+            {
+                createAccount();
+            }
+        }
+            
 
         if (tryLogin)
         {
@@ -83,6 +107,7 @@ public class loginScript : MonoBehaviour {
 				break;
 			}
         }
+        
     }
 
     public void login()
@@ -137,6 +162,74 @@ public class loginScript : MonoBehaviour {
         player.Incre.debugging = true;
         return 0;
     }
+
+    //changes mode from login mode to create account mode
+    public void changeLoginMode()
+    {
+        if(loginScreen.active)
+        {
+            loginScreen.SetActive(false);
+            createAccountScreen.SetActive(true);
+            accountStatus.enabled = false;
+        }
+        else
+        {
+            newId.GetComponent<InputField>().text = "";
+            newPass.GetComponent<InputField>().text = "";
+            verificationCode.GetComponent<InputField>().text = "";
+            loginScreen.SetActive(true);
+            createAccountScreen.SetActive(false);
+        }
+
+    }
+    //creates account - based on account generator script
+    public void createAccount()
+    {
+        bool inputError = false;
+        accountStatus.enabled = true;
+        accountStatus.text = "";
+        if(newId.GetComponent<InputField>().text == "")
+        {
+            accountStatus.text += "ID must be entered\n";
+            inputError = true;
+        }
+        if(newPass.GetComponent<InputField>().text == "")
+        {
+            accountStatus.text += "Password must be entered\n";
+            inputError = true;
+        }
+        //hardcoded for now, would need to add functionality to server for further verification
+        if(verificationCode.GetComponent<InputField>().text != "test2018")
+        {
+            if(verificationCode.GetComponent<InputField>().text == "")
+            {
+                accountStatus.text += "Verification Code must be entered\n";
+                inputError = true;
+            }
+            else
+            {
+                accountStatus.text += "Verification Code is incorrect\n";
+                inputError = true;
+            }
+        }
+
+        //if there was a problem with the input
+        if (inputError)
+            return;
+
+        accountStatus.text = "Creating Account...";
+
+        using (var ws = new WebSocket("ws://69.166.48.217:60001/AccountCreation"))//("ws://dragonsnest.far/Laputa"))
+        {
+            ws.Connect();
+
+            ws.Send("CREATE " + newId.GetComponent<InputField>().text + " " + newPass.GetComponent<InputField>().text);
+            Debug.Log("CREATE " + newId.GetComponent<InputField>().text + " " + newPass.GetComponent<InputField>().text);
+            accountStatus.text = "Account Created!";
+            ws.Close();
+        }
+        changeLoginMode();
+    }
 }
 
 public class JsonStrings
@@ -145,4 +238,6 @@ public class JsonStrings
     public string mastermind = "";
     public string incremental = "";
     public string conqueror = "";
+    public string daredevil = "";
+    public string sokoban = "";
 }

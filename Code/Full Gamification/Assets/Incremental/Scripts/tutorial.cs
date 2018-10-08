@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-public class Tutorial : MonoBehaviour
+public class tutorial : MonoBehaviour
 {
     public List<GameObject> tutorials;
     private int index;
@@ -12,8 +12,8 @@ public class Tutorial : MonoBehaviour
         index = 0;
         prevIndex = 0;
 
-        foreach (var tutorial in tutorials)
-            tutorial.SetActive(false);
+        foreach (var tempTutorial in tutorials)
+            tempTutorial.SetActive(false);
 		
         if (player.Incre.needTutorial)
         {
@@ -26,7 +26,7 @@ public class Tutorial : MonoBehaviour
 	public void Reset ()
 	{
 		player.Incre.needTutorial = true;
-		this.Start ();
+		this.Start();
 	}
 
     public void nextTutorial ()
