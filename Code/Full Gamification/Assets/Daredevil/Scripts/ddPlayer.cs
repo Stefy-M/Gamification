@@ -2,25 +2,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Newtonsoft.Json;
 
 //here we can add save data to daredevil game
-/*[System.Serializable]
+[System.Serializable]
 public class DaredevilSave
 {
-    [JsonProperty("guns")]
-    public List<Gun> guns { get; set; }
-    [JsonProperty("currentGun")]
-    public int currentGun { get; set; }
-    [JsonProperty("currentSkill")]
-    public int currentSkill { get; set; }
-    [JsonProperty("highestLevelReached")]
-    public int highestLevelReached { get; set; } // Starts at 0. 0 = Level 1.
+    [JsonProperty("test")]
+    public string test { get; set; }
 
     public DaredevilSave()
     {
-
+        test = "test-sokoban-save";
     }
-}*/
+}
 
 public class ddPlayer : MonoBehaviour {
 
