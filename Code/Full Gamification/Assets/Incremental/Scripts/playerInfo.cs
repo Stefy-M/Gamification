@@ -127,7 +127,13 @@ public class IncrementalData
     public string titleCollectionStr = "";
     public bool[] titleCollection = new bool[50];
     public int LogOutpassiveProgressGained = 0;
-    public List<string> usedCode = new List<string>(); 
+    public List<string> usedCode = new List<string>();
+    //New features for Ascension
+    public int seekerPerkLevel;
+    public int sudokuPerkLevel;
+    public int conquerorPerkLevel;
+    public int daredevilPerkLevel;
+    public int sokobanPerkLevel;
 }
 
 public enum game

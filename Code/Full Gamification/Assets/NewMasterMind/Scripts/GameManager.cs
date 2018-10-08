@@ -13,7 +13,7 @@ public class SokobanSave
 
     public SokobanSave()
     {
-        test = "test sokoban save";
+        test = "test-sokoban-save";
     }
 }
 

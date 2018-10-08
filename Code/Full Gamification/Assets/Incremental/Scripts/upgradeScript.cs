@@ -42,6 +42,7 @@ public class upgradeScript : MonoBehaviour {
     public Text price10;
     public Text price11;
     public Text price12;
+    public Button resetButton;
     //public Text price13;
     //public Text price14;
     //public Text price15;
@@ -54,11 +55,20 @@ public class upgradeScript : MonoBehaviour {
     {
         updateTitle();
         updatePrice();
+        GameObject resetButtonObject = GameObject.Find("reset button");
+        resetButton = resetButtonObject.GetComponent<Button>();
     }
 
     void Update()
     {
-
+        if(player.Incre.lv < 30)
+        {
+            resetButton.interactable = false;
+        }
+        else
+        {
+            resetButton.interactable = true;
+        }
     }
 
     public void reset()

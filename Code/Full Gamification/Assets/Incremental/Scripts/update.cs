@@ -121,6 +121,7 @@ public class update : MonoBehaviour {
         updateCoin();
         updateRedeemText();
         updateExpBar();
+        updatePlayerInfo();
         mainScreen.SetActive(!player.Incre.gameON);
 
         if (bar_progress.value < 0.021f)
@@ -214,7 +215,7 @@ public class update : MonoBehaviour {
     void updatePlayerInfo()
     {
         if (playerInfoDisplay != null)
-            playerInfoDisplay.text = string.Format("-player info-\r\nid: {0}\r\nresets: {1}",
+            playerInfoDisplay.text = string.Format("-player info-\r\nid: {0}\r\nAscension: {1}",
 				player.Incre.username, player.Incre.permanentPerksLV - 1);
     }
 
