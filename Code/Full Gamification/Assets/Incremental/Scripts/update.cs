@@ -24,6 +24,9 @@ public class update : MonoBehaviour {
     public GameObject dialog_no;
     public GameObject dialog_okay;
     public GameObject mainScreen;
+    public GameObject perkWindow;
+    public GameObject perkWindowButton;
+
     public Slider bar_progress;
     public Slider bar_exp;
 
@@ -124,6 +127,13 @@ public class update : MonoBehaviour {
         updatePlayerInfo();
         mainScreen.SetActive(!player.Incre.gameON);
 
+        if (player.Incre.hasAscendPoint > 0 || player.Incre.hasLevelPoint > 0)
+        {
+            perkWindowButton.SetActive(true);
+        }
+        else
+            perkWindowButton.SetActive(false);
+
         if (bar_progress.value < 0.021f)
             bar_progress.value = 0.021f;
 
@@ -176,6 +186,11 @@ public class update : MonoBehaviour {
         else
             showMessage2("Do you want to close the whole game?",
 				"Are you really sure?", dialogMode.exitapplication);
+    }
+
+    public void levelUpPressed()
+    {
+        perkWindow.SetActive(!perkWindow.active);
     }
 
     public void resetPressed()
@@ -428,6 +443,7 @@ public class update : MonoBehaviour {
         //visual effect will call in this function
         sendMsg("Level up!!!");
         player.Incre.lv++;
+        player.Incre.hasLevelPoint++;
 
         //calculate new incremental values here
         //calculateIncremental();

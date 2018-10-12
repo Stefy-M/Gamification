@@ -80,6 +80,7 @@ public class upgradeScript : MonoBehaviour {
         {
             int previousLV = player.Incre.permanentPerksLV;
             player.Incre.lv = 1;
+            player.Incre.hasAscendPoint++;
             player.Incre.coin = new coin();
             player.Incre.progress = new prog();
             player.Incre.needTutorial = false;
