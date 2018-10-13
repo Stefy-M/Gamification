@@ -40,8 +40,8 @@ public struct prog
 
 public struct stam
 {
-    public static double _cur = 15;
-    public static double _max = 15;
+    public static double _cur = 20;
+    public static double _max = 20;
     public double cur
     {
         get
@@ -394,14 +394,20 @@ public static class player
 
 		switch (type) {
 		case minigame.conquer:
-			percentage = 20;
-			break;
+                percentage = 15;
+                break;
 		case minigame.mastermind:
-			percentage = 40;
-			break;
+                percentage = 25;
+                break;
 		case minigame.seeker:
-			percentage = 30;
-			break;
+                percentage = 20;
+                break;
+        case minigame.daredevil:
+                percentage = 15;
+                break;
+        case minigame.sokoban:
+                percentage = 25;
+                break;
 		}
 		
         percentage = percentage * 0.01;

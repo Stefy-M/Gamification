@@ -36,11 +36,11 @@ public struct prog
     public int boosterRemain;
     public double boosterRate;
 }
-
+//might want to up the stamina to 20 for testing purposes since they're are more minigames now.
 public struct stam
 {
-    public static double _cur = 15;
-    public static double _max = 15;
+    public static double _cur = 20;
+    public static double _max = 20;
     public double cur
     {
         get
@@ -128,7 +128,7 @@ public class IncrementalData
 
 public enum game
 {
-    incremental, seeker, mastermind, conquer
+    incremental, seeker, mastermind, conquer, daredevil, sokoban
 }
 
 public enum minigame
@@ -136,6 +136,8 @@ public enum minigame
     none,
     seeker,
     conquer,
-    mastermind
+    mastermind,
+    daredevil,
+    sokoban
 }
 
