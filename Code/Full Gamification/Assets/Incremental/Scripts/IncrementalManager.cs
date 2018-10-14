@@ -9,7 +9,7 @@ public class IncrementalManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update ()
-    {
+	{
 		
 	}
     public void useStamina(int i)
