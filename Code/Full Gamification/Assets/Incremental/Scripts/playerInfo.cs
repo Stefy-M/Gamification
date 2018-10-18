@@ -396,16 +396,16 @@ public static class player
 
 		switch (type) {
 		case minigame.conquer:
-                percentage = 15;
+                percentage = 20;
                 break;
 		case minigame.mastermind:
-                percentage = 25;
+                percentage = 20;
                 break;
 		case minigame.seeker:
                 percentage = 20;
                 break;
         case minigame.daredevil:
-                percentage = 15;
+                percentage = 20;
                 break;
         case minigame.sokoban:
                 percentage = 25;
@@ -417,6 +417,7 @@ public static class player
         //reward coin
         double activeCoinReward = bal.getActiveCoinBonus() * usedStamina * percentage * rewardRate;
         double passiveCoinReward = bal.getPassiveCoinBonus() * usedStamina * percentage * rewardRate;
+        
         player.Incre.coin.active += (int)activeCoinReward;
         player.Incre.coin.passive += (int)passiveCoinReward;
 
