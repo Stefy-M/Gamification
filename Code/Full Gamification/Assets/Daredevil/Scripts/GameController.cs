@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameController : MonoBehaviour {
 
@@ -11,6 +12,7 @@ public class GameController : MonoBehaviour {
 	public ddPlayer player;
 	private float speedMultiplier =1;
 	private int difficulty = 1;
+	public Text HSText;
 	
 
 
@@ -18,15 +20,16 @@ public class GameController : MonoBehaviour {
 	public bool isPlayerStopped = false; // used to signal when the player has reached lowest Y position
 	private float inGameScore;
 	private int inGameCoins;
+	private float highestScore;
 
 
 	
 	// Use this for initialization
 	void Start () {
 
-		
 
-		
+		HSText.text = PlayerPrefs.GetFloat("HighScore", 0).ToString();
+		highestScore = PlayerPrefs.GetFloat("HighScore", 0);
 	}
 	
 	// Update is called once per frame
@@ -34,8 +37,14 @@ public class GameController : MonoBehaviour {
 	{
 		inGameScore =(float) Score.ScoreTime;
 		inGameCoins = player.CoinsCollected;
-		
 
+		if (inGameScore > PlayerPrefs.GetFloat("HighScore",0))
+		{
+			PlayerPrefs.SetFloat("HighScore", inGameScore);
+			HSText.text = PlayerPrefs.GetFloat("HighScore", 0).ToString();
+			highestScore = PlayerPrefs.GetFloat("HighScore", 0);
+
+		}
 
 	}
 
@@ -109,5 +118,10 @@ public class GameController : MonoBehaviour {
 	public float SpeedMultiplier
 	{
 		get { return speedMultiplier; }
+	}
+
+	public float HighestScore
+	{
+		get { return highestScore; }
 	}
 }

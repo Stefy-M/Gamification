@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 //here we can add save data to daredevil game
 [System.Serializable]
@@ -53,6 +54,8 @@ public class ddPlayer : MonoBehaviour {
 	public incremental_item coin;
 	private int coinsCollected;
 	public GameObject restartButton,gameOverText;
+	
+
 	int playerLayer, enemyLayer, coinLayer; // used for collisions
 
 
@@ -72,7 +75,7 @@ public class ddPlayer : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
-
+		
 		
 		playerLayer = this.gameObject.layer;
 		coinLayer = LayerMask.NameToLayer("Coin");
@@ -89,6 +92,7 @@ public class ddPlayer : MonoBehaviour {
 		coin = new incremental_item();
 		rb2d = GetComponent<Rigidbody2D>();
 		myAnim = GetComponent<Animator>();
+		
 		
 
 		// track if player is facing right

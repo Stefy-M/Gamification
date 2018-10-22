@@ -7,7 +7,7 @@ public class incremental_item : MonoBehaviour {
 	Rigidbody2D rb2d;
 	public float vertspeed;
 	public float destroyTimer;
-	private int points =0;
+	private int points;
 	// Use this for initialization
 	void Start () {
 		rb2d = GetComponent<Rigidbody2D>();
@@ -27,7 +27,7 @@ public class incremental_item : MonoBehaviour {
 		if (collision.gameObject.tag.Equals("Player"))
 		{
 			//add in things for collecting 
-			points++;
+	
 			Destroy(gameObject);
 			
 
