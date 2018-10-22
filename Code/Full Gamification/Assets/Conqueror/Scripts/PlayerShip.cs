@@ -1,13 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
-using System.IO;
-using Newtonsoft.Json;
 
-namespace Conqueror {
-    [System.Serializable]
+namespace Conqueror
+{
+	[System.Serializable]
     public class ConquerorSave 
     {
         [JsonProperty("guns")]

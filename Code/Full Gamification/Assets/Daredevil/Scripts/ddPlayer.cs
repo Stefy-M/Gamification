@@ -1,26 +1,29 @@
-﻿using System;
+﻿using Conqueror;
+
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 //here we can add save data to daredevil game
-/*[System.Serializable]
+[System.Serializable]
 public class DaredevilSave
 {
-    [JsonProperty("guns")]
-    public List<Gun> guns { get; set; }
-    [JsonProperty("currentGun")]
-    public int currentGun { get; set; }
-    [JsonProperty("currentSkill")]
-    public int currentSkill { get; set; }
-    [JsonProperty("highestLevelReached")]
-    public int highestLevelReached { get; set; } // Starts at 0. 0 = Level 1.
+    [JsonProperty("Score")]
+    public float score { get; set; }
+    [JsonProperty("Coins")]
+    public int coins { get; set; }
+    [JsonProperty("TimesPlayed")]
+    public int timesPlayed { get; set; }
+    
 
     public DaredevilSave()
     {
-
+		score = 0;
+		coins = 0;
+		timesPlayed = 0;
     }
-}*/
+}
 
 public class ddPlayer : MonoBehaviour {
 
@@ -48,6 +51,7 @@ public class ddPlayer : MonoBehaviour {
 
 	//In Game objects that effect player
 	public incremental_item coin;
+	private int coinsCollected;
 	public GameObject restartButton,gameOverText;
 	int playerLayer, enemyLayer, coinLayer; // used for collisions
 
@@ -69,7 +73,6 @@ public class ddPlayer : MonoBehaviour {
 	void Start () {
 
 
-		//score.ScoreTime = "0";
 		
 		playerLayer = this.gameObject.layer;
 		coinLayer = LayerMask.NameToLayer("Coin");
@@ -101,7 +104,7 @@ public class ddPlayer : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-		//Debug.Log(playerScore.ScoreTime);
+		
 		if (transform.position.y < fallConstraintY) // condition to check when player has reached lowY
 		{
 			stopped = true;
@@ -133,7 +136,7 @@ public class ddPlayer : MonoBehaviour {
 	{
 		if (collision.gameObject.tag.Equals("Enemy_bird")) // checking to test each location a bird is hit
 		{
-			//Debug.Log("X:"+collision.rigidbody.position.x+"\n" +"Y: "+ collision.rigidbody.position.y);
+			
 			playerHP -= 1;
 			switch (playerHP) {
 				case 2:
@@ -163,7 +166,7 @@ public class ddPlayer : MonoBehaviour {
 
 			if (playerHP < 1) // do game over here
 			{
-				Debug.Log("Score: " + playerScore.ScoreTime + " Coins Collected: " + coin.Points);
+				Debug.Log("Score: " + GameController.instance.InGameScore + " Coins Collected: " + coin.Points);
 				isDead = true;
 				stoptimer = true;
 				gameOverText.SetActive(true);
@@ -232,6 +235,11 @@ public class ddPlayer : MonoBehaviour {
 
 		set { this.playerHP = value; }
 
+	}
+
+	public int CoinsCollected
+	{
+		get { return coin.Points; }
 	}
 
 	

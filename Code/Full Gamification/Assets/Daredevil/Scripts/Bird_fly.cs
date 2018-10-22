@@ -22,7 +22,7 @@ public class Bird_fly : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		birdRB.velocity = new Vector2(0, 1 * flySpeed);
+		birdRB.velocity = new Vector2(0, GameController.instance.SpeedMultiplier * flySpeed);
 		Destroy(gameObject, 8f);
 	}
 
