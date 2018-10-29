@@ -13,7 +13,7 @@ public class DaredevilSave
 
     public DaredevilSave()
     {
-        test = "test-sokoban-save";
+        test = "test-daredevil-save";
     }
 }
 
