@@ -57,6 +57,7 @@ public class GameManager : MonoBehaviour {
         m_NextButton.SetActive(false);
         m_LevelBuilder.NextLevel();
         LevelTextScript.LevelValue += 1;
+		LevelTimerScript.resetTimer = true;
         StartCoroutine(ResetSceneASync());
     }
 
@@ -73,6 +74,7 @@ public class GameManager : MonoBehaviour {
             if (!box.m_OnCross)
                 return false;
         }
+		LevelTimerScript.levelComplete = true; // tell timer level is complete to stop timer
         return true;
     }
 
