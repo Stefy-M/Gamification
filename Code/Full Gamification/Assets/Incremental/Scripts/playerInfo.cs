@@ -194,8 +194,22 @@ public static class player
             PlayerPrefs.SetString("localConquerData", value);
         }
     }
-    
-    public static string JsonStr = "";
+
+	public static string localDaredevilData
+	{
+		get
+		{
+			return PlayerPrefs.GetString("localDaredevilData", "");
+		}
+		set
+		{
+			PlayerPrefs.SetString("localDaredevilData", value);
+		}
+	}
+
+
+
+	public static string JsonStr = "";
     public static IncrementalData Incre = new IncrementalData();
     public static sudokuData Sudoku = new sudokuData();
     public static ConquerorSave conqueror = new ConquerorSave();

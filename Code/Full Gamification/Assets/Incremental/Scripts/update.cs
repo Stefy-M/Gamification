@@ -588,6 +588,8 @@ public class update : MonoBehaviour {
 			player.localMasterData = player.getJsonStr(game.mastermind);
 			player.localSeekerData = player.getJsonStr(game.seeker);
 			player.localConquerData = player.getJsonStr(game.conquer);
+			player.localDaredevilData = player.getJsonStr(game.daredevil);
+			
 		}
 		else
 		{

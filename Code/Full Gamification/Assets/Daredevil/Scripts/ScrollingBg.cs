@@ -26,7 +26,7 @@ public class ScrollingBg : MonoBehaviour {
 	void Update () {
 		if (GameController.instance.isStopped()) // When player stops run scrolling background
 		{
-			rb2d.velocity = new Vector2(rb2d.velocity.x, 1 * scrollSpeed);
+			rb2d.velocity = new Vector2(rb2d.velocity.x, GameController.instance.SpeedMultiplier * scrollSpeed);
 			if (transform.position.y > 8)
 			{
 				repositionBg();
