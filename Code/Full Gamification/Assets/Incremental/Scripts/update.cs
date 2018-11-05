@@ -63,6 +63,10 @@ public class update : MonoBehaviour {
     dialogMode _dialogMode;
     string localSaveData;
 
+    //leaderboard stuff
+    public GameObject LBOff;
+    public GameObject LBOn;
+
     void Start()
     {
         //test purpose
@@ -125,6 +129,7 @@ public class update : MonoBehaviour {
         updateRedeemText();
         updateExpBar();
         updatePlayerInfo();
+        updateLeaderboard();
         mainScreen.SetActive(!player.Incre.gameON);
 
         if (player.Incre.hasAscendPoint > 0 || player.Incre.hasLevelPoint > 0)
@@ -141,6 +146,25 @@ public class update : MonoBehaviour {
             bar_exp.value = 0.021f;
 		
 		txt_exit.text = player.Incre.gameON ? "Close Game" : "Exit Game";
+    }
+
+    private void updateLeaderboard()
+    {
+        if(player.Incre.lbHidden)
+        {
+            LBOff.SetActive(true);
+            LBOn.SetActive(false);
+        }
+        else
+        {
+            LBOff.SetActive(false);
+            LBOn.SetActive(true);
+        }
+    }
+
+    public void changeLBStatus()
+    {
+        player.Incre.lbHidden = !player.Incre.lbHidden;
     }
 
     private void OnApplicationQuit()

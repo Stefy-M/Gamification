@@ -32,9 +32,9 @@ public class NetworkManager : MonoBehaviour
     private static string _serverAddress = "ccain.eecs.wsu.edu";                //Self explanatory
     private static string _ipString = "69.166.48.217";
 
-        //"69.166.48.217";
+    //"69.166.48.217";
     private static IPAddress _serverIP = IPAddress.Parse(_ipString);      //Currently hard coded for efficiency
-	private WebSocket _webClient = null;
+    private WebSocket _webClient = null;
     private string _loginKey = "";                  /* Obtained during login process, used by server to verify login session
                                                      * Each login session gets a unique key to append to each message. On the server,
                                                      * if the login key given does not match the current login, that means you are in
@@ -58,7 +58,7 @@ public class NetworkManager : MonoBehaviour
 
     private string _username;                   //All of these should be self explanatory
     private string _password;
-    
+
     public JSONNode _loginData;
     //nodes for games
 
@@ -78,6 +78,10 @@ public class NetworkManager : MonoBehaviour
     private bool _awaitingPing = false;         //If no TCP activity in past 15 seconds, send one ping to the server.
     public int loginFlag;
 
+    //Leaderboard information
+    private bool needsLB = false;
+    public string leaderboardInfo = null;
+
 
     /********************************************************************************
     ------------------------------- UNITY SECTION -----------------------------------
@@ -88,8 +92,8 @@ public class NetworkManager : MonoBehaviour
     //*
     void Awake()
     {
-        
-        if(Instance == null)
+
+        if (Instance == null)
         {
             DontDestroyOnLoad(gameObject);
             Instance = this;
@@ -124,6 +128,13 @@ public class NetworkManager : MonoBehaviour
         //DontDestroyOnLoad(this);
     }
 
+    //sends request for leaderboard to the server
+    public void requestLeaderboard()
+    {
+        Instance._webClient.Send("LEADERBOARD");
+        Instance.needsLB = true;
+    }
+
     public bool SetLoginCredentials(string uname, string passwd)
     {
         Instance._username = uname;
@@ -150,6 +161,8 @@ public class NetworkManager : MonoBehaviour
         Instance.loginFlag = 0;
         Instance._isLoggedIn = false;
         Instance.loaded_json = "";
+        Instance.needsLB = false;
+        Instance.leaderboardInfo = null;
         //Show version number on client
         //GameObject.Find("Version Number").GetComponent<Text>().text = _clientVersion;
 
@@ -160,12 +173,12 @@ public class NetworkManager : MonoBehaviour
             Instance._webClient = new WebSocket("ws://" + _serverIP + ":" + _tcpPort + "/Client");//(_serverURI);
             Debug.Log("URL: " + Instance._webClient.Url);
             //set up OnMessage
-            Instance._webClient.OnMessage += (sender,e) => ReceivedMsg(sender,e);
+            Instance._webClient.OnMessage += (sender, e) => ReceivedMsg(sender, e);
 
             //GameObject.Find("Error Message").GetComponent<Text>().text = "Connecting to server...";
             Instance._webClient.Connect();
 
-            
+
 
             /*
             if (_serverVersion != _clientVersion)
@@ -185,7 +198,7 @@ public class NetworkManager : MonoBehaviour
         //DontDestroyOnLoad(this);
     }
 
-   
+
 
     private void ReceivedMsg(object sender, MessageEventArgs e)
     {
@@ -217,7 +230,6 @@ public class NetworkManager : MonoBehaviour
             return;
         }
         
-
         if (!_hasReceivedData)
         {
             Instance._webClient.Send("LOGIN_GETDATA");
@@ -238,6 +250,14 @@ public class NetworkManager : MonoBehaviour
             //GameObject.Find("PlayerData").GetComponent<GlobalControl>().enabled = true;
         }
         Debug.Log("loginFlag = " + Instance.loginFlag);
+
+        //This will be what happens after we request the leaderboard from the server, not the best implementation but will work for now because we only request login info and lb info from server.
+        if(Instance.needsLB)
+        {
+            Instance.leaderboardInfo = e.Data;
+            Debug.Log("Leaderboard Info Received: " + Instance.leaderboardInfo);
+            Instance.needsLB = false;
+        }
     }
 
     //*

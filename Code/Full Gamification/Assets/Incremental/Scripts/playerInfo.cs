@@ -131,11 +131,15 @@ public class IncrementalData
     //New features for Ascension/Leveling
     public int hasAscendPoint = 0;
     public int hasLevelPoint = 0;
+    //Perk points
     public int seekerPerkLevel = 0;
     public int sudokuPerkLevel = 0;
     public int conquerorPerkLevel = 0;
     public int daredevilPerkLevel = 0;
     public int sokobanPerkLevel = 0;
+    //Potion stuff
+    //Opt in to leaderboard
+    public bool lbHidden = true;
 }
 
 public enum game
