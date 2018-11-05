@@ -11,7 +11,7 @@ public class incremental_item : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		rb2d = GetComponent<Rigidbody2D>();
-		points = 0;
+		
 	}
 	
 	// Update is called once per frame
@@ -19,7 +19,7 @@ public class incremental_item : MonoBehaviour {
 		rb2d.velocity = new Vector2(0, 1 * vertspeed);
 		Destroy(gameObject, destroyTimer);
 		
-		
+
 	}
 
 	private void OnCollisionEnter2D(Collision2D collision)
@@ -27,6 +27,7 @@ public class incremental_item : MonoBehaviour {
 		if (collision.gameObject.tag.Equals("Player"))
 		{
 			//add in things for collecting 
+	
 			Destroy(gameObject);
 			
 
