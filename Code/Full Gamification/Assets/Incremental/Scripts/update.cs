@@ -67,6 +67,11 @@ public class update : MonoBehaviour {
     public GameObject LBOff;
     public GameObject LBOn;
 
+    //Perk level display
+    public GameObject PerkLevels;
+    //For pulsing buttons
+    public GameObject shopButton;
+
     void Start()
     {
         //test purpose
@@ -130,14 +135,29 @@ public class update : MonoBehaviour {
         updateExpBar();
         updatePlayerInfo();
         updateLeaderboard();
+
+        if(!player.Incre.gameON)
+            updatePerkLevels();
+
         mainScreen.SetActive(!player.Incre.gameON);
 
+
+        //This is for perkwindow/leveling up purposes
         if (player.Incre.hasAscendPoint > 0 || player.Incre.hasLevelPoint > 0)
         {
             perkWindowButton.SetActive(true);
         }
         else
             perkWindowButton.SetActive(false);
+
+        if (player.Incre.lv >= 30)
+        {
+            shopButton.GetComponent<buttonPulse>().shouldPulse = true;
+        }
+        else
+        {
+            shopButton.GetComponent<buttonPulse>().shouldPulse = false;
+        }
 
         if (bar_progress.value < 0.021f)
             bar_progress.value = 0.021f;
@@ -146,6 +166,22 @@ public class update : MonoBehaviour {
             bar_exp.value = 0.021f;
 		
 		txt_exit.text = player.Incre.gameON ? "Close Game" : "Exit Game";
+    }
+
+
+    private void updatePerkLevels()
+    {
+        Text seekerText = PerkLevels.transform.Find("SeekerPerkLevel").gameObject.GetComponent<Text>();
+        Text conqText = PerkLevels.transform.Find("ConqPerkLevel").gameObject.GetComponent<Text>();
+        Text sudokuText = PerkLevels.transform.Find("SudokuPerkLevel").gameObject.GetComponent<Text>();
+        Text ddText = PerkLevels.transform.Find("DDPerkLevel").gameObject.GetComponent<Text>();
+        Text sokoText = PerkLevels.transform.Find("SokoPerkLevel").gameObject.GetComponent<Text>();
+
+        seekerText.text = player.Incre.seekerPerkLevel.ToString();
+        conqText.text = player.Incre.conquerorPerkLevel.ToString();
+        sudokuText.text = player.Incre.sudokuPerkLevel.ToString();
+        ddText.text = player.Incre.daredevilPerkLevel.ToString();
+        sokoText.text = player.Incre.sokobanPerkLevel.ToString();
     }
 
     private void updateLeaderboard()

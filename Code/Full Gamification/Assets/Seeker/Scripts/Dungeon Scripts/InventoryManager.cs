@@ -108,7 +108,7 @@ public class InventoryManager : MonoBehaviour
     {
         if (description_display != null)
         {
-            description_text.text = GlobalControl.Instance.full_items_list[item_id].name + ": " + GlobalControl.Instance.full_items_list[item_id].description + "\nSells for: " + GlobalControl.Instance.full_items_list[item_id].value + " reps.";
+            description_text.text = GlobalControl.Instance.full_items_list[item_id].name + ": " + GlobalControl.Instance.full_items_list[item_id].description + "\nSells for: " + (GlobalControl.Instance.full_items_list[item_id].value + (5 * player.Incre.seekerPerkLevel)) + " reps.";
             description_display.SetActive(true);
         }
     }

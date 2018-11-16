@@ -138,16 +138,19 @@ public class PerkWindow : MonoBehaviour {
     public void p1Reward()
     {
         player.Incre.hasLevelPoint--;
+        player.Incre.progress.numBooster++;
     }
 
     public void p2Reward()
     {
         player.Incre.hasLevelPoint--;
+        player.Incre.exp.numBooster++;
     }
 
     public void p3Reward()
     {
         player.Incre.hasLevelPoint--;
+        player.Incre.coin.numBooster++;
     }
 
 
