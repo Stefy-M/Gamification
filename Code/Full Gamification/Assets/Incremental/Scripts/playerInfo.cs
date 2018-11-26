@@ -40,8 +40,8 @@ public struct prog
 
 public struct stam
 {
-    public static double _cur = 20;
-    public static double _max = 20;
+    public static double _cur = 8;
+    public static double _max = 8;
     public double cur
     {
         get
@@ -426,7 +426,7 @@ public static class player
                 percentage = 20;
                 break;
         case minigame.sokoban:
-                percentage = 25;
+                percentage = 20;
                 break;
 		}
 		
