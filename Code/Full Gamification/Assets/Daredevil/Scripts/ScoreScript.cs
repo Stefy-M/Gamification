@@ -37,7 +37,7 @@ public class ScoreScript : MonoBehaviour {
 			
 			t = Time.time - startTime;
 			minutes = ((int)t / 60).ToString();
-			secs = (t % 60).ToString("f2");
+			secs = t.ToString("f2");
 
 			score.text = secs;
 			Scoretime = Convert.ToDouble(score.text);
