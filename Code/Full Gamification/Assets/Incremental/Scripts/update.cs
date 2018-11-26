@@ -389,8 +389,7 @@ public class update : MonoBehaviour {
             else
                 progressRate = bal.getActiveProgressBarRate() * boosterRate;
 
-            txt_progress.text = string.Format("Prog {0}/100(+{1})",
-				((player.Incre.progress.cur / bal.getMaxProgress() * 100)).ToString("N2"),
+            txt_progress.text = string.Format("Progress rate: +{0}",
 				(progressRate / bal.getMaxProgress() * 10000).ToString("N3"));
         }
     }

@@ -19,12 +19,12 @@ namespace Conqueror {
                 return;
 
             // Add bonus to incremental
-            player.Incre.coin.active += (int) Mathf.Pow(1.3f, level);
-            player.Incre.coin.passive += (int) (Mathf.Pow(1.3f, level) / 10);
+            player.Incre.coin.active += (int) 2 * level;
+            player.Incre.coin.passive += (int) 1 * level;
 
-            // Add stronger gun based on current level
+            // Add stronger gun based on current level and perk level
             Gun g;
-            float damage = (int)Random.Range(Mathf.Max(level - 2f, 1f), level + 2f);
+            float damage = (int)Random.Range(Mathf.Max(level - 2f, 1f), level + 2f) + (5 * player.Incre.conquerorPerkLevel);
             float rof = Random.Range((30f/111) / (1 + 0.1f * level), 30f/111);
             float speed = Random.Range(5, 20 + level * 2);
             int type = Random.Range(0, Mathf.Min(level, 3));

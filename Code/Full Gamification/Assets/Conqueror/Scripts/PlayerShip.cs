@@ -203,7 +203,8 @@ namespace Conqueror
 
                     SoundManager.instance.PlaySingle(playerHit);
 
-                    health--;
+                    //every 30 levels, damage increases by one
+                    health -= (GameManager.instance.level / 30);
 
                     if (healthBar)
                         healthBar.value = health;
@@ -367,7 +368,12 @@ namespace Conqueror
         public void ResetSpeed()
         {
             sprite.color = originalColor;
-            moveSpeed = defaultMoveSpeed;
+            moveSpeed = defaultMoveSpeed + player.Incre.conquerorPerkLevel;
+        }
+
+        public void ResetSkillTimer()
+        {
+            skillTimer = 0;
         }
     }
 }
