@@ -42,6 +42,8 @@ namespace Conqueror {
             if (SoundManager.instance == null)
                 Instantiate(soundManager);
 
+            SoundManager.instance.curGame = minigame.conquer;
+
             SoundManager.instance.PlayMusic(music);
 
             InitSave();

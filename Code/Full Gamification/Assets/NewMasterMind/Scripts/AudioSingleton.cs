@@ -23,4 +23,11 @@ public class AudioSingleton : MonoBehaviour
 		}
 		DontDestroyOnLoad (this.gameObject);
 	}
+
+    private void Update()
+    {
+        // Something that kills this when switching to a different game.
+        if (player.Incre.currentGame != minigame.sokoban)
+            Destroy(gameObject);
+    }
 }
