@@ -166,6 +166,7 @@ namespace Conqueror {
             //Just destroys Arena, keeps bossdrops, bullets active (boss should be dead at this point)
             GameObject.Find("Player").GetComponent<PlayerShip>().ResetSpeed();
             GameObject.Find("Player").GetComponent<PlayerShip>().resetInvulnerability();
+            GameObject.Find("Player").GetComponent<PlayerShip>().ResetSkillTimer();
 
             Destroy(currentArena);
 

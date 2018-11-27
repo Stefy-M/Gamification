@@ -35,7 +35,7 @@ namespace Conqueror {
 			cs = GameObject.Find("GameManager").GetComponent<CountdownScript>();
             level = GameManager.instance.level;
 
-            maxhp = 20 + 10 * (Mathf.Pow(1.3f, level));
+            maxhp = 20 + (20 * (level));
             hp = maxhp;
             maxrof = (30f / (level * 0.5f));
             rof = maxrof;
