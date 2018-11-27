@@ -28,7 +28,6 @@ public class DaredevilSave
 		score = 0;
 		coins = 0;
 		timesPlayed = 0;
-
     }
 }
 

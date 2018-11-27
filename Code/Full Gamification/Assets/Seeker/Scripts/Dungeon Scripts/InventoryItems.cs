@@ -104,7 +104,7 @@ public class InventoryItems : MonoBehaviour, IPointerClickHandler, IPointerEnter
 
     public void Sell()
     {
-        GlobalControl.Instance.reputation += GlobalControl.Instance.full_items_list[item_id].value;
+        GlobalControl.Instance.reputation += (GlobalControl.Instance.full_items_list[item_id].value + (5 * player.Incre.seekerPerkLevel));
         inventory.RemoveItem(slot_num);
 
         if (item_id == 0)

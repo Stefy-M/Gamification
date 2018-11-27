@@ -40,8 +40,8 @@ public struct prog
 
 public struct stam
 {
-    public static double _cur = 20;
-    public static double _max = 20;
+    public static double _cur = 8;
+    public static double _max = 8;
     public double cur
     {
         get
@@ -131,11 +131,15 @@ public class IncrementalData
     //New features for Ascension/Leveling
     public int hasAscendPoint = 0;
     public int hasLevelPoint = 0;
+    //Perk points
     public int seekerPerkLevel = 0;
     public int sudokuPerkLevel = 0;
     public int conquerorPerkLevel = 0;
     public int daredevilPerkLevel = 0;
     public int sokobanPerkLevel = 0;
+    //Potion stuff
+    //Opt in to leaderboard
+    public bool lbHidden = true;
 }
 
 public enum game
@@ -422,7 +426,7 @@ public static class player
                 percentage = 20;
                 break;
         case minigame.sokoban:
-                percentage = 25;
+                percentage = 20;
                 break;
 		}
 		

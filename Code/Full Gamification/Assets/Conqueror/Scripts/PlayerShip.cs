@@ -107,8 +107,9 @@ namespace Conqueror
             sprite = GetComponent<SpriteRenderer>();
             
             transform.position = defaultPos;
-            health = maxHealth;
-            moveSpeed = defaultMoveSpeed;
+            //The following 2 stats are modified with perk level
+            health = maxHealth + (2 * player.Incre.conquerorPerkLevel);
+            moveSpeed = defaultMoveSpeed + player.Incre.conquerorPerkLevel;
             inBoss = false;
             flashTimer = 0.0f;
             invincible = false;

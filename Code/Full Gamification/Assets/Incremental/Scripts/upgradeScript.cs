@@ -55,19 +55,23 @@ public class upgradeScript : MonoBehaviour {
     {
         updateTitle();
         updatePrice();
-        GameObject resetButtonObject = GameObject.Find("reset button");
-        resetButton = resetButtonObject.GetComponent<Button>();
+        //GameObject resetButtonObject = GameObject.Find("reset button").gameObject;
+        //resetButton = resetButtonObject.GetComponent<Button>();
     }
 
     void Update()
     {
-        if(player.Incre.lv < 30)
+        //GameObject resetButtonObject = GameObject.Find("reset button").gameObject;
+        //resetButton = resetButtonObject.GetComponent<Button>();
+        if (player.Incre.lv < 30)
         {
             resetButton.interactable = false;
+            resetButton.gameObject.GetComponent<buttonPulse>().shouldPulse = false;
         }
         else
         {
             resetButton.interactable = true;
+            resetButton.gameObject.GetComponent<buttonPulse>().shouldPulse = true;
         }
     }
 

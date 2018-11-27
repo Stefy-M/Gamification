@@ -74,9 +74,6 @@ public static class fixedSudoku
 {
     // List for the fix board
     // XML file resources are loaded into these.
-
-
-
     public static TextAsset sudokuEasy = Resources.Load<TextAsset>("levelsEasyXMLprefab");
     public static TextAsset sudokuMedium = Resources.Load<TextAsset>("levelsMediumXMLprefab");
     public static TextAsset sudokuHard = Resources.Load<TextAsset>("levelsHardXMLprefab");
@@ -91,7 +88,7 @@ public static class fixedSudoku
     public static List<string> parseXmlFile(TextAsset type, string nodepath)
     {
         string value_display = "";
-        //Debug.Log(xmlDoc.Value);
+        Debug.Log(xmlDoc.Value);
         xmlDoc.LoadXml(type.text);
         XmlNodeList myNodeList = xmlDoc.SelectNodes(nodepath);
         List<string> nodes = new List<string>();
