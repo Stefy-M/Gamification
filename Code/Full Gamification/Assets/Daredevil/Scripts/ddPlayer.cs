@@ -34,14 +34,15 @@ public class DaredevilSave
 public class ddPlayer : MonoBehaviour {
 
 	//Jumping variables *Not being used yet*
-	bool grounded = false;
+	bool grounded = true;
 	float groundCheckRadius = 0.2f;
 	public LayerMask groundLayer;
 	public Transform groundCheck;
-
+	private bool hasSlow = false;
+	private bool executeSlow;
 
 	//Player variables
-	private float fallConstraintY; // point at which the player will stop falling
+	private float fallConstraintY =-10; // point at which the player will stop falling
 	public float maxSpeed;
 	private Rigidbody2D rb2d;
 	private int playerHP = 3;
@@ -52,13 +53,14 @@ public class ddPlayer : MonoBehaviour {
 	private bool isDead = false;
 	public GameObject heart1, heart2, heart3;
 	public ScoreScript playerScore;
+	
 
 
 
 	//In Game objects that effect player
 	public incremental_item coin;
 	private int coinsCollected;
-	public GameObject restartButton,gameOverText;
+	public GameObject restartButton,gameOverText,slowEnabledText;
 	
 
 	int playerLayer, enemyLayer, coinLayer; // used for collisions
@@ -80,8 +82,8 @@ public class ddPlayer : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
-		
-		
+
+		//groundCheck = GetComponent<Transform>();
 		playerLayer = this.gameObject.layer;
 		coinLayer = LayerMask.NameToLayer("Coin");
 		enemyLayer = LayerMask.NameToLayer("Enemy_bird");
@@ -98,6 +100,8 @@ public class ddPlayer : MonoBehaviour {
 		rb2d = GetComponent<Rigidbody2D>();
 		myAnim = GetComponent<Animator>();
 		
+		//myAnim.SetBool("isGrounded", true);
+		
 		
 
 		// track if player is facing right
@@ -108,6 +112,7 @@ public class ddPlayer : MonoBehaviour {
 
 		restartButton.SetActive(false);
 		gameOverText.SetActive(false);
+		slowEnabledText.SetActive(false);
 	}
 	
 	// Update is called once per frame
@@ -190,6 +195,13 @@ public class ddPlayer : MonoBehaviour {
 			coin.Points++;
 			
 		}
+
+		if (collision.gameObject.tag.Equals("SlowDown"))
+		{
+			Debug.Log("Slow");
+			slowEnabledText.SetActive(true);
+			hasSlow = true;
+		}
 	}
 
 	IEnumerator Immortal()
@@ -210,10 +222,19 @@ public class ddPlayer : MonoBehaviour {
 		//check if we are grounded, if no then we are falling
 		if (isDead == false)
 		{
-			grounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
-			myAnim.SetBool("isGrounded", grounded);
+
+
+			if (Input.GetButton("Jump") && hasSlow)
+			{
+				// executes slow
+				Debug.Log("Space Pressed");
+				slowEnabledText.SetActive(false);
+				executeSlow = true;
+				hasSlow = false;
+			}
 
 			myAnim.SetFloat("vertSpeed", rb2d.velocity.y);
+			
 
 
 			float move = Input.GetAxis("Horizontal");
@@ -264,5 +285,16 @@ public class ddPlayer : MonoBehaviour {
 		theScale.x *= -1;
 
 		transform.localScale = theScale;
+	}
+
+	public bool HasSlow
+	{
+		get { return hasSlow; }
+	}
+
+	public bool ExecuteSlow
+	{
+		get { return executeSlow; }
+		set { executeSlow = value; }
 	}
 }
