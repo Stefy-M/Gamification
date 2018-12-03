@@ -12,6 +12,8 @@ namespace Conqueror {
         public float lowPitchRange = .95f;
         public float highPitchRange = 1.05f;
 
+        public minigame curGame;
+
         void Awake()
         {
             if (instance == null)
@@ -25,7 +27,7 @@ namespace Conqueror {
         void Update()
         {
             // Something that kills this when switching to a different game.
-            if (player.Incre.currentGame != minigame.conquer)
+            if (player.Incre.currentGame != curGame)
                 Destroy(gameObject);
         }
 

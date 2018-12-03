@@ -11,7 +11,7 @@ public class GameController : MonoBehaviour {
 	public GameObject [] Clouds = new GameObject[2];
 	public Camera camera;
 	public ScoreScript Score;
-	public ddPlayer player;
+	public ddPlayer daredevilPlayer;
 	private float speedMultiplier =1;
 	private int difficulty = 1;
 	public Text HSText;
@@ -23,6 +23,8 @@ public class GameController : MonoBehaviour {
 	private float inGameScore;
 	private int inGameCoins;
 	private float highestScore;
+    private GameObject coinSpawner;
+    private GameObject powerUpSpawner;
 
 
 	
@@ -31,22 +33,36 @@ public class GameController : MonoBehaviour {
 		
 		Clouds[0].SetActive(true);
 		Clouds[1].SetActive(false);
-		HSText.text = PlayerPrefs.GetFloat("HighScore", 0).ToString();
-		highestScore = PlayerPrefs.GetFloat("HighScore", 0);
-	}
+        //HSText.text = PlayerPrefs.GetFloat("HighScore", 0).ToString();
+        //highestScore = PlayerPrefs.GetFloat("HighScore", 0);
+        //Online saving/loading for high score added here
+        HSText.text = player.daredevilSave.score.ToString();
+        highestScore = player.daredevilSave.score;
+        player.daredevilSave.timesPlayed++;
+        //get spawners to reduce coin spawn time and power up spawn rate for perk level tie in
+        coinSpawner = GameObject.Find("Spawns/Coin_spawner");
+        powerUpSpawner = GameObject.Find("Spawns/SlowItem_spawner");
+        coinSpawner.GetComponent<BirdSpawning>().spawnRate -= player.Incre.daredevilPerkLevel;
+        powerUpSpawner.GetComponent<BirdSpawning>().spawnRate -= player.Incre.daredevilPerkLevel;
+
+
+    }
 	
 	// Update is called once per frame
 	void Update ()
 	{
 		
 		inGameScore =(float) Score.ScoreTime;
-		inGameCoins = player.CoinsCollected;
+		inGameCoins = daredevilPlayer.CoinsCollected;
 
-		if (inGameScore > PlayerPrefs.GetFloat("HighScore",0))
+		if (inGameScore > highestScore)
 		{
-			PlayerPrefs.SetFloat("HighScore", inGameScore);
-			HSText.text = PlayerPrefs.GetFloat("HighScore", 0).ToString();
-			highestScore = PlayerPrefs.GetFloat("HighScore", 0);
+			//PlayerPrefs.SetFloat("HighScore", inGameScore);
+            player.daredevilSave.score = inGameScore;
+            HSText.text = player.daredevilSave.score.ToString();
+            highestScore = player.daredevilSave.score;
+            //HSText.text = PlayerPrefs.GetFloat("HighScore", 0).ToString();
+			//highestScore = PlayerPrefs.GetFloat("HighScore", 0);
 
 		}
 
@@ -54,7 +70,7 @@ public class GameController : MonoBehaviour {
 
 	private void FixedUpdate()
 	{
-		if (player.ExecuteSlow )
+		if (daredevilPlayer.ExecuteSlow )
 		{
 			//Debug.Log("SLOOOOOOW");
 			speedMultiplier = 0.8f;
@@ -64,19 +80,19 @@ public class GameController : MonoBehaviour {
 			//player.ExecuteSlow = false;
 		}
 
-		if ((inGameScore >= 10 && inGameScore < 20) && !player.ExecuteSlow)
+		if ((inGameScore >= 10 && inGameScore < 20) && !daredevilPlayer.ExecuteSlow)
 		{
 			speedMultiplier = 1.2f;
 			difficulty = 2;
 		}
 
-		if ((inGameScore >= 20 && inGameScore < 30) && !player.ExecuteSlow)
+		if ((inGameScore >= 20 && inGameScore < 30) && !daredevilPlayer.ExecuteSlow)
 		{
 			speedMultiplier = 1.3f;
 			difficulty = 3;
 			
 		}
-		if ((inGameScore >= 30 && inGameScore < 40 )&& !player.ExecuteSlow)
+		if ((inGameScore >= 30 && inGameScore < 40 )&& !daredevilPlayer.ExecuteSlow)
 		{
 			speedMultiplier = 1.5f;
 			difficulty = 4;
@@ -85,18 +101,20 @@ public class GameController : MonoBehaviour {
 			camera.backgroundColor = new Color32(44, 53, 165, 255);
 		}
 
-		if ((inGameScore >= 40 && inGameScore < 50) && !player.ExecuteSlow)
+		if ((inGameScore >= 40 && inGameScore < 50) && !daredevilPlayer.ExecuteSlow)
 		{
 			speedMultiplier = 1.6f;
 			
 			difficulty = 5;
 		}
 
-		if (inGameScore >= 50 && !player.ExecuteSlow)
+		if (inGameScore >= 50 && !daredevilPlayer.ExecuteSlow)
 		{
 			speedMultiplier = 1.8f;
 			difficulty = 6;
 		}
+
+        
 
 
 	}
@@ -112,8 +130,6 @@ public class GameController : MonoBehaviour {
 			Destroy(gameObject);
 		}
 	}
-
-	
 
 	public float InGameScore
 	{

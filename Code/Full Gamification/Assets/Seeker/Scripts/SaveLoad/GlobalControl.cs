@@ -218,7 +218,7 @@ public class GlobalControl : MonoBehaviour {
     {
         Debug.Log("Initializing Stuff Here.");
         initialized = true;
-        player.Incre.stamina.cur = player.Incre.stamina.max;
+        //player.Incre.stamina.cur = player.Incre.stamina.max;
 
         hp = 10;
         stam = 10;

@@ -28,6 +28,7 @@ namespace Conqueror {
             
             if (other.CompareTag("Boss")) {
                 var boss = other.gameObject.GetComponent<Boss>();
+                //This increases damage based on conqueror perk level
                 boss.hp -= damage;
                 SoundManager.instance.PlaySingle(damagedBoss);
                 Destroy(gameObject);
