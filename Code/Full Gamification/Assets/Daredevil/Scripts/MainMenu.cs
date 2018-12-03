@@ -7,8 +7,11 @@ public class MainMenu : MonoBehaviour {
 
 	public void PlayGame()
 	{
-		SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
-
+        if (player.Incre.stamina.cur > 0)
+        {
+            player.Incre.stamina.cur--;
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        }
 	}
 
 	public void QuitGame()

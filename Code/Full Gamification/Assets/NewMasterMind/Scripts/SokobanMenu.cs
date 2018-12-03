@@ -7,6 +7,10 @@ public class SokobanMenu : MonoBehaviour {
 
     public void PlayGame()
     {
-        SceneManager.LoadScene("MainScene");
+        if(player.Incre.stamina.cur > 0)
+        {
+            player.Incre.stamina.cur--;
+            SceneManager.LoadScene("MainScene");
+        }
     }
 }

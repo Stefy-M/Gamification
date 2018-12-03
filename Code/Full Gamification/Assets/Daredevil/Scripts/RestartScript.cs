@@ -18,7 +18,11 @@ public class RestartScript : MonoBehaviour {
 
 	public void restartScene()
 	{
-		
-		SceneManager.LoadScene("main");
+        if (player.Incre.stamina.cur > 0)
+        {
+            player.Incre.stamina.cur--;
+            SceneManager.LoadScene("main");
+        }
+            
 	}
 }

@@ -58,6 +58,13 @@ public class GameManager : MonoBehaviour {
         m_LevelBuilder.NextLevel();
         LevelTextScript.LevelValue += 1;
 		LevelTimerScript.resetTimer = true;
+
+        //this should be replaced to do something more influential in the game
+        if (player.Incre.passive)
+            player.Incre.coin.passive += (LevelTextScript.LevelValue * player.Incre.sokobanPerkLevel);
+        else
+            player.Incre.coin.active += (LevelTextScript.LevelValue * (1 + player.Incre.sokobanPerkLevel));
+
         StartCoroutine(ResetSceneASync());
     }
 

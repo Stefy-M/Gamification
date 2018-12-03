@@ -10,11 +10,6 @@ using UnityEngine.UI;
 [System.Serializable]
 public class DaredevilSave
 {
-
-    [JsonProperty("test")]
-    public string test { get; set; }
-
-	
     [JsonProperty("Score")]
     public float score { get; set; }
     [JsonProperty("Coins")]
@@ -192,9 +187,12 @@ public class ddPlayer : MonoBehaviour {
 
 		if (collision.gameObject.tag.Equals("Coin")) // when player collides with coin
 		{
-			coin.Points++;
-			
-		}
+            //reward incremental coins for collecting a coin in daredevil game - depends on if you are in active or passive mode
+            if(player.Incre.passive)
+                player.Incre.coin.passive += (int)(GameController.instance.InGameScore * GameController.instance.Difficulty);
+            else
+                player.Incre.coin.active += (int)(GameController.instance.InGameScore * GameController.instance.Difficulty);
+        }
 
 		if (collision.gameObject.tag.Equals("SlowDown"))
 		{
