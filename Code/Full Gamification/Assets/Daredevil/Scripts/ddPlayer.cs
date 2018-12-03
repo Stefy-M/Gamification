@@ -38,8 +38,7 @@ public class ddPlayer : MonoBehaviour {
 	float groundCheckRadius = 0.2f;
 	public LayerMask groundLayer;
 	public Transform groundCheck;
-	private bool hasSlow = false;
-	private bool executeSlow;
+	
 
 	//Player variables
 	private float fallConstraintY =-10; // point at which the player will stop falling
@@ -61,7 +60,9 @@ public class ddPlayer : MonoBehaviour {
 	public incremental_item coin;
 	private int coinsCollected;
 	public GameObject restartButton,gameOverText,slowEnabledText;
-	
+	private bool hasSlow = false;
+	private bool executeSlow;
+
 
 	int playerLayer, enemyLayer, coinLayer; // used for collisions
 
@@ -119,7 +120,7 @@ public class ddPlayer : MonoBehaviour {
 	void Update () {
 
 		
-		if (transform.position.y < fallConstraintY) // condition to check when player has reached lowY
+		if (transform.position.y < fallConstraintY) // condition to check when player has reached fallConstraint for y-axis
 		{
 			stopped = true;
 			maxSpeed = 20; // speed up player movement
